@@ -79,9 +79,9 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
 		this.onXMLError("far attribute is not a float.");
 
 	//Parse translate tag
-	var translate = initials.getElementsByTagName('translate');
+	var translate = initials.getElementsByTagName('translation');
 	if(translate.length != 1)
-		this.onXMLError("<translate> tag is missing or appears more than once");
+		this.onXMLError("<translation> tag is missing or appears more than once");
 	this.translateX = this.reader.getFloat(translate[0], 'x', true);
 	this.translateY = this.reader.getFloat(translate[0], 'y', true);
 	this.translateZ = this.reader.getFloat(translate[0], 'z', true);
@@ -167,12 +167,17 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 		this.onXMLError("'a' attribute value in ambient tag is not a float.");
 
 	//Parse doubleside tag
+	/*
 	var doubleside = illumination[0].getElementsByTagName('doubleside');
 	if(doubleside.length != 1)
 		this.onXMLError("<doubleside> tag is missing or appears more than once");
 	this.doublesideValue = this.reader.getFloat(doubleside[0],'value',true);
 	if(isNaN(this.doublesideValue))
 		this.onXMLError("'value' attribute value in doubleside tag is not a float.");
+	*/
+	this.IsTagUnique('doubleside', rootElement);
+	this.doubleside = this.parseBool('doubleside', 'value', rootElement);
+
 
 	//Parse background tag
 	this.backgroundRGBA = [];
@@ -218,14 +223,22 @@ MySceneGraph.prototype.parseLight = function(parent){
 	var light = { tagId:parent.id };
 
 	//Parse enable value
-	var enableTags = parent.getElementsByTagName('enable');
+	//var enableTags = parent.getElementsByTagName('enable');
 	this.IsTagUnique('enable',parent);
+	/*
 	light.enable = this.reader.getFloat(enableTags[0],'value',true);
 	if(!light.enable == null){
 		if(light.enable != 1 && light.enable != 0){
 			this.onXMLError("enable value on <enable> tag on light with the id '" + parent.id + "' it's not 0 nor 1.");
 		}
 	}
+	*/
+
+	light.enable = this.parseBool('enable', 'value', parent);
+
+	//Parse position tag
+	this.IsTagUnique('position', parent);
+	light.position = this.parseXYZW('position', parent);
 
 	//Parse ambient tag
 	this.IsTagUnique('ambient', parent);
@@ -379,17 +392,130 @@ MySceneGraph.prototype.parseLeaf = function(parent){
 }
 
 MySceneGraph.prototype.parseNodes = function(rootElement) {
-	var nodes = rootElement.getElementsByTagName('NODES');
-	if(nodes.length == 0)
+	var nodesTag = rootElement.getElementsByTagName('NODES');
+	if(nodesTag.length == 0)
 		this.onXMLError("<NODES> tag is missing.");
-	if(nodes.length > 1)
+	if(nodesTag.length > 1)
 		this.onXMLError("<NODES> tag appears more than once.");
+
+	//Create nodes array
+	this.nodes = [];
+
+	//Parse nodes
+	nodesTagArray = nodesTag[0].getElementsByTagName('NODE');
+	for (var i = 0; i < nodesTagArray.length; i++) {
+		var id = this.reader.getString(nodesTagArray[i], "id", true);
+		if(this.checkID(id,this.nodes)){
+			this.onXMLError("Id: '" + id + "' duplicated in inside NODES tag");  
+		}else{
+			this.parseNode(nodesTagArray[i], nodesTagArray);
+		}
+	};
+
+	//Parse root
+	this.IsTagUnique('ROOT', rootElement);
+	this.parseRoot(rootElement);
 }
 
+MySceneGraph.prototype.parseRoot = function(rootElement){
+	var rootArray = rootElement.getElementsByTagName('ROOT');
+	this.root = {};
+	this.root.childs = [];
+
+	//Parse and check ID
+	if(this.checkID(rootArray[0].id, this.nodes)){
+		this.root.tagId = rootArray[0].id;
+	}else{
+		this.onXMLError("Id: '" + rootArray[0].id + "' referenced in root tag doesn't exist in NODES tag");
+	}
+}
+
+MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
+	var node = {};
+	node.children = [];
+
+	//Parse and check ID
+	if(this.checkID(rootElement.id, this.nodes)){
+		this.onXMLError("Id: '" + rootElement.id + "' duplicated inside NODES tag");
+	}else{
+		node.tagId = rootElement.id;
+		this.nodes.push(node);
+	}
+
+	//Parse Material
+	this.IsTagUnique('MATERIAL', rootElement);
+	this.existsID('MATERIAL', rootElement, this.materials);
+	node.materialID = this.parseString('MATERIAL', rootElement, 'id');
+
+	//Parse Texture
+	this.IsTagUnique('TEXTURE', rootElement);
+	this.existsID('TEXTURE', rootElement, this.textures);
+	node.TextureID = this.parseString('TEXTURE', rootElement, 'id');
+
+
+	//Parse Geometric Transformations
+	var geoTransformsTag = [];
+	node.transformations = [];
+	geoTransformsTag = geoTransformsTag.concat(this.getOnlyChildsWithName(rootElement, 'TRANSLATION'), this.getOnlyChildsWithName(rootElement, 'ROTATION'),this.getOnlyChildsWithName(rootElement, 'SCALE'));
+	for (var i = 0; i < geoTransformsTag.length; i++) {
+		switch(geoTransformsTag[i].tagName){
+			case 'TRANSLATION':
+				var translation = {};
+				translation.typeOf = 'translation';
+				translation.xyz = this.parseTranslation(geoTransformsTag[i], rootElement);
+				node.transformations.push(translation);
+				break;
+			case 'ROTATION':
+				var rotation = {};
+				rotation.typeOf = 'rotation';
+				var arrayRot = this.parseRotation(geoTransformsTag[i], rootElement);
+				rotation.axisRot = arrayRot[0];
+				rotation.angle = arrayRot[1];
+				node.transformations.push(rotation);
+				break;
+			case 'SCALE':
+				var scale = {};
+				scale.typeOf = 'scale';
+				scale.xyz = this.parseScale(geoTransformsTag[i], rootElement);
+				node.transformations.push(scale);
+				break;
+		}	
+	};
+
+	//Parse descendants
+	this.IsTagUnique('DESCENDANTS', rootElement);
+	var descendantsTag = rootElement.getElementsByTagName('DESCENDANTS');
+	var descendants = descendantsTag[0].getElementsByTagName('DESCENDANT');
+	if(descendants.length == 0){
+		this.onXMLError("The node with tag '" + rootElement.tagName + "' with id '" + rootElement.id + "' doesn't have any children node or leaf");
+	}else{
+		for (var i = 0; i < descendants.length; i++) {
+			if( !this.checkIDother(descendants[i].id, nodesArray) && !this.checkID(descendants[i].id, this.leaves)){
+				this.onXMLError("The node with tag '" + rootElement.tagName + "' with id '" + rootElement.id + "' has a children node or leaf that doesn't exist");
+			}else{
+				node.children.push(descendants[i].id);
+			}
+		};
+	}
+}
+
+MySceneGraph.prototype.ceateNodeGraph = function(){
+	
+}
 
 /*
  *	Helping functions
  */
+
+MySceneGraph.prototype.getOnlyChildsWithName = function(parent, tagName){
+	var children = [];
+	for (var i = 0; i < parent.childNodes.length; i++) {
+		if(parent.childNodes[i].tagName == tagName){
+			children.push(parent.childNodes[i]);
+		}
+	};
+	return children;
+}
 
 /* Checks if an Id is already in an array */
 MySceneGraph.prototype.checkID = function(newId, array){
@@ -399,6 +525,78 @@ MySceneGraph.prototype.checkID = function(newId, array){
 		}
 	};
 	return false;
+}
+
+/* Checks if an tagId is already in an array */
+MySceneGraph.prototype.checkIDother = function(newId, array){
+	for (var i = 0; i < array.length; i++) {
+		if(array[i].id == newId){
+			return true;
+		}
+	};
+	return false;
+}
+
+/* Checks if an Id is already in an String array */
+MySceneGraph.prototype.checkIDString = function(newId, array){
+	for (var i = 0; i < array.length; i++) {
+		if(array[i] == newId){
+			return true;
+		}
+	};
+	return false;
+}
+
+MySceneGraph.prototype.parseTranslation = function(tag, parent){
+	var x = this.reader.getFloat(tag,'x',true);
+	if(isNaN(x)){
+		this.onXMLError("'x' attribute on tag <'" + tag.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	var y = this.reader.getFloat(tag,'y',true);
+	if(isNaN(y)){
+		this.onXMLError("'y' attribute on tag <'" + tag.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	var z = this.reader.getFloat(tag,'z',true);
+	if(isNaN(z)){
+		this.onXMLError("'z' attribute on tag <'" + tag.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	return [x,y,z];
+}
+
+MySceneGraph.prototype.parseRotation = function(tag, parent){
+	var axis = this.reader.getString(tag, 'axis', true);
+	if(axis != 'x' && axis != 'y' && axis != 'z')
+		this.onXMLError("'axis' attribute in tag '" + tag.tagName + "' inside tag '" + parent.tagName + "' with id '" + parent.id + "' is not 'x', 'y' or 'z'");
+	var angle = this.reader.getFloat(tag, 'angle', true);
+	if(isNaN(angle))
+		this.onXMLError("'angle' attribute in tag '" + tag.tagName + "' inside tag '" + parent.tagName + "' with id '" + parent.id + "' is not a float");
+	return [axis,angle];
+}
+
+MySceneGraph.prototype.parseScale = function(tag, element){
+	var sx = this.reader.getFloat(tag,'sx',true);
+	if(isNaN(sx)){
+		this.onXMLError("'sx' attribute on tag <'" + tag.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	var sy = this.reader.getFloat(tag,'sy',true);
+	if(isNaN(sy)){
+		this.onXMLError("'sy' attribute on tag <'" + tag.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	var sz = this.reader.getFloat(tag,'sz',true);
+	if(isNaN(sz)){
+		this.onXMLError("'sz' attribute on tag <'" + tag.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	return [sx,sy,sz];
+}
+
+
+MySceneGraph.prototype.parseBool = function(element, attribute, parent){
+	var tags = parent.getElementsByTagName(element);
+	var bool = this.reader.getFloat(tags[0],attribute,true);
+		if( (bool != 1 && bool != 0) || !Number.isInteger(bool) ){
+			this.onXMLError("The attribute '" + attribute + "'  on tag '" + element + "' inside '" + parent.tagName + "' tag with the id '" + parent.id + "' it's not 0 nor 1.");
+		}
+	return bool;
 }
 
 MySceneGraph.prototype.parseRGBA = function(rgbaElement, parent){
@@ -422,23 +620,23 @@ MySceneGraph.prototype.parseRGBA = function(rgbaElement, parent){
 	return [r,g,b,a];
 }
 
-MySceneGraph.prototype.parseXYZW = function(xyzwelement, parent){
-	var tags = parent.getElementsByTagName(rgbaElement);
-	var x = this.reader.getFloat(tags[0],'r',true);
-	if(isNaN(r)){
-		this.onXMLError("'x' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+MySceneGraph.prototype.parseXYZW = function(xyzwElement, parent){
+	var tags = parent.getElementsByTagName(xyzwElement);
+	var x = this.reader.getFloat(tags[0],'x',true);
+	if(isNaN(x)){
+		this.onXMLError("'x' attribute on tag <'" + xyzwElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
 	}
-	var y = this.reader.getFloat(tags[0],'g',true);
-	if(isNaN(g)){
-		this.onXMLError("'y' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	var y = this.reader.getFloat(tags[0],'y',true);
+	if(isNaN(y)){
+		this.onXMLError("'y' attribute on tag <'" + xyzwElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
 	}
-	var z = this.reader.getFloat(tags[0],'b',true);
-	if(isNaN(b)){
-		this.onXMLError("'z' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	var z = this.reader.getFloat(tags[0],'z',true);
+	if(isNaN(z)){
+		this.onXMLError("'z' attribute on tag <'" + xyzwElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
 	}
-	var w = this.reader.getFloat(tags[0],'a',true);
-	if(isNaN(a)){
-		this.onXMLError("'w' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	var w = this.reader.getFloat(tags[0],'w',true);
+	if(isNaN(w)){
+		this.onXMLError("'w' attribute on tag <'" + xyzwElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
 	}
 	return [x,y,z,w];
 }
@@ -459,7 +657,14 @@ MySceneGraph.prototype.parseFloat = function(element, parent, attribute){
 MySceneGraph.prototype.IsTagUnique = function(tag, parent){
 	var tags = parent.getElementsByTagName(tag);
 	if(tags.length != 1)
-		this.onXMLError("<'" + tag + "'> tag inside <'" + parent.tagName + "'> with id " + parent.id + " is missing or appears more than once");
+		this.onXMLError("<'" + tag + "'> tag inside <'" + parent.tagName + "'> with id '" + parent.id + "' is missing or appears more than once");
+}
+
+MySceneGraph.prototype.existsID = function(tag, parent, array){
+	var tags = parent.getElementsByTagName(tag);
+	if(!this.checkID(tags[0].id, array)){
+		this.onXMLError("The id '" + tags[0].id + "' in tag '" + tag + "' inside tag '" + parent.tagName + "' with  id '" + parent.id + "' references a non-existant id");
+	}
 }
 
 MySceneGraph.prototype.getOnlyChilds = function(array,parent){

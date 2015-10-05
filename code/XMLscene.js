@@ -125,8 +125,6 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 };
 
 XMLscene.prototype.initTexturesOnGraphLoaded = function () {
-	
-	console.log(this.graph.textures);
 
 	for(var i=0; i<this.graph.textures.length; i++){
 		this.textures.push(new CGFappearance(this));

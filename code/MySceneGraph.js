@@ -174,9 +174,8 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	this.doublesideValue = this.reader.getFloat(doubleside[0],'value',true);
 	if(isNaN(this.doublesideValue))
 		this.onXMLError("'value' attribute value in doubleside tag is not a float.");
-	*/
 	this.IsTagUnique('doubleside', rootElement);
-	this.doubleside = this.parseBool('doubleside', 'value', rootElement);
+	this.doubleside = this.parseBool('doubleside', 'value', rootElement);*/
 
 
 	//Parse background tag

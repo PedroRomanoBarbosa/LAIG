@@ -2,11 +2,14 @@
  * MyCylinder
  * @constructor
  */
- function MyCylinder(scene, slices, stacks) {
+ function MyCylinder(scene, slices, stacks, height, topRadius, bottomRadius) {
  	CGFobject.call(this, scene);
 
    this.slices=slices;
    this.stacks=stacks;
+   this.cylHeight=height;
+   this.radiusInc=(topRadius - bottomRadius)/stacks;
+   this.heightInc=height/stacks;
 
    this.initBuffers();
  };
@@ -19,7 +22,7 @@
   this.vertices = [];
   this.normals = [];
   this.indices = [];
-  this.texCoords = [];             
+  this.texCoords = [];
   
   var deg2rad=Math.PI/180.0;
   var ang = 360/this.slices;
@@ -29,7 +32,7 @@
   //CALCULO DOS VERTICES E DAS NORMAIS
   for(var j = 0; j < this.stacks+1; j++){
     for(var i = 0; i < this.slices+1; i++){ 
-     this.vertices.push(Math.cos(a_rad*i), Math.sin(a_rad*i), (inc_z*j)-0.5);
+     this.vertices.push( (this.bottomRadius + (j*this.radiusInc) * Math.cos(a_rad*i), Math.sin(a_rad*i), (inc_z*j)-0.5);
      this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),0);
      this.texCoords.push((ang*i)/360, inc_z*j);
     }

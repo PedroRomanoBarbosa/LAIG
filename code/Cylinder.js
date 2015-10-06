@@ -15,7 +15,7 @@
  };
 
  Cylinder.prototype = Object.create(CGFobject.prototype);
- Cylinder.prototype.constructor = MyCylinder;
+ Cylinder.prototype.constructor = Cylinder;
 
  Cylinder.prototype.initBuffers = function() {
 

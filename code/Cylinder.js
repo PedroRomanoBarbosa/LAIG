@@ -2,7 +2,7 @@
  * MyCylinder
  * @constructor
  */
- function MyCylinder(scene, slices, stacks, height, topRadius, bottomRadius) {
+ function Cylinder(scene, slices, stacks, height, topRadius, bottomRadius) {
  	CGFobject.call(this, scene);
 
    this.slices=slices;
@@ -14,10 +14,10 @@
    this.initBuffers();
  };
 
- MyCylinder.prototype = Object.create(CGFobject.prototype);
- MyCylinder.prototype.constructor = MyCylinder;
+ Cylinder.prototype = Object.create(CGFobject.prototype);
+ Cylinder.prototype.constructor = MyCylinder;
 
- MyCylinder.prototype.initBuffers = function() {
+ Cylinder.prototype.initBuffers = function() {
 
   this.vertices = [];
   this.normals = [];
@@ -31,8 +31,8 @@
 
   //CALCULO DOS VERTICES E DAS NORMAIS
   for(var j = 0; j < this.stacks+1; j++){
-    for(var i = 0; i < this.slices+1; i++){ 
-     this.vertices.push( (this.bottomRadius + (j*this.radiusInc) * Math.cos(a_rad*i), Math.sin(a_rad*i), (inc_z*j)-0.5);
+    for(var i = 0; i < this.slices+1; i++){
+     this.vertices.push( (this.bottomRadius + (j*this.radiusInc)) * Math.cos(a_rad*i), (this.bottomRadius + (j*this.radiusInc)) * Math.sin(a_rad*i), (inc_z*j)-0.5);
      this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),0);
      this.texCoords.push((ang*i)/360, inc_z*j);
     }

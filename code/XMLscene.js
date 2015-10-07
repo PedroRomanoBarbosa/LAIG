@@ -56,6 +56,9 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.enableTextures(true);
     this.textures=[];
     this.initTexturesOnGraphLoaded();
+
+    this.materials=[];
+    this.initMaterialsOnGraphLoaded();
 };
 
 XMLscene.prototype.display = function () {
@@ -129,6 +132,22 @@ XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 	for(var i=0; i<this.graph.textures.length; i++){
 		this.textures.push(new CGFappearance(this));
 		this.textures[i].ID=this.graph.textures[i].tagId;
-		//this.textures[i].loadTexture(this.graph.textures[i].filepath);
+		this.textures[i].loadTexture(this.graph.textures[i].filepath);
+		this.textures[i].amplif_factor = {};
+		this.textures[i].amplif_factor.s=this.graph.textures[i].amplif_factor.s;
+		this.textures[i].amplif_factor.t=this.graph.textures[i].amplif_factor.t;
+	}
+};
+
+XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
+
+	for(var i=0; i<this.graph.materials.length; i++){
+		this.materials.push(new CGFappearance(this));
+		this.materials[i].ID=this.graph.materials[i].tagId;
+		this.materials[i].shininess=this.graph.materials[i].shininess;
+		this.materials[i].setSpecular(this.graph.materials[i].specular[0],this.graph.materials[i].specular[1],this.graph.materials[i].specular[2],this.graph.materials[i].specular[3]);
+		this.materials[i].setDiffuse(this.graph.materials[i].diffuse[0],this.graph.materials[i].diffuse[1],this.graph.materials[i].diffuse[2],this.graph.materials[i].diffuse[3]);
+		this.materials[i].setAmbient(this.graph.materials[i].ambient[0],this.graph.materials[i].ambient[1],this.graph.materials[i].ambient[2],this.graph.materials[i].ambient[3]);
+		this.materials[i].setEmission(this.graph.materials[i].emission[0],this.graph.materials[i].emission[1],this.graph.materials[i].emission[2],this.graph.materials[i].emission[3]);
 	}
 };

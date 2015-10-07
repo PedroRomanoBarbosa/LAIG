@@ -26,15 +26,14 @@
   
   var deg2rad=Math.PI/180.0;
   var ang = 360/this.slices;
-  var inc_z = 1/this.stacks;
   var a_rad=ang*deg2rad;
 
   //CALCULO DOS VERTICES E DAS NORMAIS
   for(var j = 0; j < this.stacks+1; j++){
     for(var i = 0; i < this.slices+1; i++){
-     this.vertices.push( (this.bottomRadius + (j*this.radiusInc)) * Math.cos(a_rad*i), (this.bottomRadius + (j*this.radiusInc)) * Math.sin(a_rad*i), (inc_z*j)-0.5);
+     this.vertices.push( (this.bottomRadius + (j*this.radiusInc)) * Math.cos(a_rad*i), (this.bottomRadius + (j*this.radiusInc)) * Math.sin(a_rad*i), (heightInc*j)-0.5);
      this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),0);
-     this.texCoords.push((ang*i)/360, inc_z*j);
+     this.texCoords.push((ang*i)/360, heightInc*j);
     }
  }
 

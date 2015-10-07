@@ -1,49 +1,76 @@
 
- function Cylinder(scene, slices, stacks, height, topRadius, bottomRadius) {
+ function Triangle(scene, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z) {
  	CGFobject.call(this, scene);
 
-   this.slices=slices;
-   this.stacks=stacks;
-   this.cylHeight=height;
-   this.radiusInc=(topRadius - bottomRadius)/stacks;
-   this.heightInc=height/stacks;
+   this.p1x = p1x;
+   this.p1y = p1y;
+   this.p1z = p1z;
+
+   this.p2x = p2x;
+   this.p2y = p2y;
+   this.p2z = p2z;
+
+   this.p3x = p3x;
+   this.p3y = p3y;
+   this.p3z = p3z;
+
+   this.a = Math.sqrt(
+   (this.p1x - this.p3x) * (this.p1x - this.p3x) +
+   (this.p1y - this.p3y) * (this.p1y - this.p3y) +
+   (this.p1z - this.p3z) * (this.p1z - this.p3z)
+   );
+
+   this.b = Math.sqrt(
+   (this.p2x - this.p1x) * (this.p2x - this.p1x) +
+   (this.p2y - this.p1y) * (this.p2y - this.p1y) +
+   (this.p2z - this.p1z) * (this.p2z - this.p1z)
+   );
+
+   this.c = Math.sqrt(
+   (this.p3x - this.p2x) * (this.p3x - this.p2x) +
+   (this.p3y - this.p2y) * (this.p3y - this.p2y) +
+   (this.p3z - this.p2z) * (this.p3z - this.p2z)
+   );
+   
+   this.cosAlpha = (-this.a*this.a + this.b*this.b + this.c * this.c) / (2 * this.b * this.c);
+   this.cosBeta =  ( this.a*this.a - this.b*this.b + this.c * this.c) / (2 * this.a * this.c);
+   this.cosGamma = ( this.a*this.a + this.b*this.b - this.c * this.c) / (2 * this.a * this.b);
+
+   this.beta = Math.acos(this.cosBeta);
+   this.alpha = Math.acos(this.cosAlpha);
+   this.gamma = Math.acos(this.cosGamma);
 
    this.initBuffers();
  };
 
- Cylinder.prototype = Object.create(CGFobject.prototype);
- Cylinder.prototype.constructor = Cylinder;
+ Triangle.prototype = Object.create(CGFobject.prototype);
+ Triangle.prototype.constructor = Triangle;
 
- Cylinder.prototype.initBuffers = function() {
+ Triangle.prototype.initBuffers = function() {
 
-  this.vertices = [];
-  this.normals = [];
-  this.indices = [];
-  this.texCoords = [];
-  
-  var deg2rad=Math.PI/180.0;
-  var ang = 360/this.slices;
-  var a_rad=ang*deg2rad;
+   this.primitiveType = this.scene.gl.TRIANGLES;
 
-  //CALCULO DOS VERTICES E DAS NORMAIS
-  for(var j = 0; j < this.stacks+1; j++){
-    for(var i = 0; i < this.slices+1; i++){
-     this.vertices.push( (this.bottomRadius + (j*this.radiusInc)) * Math.cos(a_rad*i), (this.bottomRadius + (j*this.radiusInc)) * Math.sin(a_rad*i), (heightInc*j)-0.5);
-     this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),0);
-     this.texCoords.push((ang*i)/360, heightInc*j);
-    }
- }
+   this.vertices = [
+        this.p1x, this.p1y, this.p1z,
+        this.p2x, this.p2y, this.p2z,
+        this.p3x, this.p3y, this.p3z
+			];
 
- //CALCULO DOS INDICES
- for(var j = 0; j < this.stacks; j++){
-   for(var i = 0; i < this.slices; i++){
-    this.indices.push(i + j * ( this.slices + 1 ), i + 1 + j * ( this.slices + 1 ), i + 1 + ( j + 1 ) * ( this.slices + 1 ));
-    this.indices.push(i + j * ( this.slices + 1 ), i + 1 + ( j + 1 ) * ( this.slices + 1 ), i + ( j + 1 ) * ( this.slices + 1 ));
-   }
- }
+   this.indices = [
+            0,1,2
+        ];
 
+   this.normals = [
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1
+		];
 
-this.primitiveType = this.scene.gl.TRIANGLES;
-this.initGLBuffers();
+   this.texCoords = [
+   		(this.c - this.a * Math.cos(this.beta)), 0.0,
+   		0.0, 1,
+   		this.c, 1.0
+		];
 
+   this.initGLBuffers();
 };

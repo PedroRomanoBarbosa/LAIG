@@ -498,10 +498,6 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 	}
 }
 
-MySceneGraph.prototype.ceateNodeGraph = function(){
-	
-}
-
 /*
  *	Helping functions
  */

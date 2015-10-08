@@ -1,5 +1,7 @@
-function Rectangle(scene, p1x, p1y, p2x, p2y) {
+function Rectangle(scene, id, p1x, p1y, p2x, p2y) {
 	CGFobject.call(this, scene);
+
+	this.ID=id;
 
 	this.p1x = p1x;
 	this.p1y = p1y;
@@ -27,8 +29,8 @@ Rectangle.prototype.initBuffers = function () {
 			];
 
 	this.indices = [
-            0,1,2,
-            2,1,3
+            2,1,0,
+            3,1,2
         ];
 
 	this.normals = [

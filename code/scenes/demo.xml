@@ -3,11 +3,11 @@
 
 	<INITIALS>
 		<frustum  near="0.1" far="500"/>
-		<translation x="1" y="2" z="3"/>
-		<rotation axis="x" angle="1"/>
-    	<rotation axis="y" angle="2"/>
-    	<rotation axis="z" angle="3"/>
-    	<scale sx="1" sy="2" sz="3" />
+		<translation x="0" y="0" z="0"/>
+		<rotation axis="x" angle="0"/>
+    	<rotation axis="y" angle="0"/>
+    	<rotation axis="z" angle="0"/>
+    	<scale sx="1" sy="1" sz="1" />
     	<reference length="1"/>
 	</INITIALS>
 
@@ -49,25 +49,19 @@
 
 
 	<LEAVES>
-		<LEAF id="r" type="rectangle" args="1.1 2.1 3.1 4.1" />
-		<LEAF id="c" type="cylinder" args="1.1 1.2 1.3 1 2.0" />
+		<LEAF id="r" type="rectangle" args="1 3 2 2" />
+		<!--<LEAF id="c" type="cylinder" args="1.1 1.2 1.3 1 2.0" />
 		<LEAF id="s" type="sphere" args="1.3 1 2" />
-		<LEAF id="t" type="triangle" args="1 2 3  4 5 6  7 8 9" />
+		<LEAF id="t" type="triangle" args="1 2 3  4 5 6  7 8 9" />-->
 	</LEAVES>
 
 
 	<NODES>
-		<ROOT id="n2"/>
+		<ROOT id="n"/>
 
-        <NODE id="n2">
+        <NODE id="n">
         	<MATERIAL id="defaultMaterial" />
 	        <TEXTURE id="t1" />
-	        <TRANSLATION x="1" y="2" z="3" />
-	        <TRANSLATION x="1" y="2" z="3" />
-	        <ROTATION axis="x" angle="1.5" />
-	        <ROTATION axis="x" angle="1.5" />
-	        <SCALE sx="1" sy="2" sz="3" />
-	        <SCALE sx="1" sy="2" sz="3" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="r" />
 	        </DESCENDANTS>

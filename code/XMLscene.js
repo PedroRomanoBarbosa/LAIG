@@ -59,6 +59,9 @@ XMLscene.prototype.onGraphLoaded = function ()
 
     this.materials=[];
     this.initMaterialsOnGraphLoaded();
+
+	this.primitives=[];
+    this.loadPrimitivesOnGraphLoaded();
 };
 
 XMLscene.prototype.display = function () {
@@ -90,6 +93,10 @@ XMLscene.prototype.display = function () {
 	{
 		for(var i=0; i<8; i++){
 			this.lights[i].update();
+		}
+
+		for(var i=0; i<this.primitives.length; i++){
+			this.primitives[i].display();
 		}
 	};	
 
@@ -149,5 +156,16 @@ XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
 		this.materials[i].setDiffuse(this.graph.materials[i].diffuse[0],this.graph.materials[i].diffuse[1],this.graph.materials[i].diffuse[2],this.graph.materials[i].diffuse[3]);
 		this.materials[i].setAmbient(this.graph.materials[i].ambient[0],this.graph.materials[i].ambient[1],this.graph.materials[i].ambient[2],this.graph.materials[i].ambient[3]);
 		this.materials[i].setEmission(this.graph.materials[i].emission[0],this.graph.materials[i].emission[1],this.graph.materials[i].emission[2],this.graph.materials[i].emission[3]);
+	}
+};
+
+XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
+
+	for(var i=0; i<this.graph.leaves.length; i++){
+		switch(this.graph.leaves[i].typeOf){
+			case 'rectangle':
+				this.primitives.push(new Rectangle(this, this.graph.leaves[i].tagId, this.graph.leaves[i].primitive.leftTopX, this.graph.leaves[i].primitive.leftTopY, this.graph.leaves[i].primitive.rightBottomX, this.graph.leaves[i].primitive.rightBottomY));
+				break;
+		}
 	}
 };

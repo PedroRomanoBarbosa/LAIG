@@ -1,6 +1,8 @@
 
- function Triangle(scene, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z) {
+ function Triangle(scene, id, p1x, p1y, p1z, p2x, p2y, p2z, p3x, p3y, p3z) {
  	CGFobject.call(this, scene);
+
+ 	this.ID=id;
 
    this.p1x = p1x;
    this.p1y = p1y;

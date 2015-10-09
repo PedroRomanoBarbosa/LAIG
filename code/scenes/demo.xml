@@ -49,10 +49,10 @@
 
 
 	<LEAVES>
-		<LEAF id="r" type="rectangle" args="1 2 3 1" />
+		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
 		<!--<LEAF id="c" type="cylinder" args="1.1 1.2 1.3 1 2.0" />
-		<LEAF id="s" type="sphere" args="1.3 1 2" />
-		<LEAF id="t" type="triangle" args="1 2 3  4 5 6  7 8 9" />-->
+		<LEAF id="r" type="rectangle" args="1 2 3 1" />
+		<LEAF id="s" type="sphere" args="1.3 1 2" />-->
 	</LEAVES>
 
 
@@ -63,7 +63,7 @@
         	<MATERIAL id="defaultMaterial" />
 	        <TEXTURE id="t1" />
 	        <DESCENDANTS>
-	            <DESCENDANT id="r" />
+	            <DESCENDANT id="t" />
 	        </DESCENDANTS>
         </NODE>
 	</NODES>

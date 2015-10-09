@@ -164,8 +164,18 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 	for(var i=0; i<this.graph.leaves.length; i++){
 		switch(this.graph.leaves[i].typeOf){
 			case 'rectangle':
-				this.primitives.push(new Rectangle(this, this.graph.leaves[i].tagId, this.graph.leaves[i].primitive.leftTopX, this.graph.leaves[i].primitive.leftTopY, this.graph.leaves[i].primitive.rightBottomX, this.graph.leaves[i].primitive.rightBottomY));
+				this.primitives.push(new Rectangle(this, this.graph.leaves[i].tagId,
+					this.graph.leaves[i].primitive.leftTopX, this.graph.leaves[i].primitive.leftTopY,
+					this.graph.leaves[i].primitive.rightBottomX, this.graph.leaves[i].primitive.rightBottomY));
+				break;
+			case 'triangle':
+				this.primitives.push(new Triangle(this, this.graph.leaves[i].tagId,
+					this.graph.leaves[i].primitive.Point1[0], this.graph.leaves[i].primitive.Point1[1], this.graph.leaves[i].primitive.Point1[2],
+					this.graph.leaves[i].primitive.Point2[0], this.graph.leaves[i].primitive.Point2[1], this.graph.leaves[i].primitive.Point2[2],
+					this.graph.leaves[i].primitive.Point3[0], this.graph.leaves[i].primitive.Point3[1], this.graph.leaves[i].primitive.Point3[2]));
 				break;
 		}
+
+		console.log(this.primitives);
 	}
 };

@@ -49,3 +49,12 @@ Rectangle.prototype.initBuffers = function () {
 	
 	this.initGLBuffers();
 };
+
+Rectangle.prototype.display = function() {
+    
+    //Translation to right position
+    this.scene.pushMatrix();
+        this.scene.translate(2,0,0);
+        //CGFobject.prototype.display.call();
+    this.scene.popMatrix();
+};

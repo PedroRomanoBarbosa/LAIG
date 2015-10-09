@@ -14,7 +14,7 @@
 
 	<ILLUMINATION>
 		<ambient r="0.1" g="0.1" b="0.1" a="1" />
-	    <background r="0.3" g="0.7" b="0.8" a="1" />
+	    <background r="1" g="1" b="1" a="1" />
 	</ILLUMINATION>
 
 
@@ -49,7 +49,7 @@
 
 
 	<LEAVES>
-		<LEAF id="s" type="sphere" args="3 1 1" />
+		<LEAF id="s" type="sphere" args="3 30 30" />
 		<!--<LEAF id="c" type="cylinder" args="1.1 1.2 1.3 1 2.0" />
 		<LEAF id="r" type="rectangle" args="1 2 3 1" />
 		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />-->

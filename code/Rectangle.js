@@ -22,10 +22,10 @@ Rectangle.prototype.initBuffers = function () {
 	this.primitiveType=this.scene.gl.TRIANGLES;
 	
 	this.vertices = [
-            (-1*(this.rectWidth/2)),(this.rectHeight/2),0,
-            (this.rectWidth/2),(this.rectHeight/2),0,
-            (-1*(this.rectWidth/2)),(-1*(this.rectHeight/2)),0,
-            (this.rectWidth/2),(-1*(this.rectHeight/2)),0
+            this.p1x, this.p1y, 0,
+            this.p2x, this.p1y, 0,
+            this.p1x, this.p2y, 0,
+            this.p2x, this.p2y, 0
 			];
 
 	this.indices = [
@@ -48,13 +48,4 @@ Rectangle.prototype.initBuffers = function () {
 		];
 	
 	this.initGLBuffers();
-};
-
-Rectangle.prototype.display = function() {
-    
-    //Translation to right position
-    this.scene.pushMatrix();
-        this.scene.translate(2,0,0);
-        //CGFobject.prototype.display.call();
-    this.scene.popMatrix();
 };

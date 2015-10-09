@@ -6,7 +6,9 @@
 
    this.radius=radius;
    this.stacks=stacks;
-   this.slices=slices;
+
+   if(slices<3) this.slices=3;
+   else this.slices=slices;
 
    this.initBuffers();
  };
@@ -30,9 +32,10 @@
   //CALCULO DOS VERTICES E DAS NORMAIS
   for(var j = 0; j < this.stacks+2; j++){
     for(var i = 0; i < this.slices+1; i++){
-     this.vertices.push(this.radius*Math.cos()*Math.);
-     this.normals.push();
-     this.texCoords.push((ang*i)/360, heightInc*j);
+      this.vertices.push(this.radius*Math.cos(i*aH)*Math.sin(j*aV), this.radius*Math.sin(i*aH)*Math.sin(j*aV), this.radius*Math.cos(j*aV));
+      this.normals.push(Math.cos(i*aH)*Math.sin(j*aV), Math.sin(i*aH)*Math.sin(j*aV), Math.cos(j*aV));
+      this.texCoords.push(0, 0);
+      console.log("x- "+this.radius*Math.cos(i*aH)*Math.sin(j*aV)+" y- "+this.radius*Math.sin(i*aH)*Math.sin(j*aV)+" z- "+this.radius*Math.cos(j*aV));
     }
  }
 

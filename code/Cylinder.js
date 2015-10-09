@@ -1,12 +1,14 @@
 
- function Cylinder(scene, height, bottomRadius, topRadius, stacks, slices) {
+ function Cylinder(scene, id, height, bottomRadius, topRadius, stacks, slices) {
  	CGFobject.call(this, scene);
+
+  this.ID = id;
 
    this.slices=slices;
    this.stacks=stacks;
    this.cylHeight=height;
    this.radiusInc=(topRadius - bottomRadius)/stacks;
-   this.heightInc=height/stacks;
+   this.heigthInc = height/stacks;
 
    this.initBuffers();
  };
@@ -20,7 +22,7 @@
   this.normals = [];
   this.indices = [];
   this.texCoords = [];
-  
+
   var deg2rad=Math.PI/180.0;
   var ang = 360/this.slices;
   var a_rad=ang*deg2rad;
@@ -28,9 +30,9 @@
   //CALCULO DOS VERTICES E DAS NORMAIS
   for(var j = 0; j < this.stacks+1; j++){
     for(var i = 0; i < this.slices+1; i++){
-     this.vertices.push( (this.bottomRadius + (j*this.radiusInc)) * Math.cos(a_rad*i), (this.bottomRadius + (j*this.radiusInc)) * Math.sin(a_rad*i), (heightInc*j)-0.5);
+     this.vertices.push( (this.bottomRadius + (j*this.radiusInc)) * Math.cos(a_rad*i), (this.bottomRadius + (j*this.radiusInc)) * Math.sin(a_rad*i), (this.heigthInc*j)-0.5);
      this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),0);
-     this.texCoords.push((ang*i)/360, heightInc*j);
+     this.texCoords.push((ang*i)/360, this.heigthInc*j);
     }
  }
 

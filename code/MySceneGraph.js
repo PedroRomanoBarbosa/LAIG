@@ -2,12 +2,12 @@
 function MySceneGraph(filename, scene) {
 	this.loadedOk = null;
 	this.counter = 0;
-	
+
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
 	scene.graph = this;
-		
-	// File reading 
+
+	// File reading
 	this.reader = new CGFXMLreader();
 
 	/*
@@ -15,8 +15,8 @@ function MySceneGraph(filename, scene) {
 	 * After the file is read, the reader calls onXMLReady on this object.
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
-	 
-	this.reader.open('scenes/'+filename, this);
+
+	this.reader.open('scenes/' + filename, this);
 }
 
 
@@ -29,18 +29,18 @@ MySceneGraph.prototype.onXMLReady=function() {
 	//Checks if SCENE tag exists
 	if(rootElement.tagName != 'SCENE')
 		this.onXMLError("<SCENE> tag does not exist.");
-	
+
 	// Here should go the calls for different functions to parse the various blocks
 	var error = this.parseScene(rootElement);
 
 	if (error != null) {
 		this.onXMLError(error);
 		return;
-	}	
+	}
 
 	this.loadedOk=true;
 	console.log(this);
-	
+
 	// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
 	this.scene.onGraphLoaded();
 };
@@ -209,8 +209,8 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 	this.lights = [];
 	for (var i = 0; i < lightsTagArray.length; i++) {
 		var id = this.reader.getString(lightsTagArray[i], "id", true);
-		if(this.checkID(id,this.lights))
-			this.onXMLError("Id: '" + id + "' duplicated in inside lights tag");  
+		if(this.checkID(id,this.lights,[]))
+			this.onXMLError("Id: '" + id + "' duplicated in inside lights tag");
 		else{
 			this.parseLight(lightsTagArray[i]);
 		}
@@ -267,8 +267,8 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 	this.textures = [];
 	for (var i = 0; i < texturesTagArray.length; i++) {
 		var id = this.reader.getString(texturesTagArray[i], "id", true);
-		if(this.checkID(id,this.textures))
-			this.onXMLError("Id: '" + id + "' duplicated in inside textures tag");  
+		if(this.checkID(id,this.textures,[]))
+			this.onXMLError("Id: '" + id + "' duplicated in inside textures tag");
 		else{
 			this.parseTexture(texturesTagArray[i]);
 		}
@@ -306,8 +306,8 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 	this.materials = [];
 	for (var i = 0; i < materialsTagArray.length; i++) {
 		var id = this.reader.getString(materialsTagArray[i], "id", true);
-		if(this.checkID(id,this.materials))
-			this.onXMLError("Id: '" + id + "' duplicated in inside materials tag");  
+		if(this.checkID(id,this.materials,[]))
+			this.onXMLError("Id: '" + id + "' duplicated in inside materials tag");
 		else{
 			this.parseMaterial(materialsTagArray[i]);
 		}
@@ -354,8 +354,8 @@ MySceneGraph.prototype.parseLeafs = function(rootElement) {
 	this.leaves = [];
 	for (var i = 0; i < leavesTagArray.length; i++) {
 		var id = this.reader.getString(leavesTagArray[i], "id", true);
-		if(this.checkID(id,this.leaves))
-			this.onXMLError("Id: '" + id + "' duplicated inside leaves tag");  
+		if(this.checkID(id,this.leaves,[]))
+			this.onXMLError("Id: '" + id + "' duplicated inside leaves tag");
 		else{
 			this.parseLeaf(leavesTagArray[i]);
 		}
@@ -404,8 +404,8 @@ MySceneGraph.prototype.parseNodes = function(rootElement) {
 	nodesTagArray = nodesTag[0].getElementsByTagName('NODE');
 	for (var i = 0; i < nodesTagArray.length; i++) {
 		var id = this.reader.getString(nodesTagArray[i], "id", true);
-		if(this.checkID(id,this.nodes)){
-			this.onXMLError("Id: '" + id + "' duplicated in inside NODES tag");  
+		if(this.checkID(id,this.nodes,[])){
+			this.onXMLError("Id: '" + id + "' duplicated in inside NODES tag");
 		}else{
 			this.parseNode(nodesTagArray[i], nodesTagArray);
 		}
@@ -422,7 +422,7 @@ MySceneGraph.prototype.parseRoot = function(rootElement){
 	this.root.childs = [];
 
 	//Parse and check ID
-	if(this.checkID(rootArray[0].id, this.nodes)){
+	if(this.checkID(rootArray[0].id, this.nodes,[])){
 		this.root.tagId = rootArray[0].id;
 	}else{
 		this.onXMLError("Id: '" + rootArray[0].id + "' referenced in root tag doesn't exist in NODES tag");
@@ -434,7 +434,7 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 	node.children = [];
 
 	//Parse and check ID
-	if(this.checkID(rootElement.id, this.nodes)){
+	if(this.checkID(rootElement.id, this.nodes,[])){
 		this.onXMLError("Id: '" + rootElement.id + "' duplicated inside NODES tag");
 	}else{
 		node.tagId = rootElement.id;
@@ -443,12 +443,12 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 
 	//Parse Material
 	this.IsTagUnique('MATERIAL', rootElement);
-	this.existsID('MATERIAL', rootElement, this.materials);
+	this.existsID('MATERIAL', rootElement, this.materials, []);
 	node.materialID = this.parseString('MATERIAL', rootElement, 'id');
 
 	//Parse Texture
 	this.IsTagUnique('TEXTURE', rootElement);
-	this.existsID('TEXTURE', rootElement, this.textures);
+	this.existsID('TEXTURE', rootElement, this.textures, ["null", "clear"]);
 	node.TextureID = this.parseString('TEXTURE', rootElement, 'id');
 
 
@@ -478,7 +478,7 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 				scale.xyz = this.parseScale(geoTransformsTag[i], rootElement);
 				node.transformations.push(scale);
 				break;
-		}	
+		}
 	};
 
 	//Parse descendants
@@ -489,7 +489,7 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 		this.onXMLError("The node with tag '" + rootElement.tagName + "' with id '" + rootElement.id + "' doesn't have any children node or leaf");
 	}else{
 		for (var i = 0; i < descendants.length; i++) {
-			if( !this.checkIDother(descendants[i].id, nodesArray) && !this.checkID(descendants[i].id, this.leaves)){
+			if( !this.checkIDother(descendants[i].id, nodesArray) && !this.checkID(descendants[i].id, this.leaves,[])){
 				this.onXMLError("The node with tag '" + rootElement.tagName + "' with id '" + rootElement.id + "' has a children node or leaf that doesn't exist");
 			}else{
 				node.children.push(descendants[i].id);
@@ -513,7 +513,12 @@ MySceneGraph.prototype.getOnlyChildsWithName = function(parent, tagName){
 }
 
 /* Checks if an Id is already in an array */
-MySceneGraph.prototype.checkID = function(newId, array){
+MySceneGraph.prototype.checkID = function(newId, array, accepted){
+	for (var i = 0; i < accepted.length; i++) {
+			if(accepted[i] == newId){
+			return true;
+		}
+	};
 	for (var i = 0; i < array.length; i++) {
 		if(array[i].tagId == newId){
 			return true;
@@ -655,10 +660,10 @@ MySceneGraph.prototype.IsTagUnique = function(tag, parent){
 		this.onXMLError("<'" + tag + "'> tag inside <'" + parent.tagName + "'> with id '" + parent.id + "' is missing or appears more than once");
 }
 
-MySceneGraph.prototype.existsID = function(tag, parent, array){
+MySceneGraph.prototype.existsID = function(tag, parent, array, accepted){
 	var tags = parent.getElementsByTagName(tag);
-	if(!this.checkID(tags[0].id, array)){
-		this.onXMLError("The id '" + tags[0].id + "' in tag '" + tag + "' inside tag '" + parent.tagName + "' with  id '" + parent.id + "' references a non-existant id");
+	if(!this.checkID(tags[0].id, array, accepted)){
+		this.onXMLError("The id '" + tags[0].id + "' in tag '" + tag + "' inside tag '" + parent.tagName + "' with  id '" + parent.id + "' references a non-existant id or doesn't match the options");
 	}
 }
 
@@ -671,7 +676,7 @@ MySceneGraph.prototype.getOnlyChilds = function(array,parent){
 	};
 	return newArray;
 }
-	
+
 MySceneGraph.prototype.parseRectangleCoord = function(s, parent){
 	var rectangle = {};
 	var coordArray = s.split(" ");
@@ -818,10 +823,8 @@ MySceneGraph.prototype.isInteger = function(x){
 /*
  * Callback to be executed on any read error
  */
- 
+
 MySceneGraph.prototype.onXMLError=function (message) {
-	console.error("XML Loading Error: " + message);	
+	console.error("XML Loading Error: " + message);
 	this.loadedOk=false;
 };
-
-

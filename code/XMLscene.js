@@ -179,7 +179,6 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 				this.graph.leaves[i].primitive.radius,
 				this.graph.leaves[i].primitive.partsAlongRadius,
 				this.graph.leaves[i].primitive.partsPerSection));*/
-
 				this.primitives.push(new Sphere(this, "o", 3, 1, 1));
 				break;
 		}

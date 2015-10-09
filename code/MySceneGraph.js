@@ -419,7 +419,6 @@ MySceneGraph.prototype.parseNodes = function(rootElement) {
 MySceneGraph.prototype.parseRoot = function(rootElement){
 	var rootArray = rootElement.getElementsByTagName('ROOT');
 	this.root = {};
-	this.root.childs = [];
 
 	//Parse and check ID
 	if(this.checkID(rootArray[0].id, this.nodes)){

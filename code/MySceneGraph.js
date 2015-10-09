@@ -739,10 +739,10 @@ MySceneGraph.prototype.parseCylinderCoord = function(s, parent){
 					cylinder.topRadius = n;
 					break;
 				case 3:
-					cylinder.sections = parseInt(n,10);
+					cylinder.stacks = parseInt(n,10);
 					break;
 				case 4:
-					cylinder.parts = parseInt(n,10);
+					cylinder.slices = parseInt(n,10);
 					break;
 			}
 		}

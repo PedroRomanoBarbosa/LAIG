@@ -30,7 +30,7 @@ XMLscene.prototype.initLights = function () {
 	this.lights[0].setPosition(2, 3, 3, 1);
     this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
     this.lights[0].update();
- 
+
     this.shader.unbind();
 };
 
@@ -42,13 +42,12 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
     this.setSpecular(0.2, 0.4, 0.8, 1.0);
-    this.setShininess(10.0);	
+    this.setShininess(10.0);
 };
 
-// Handler called when the graph is finally loaded. 
+// Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
-XMLscene.prototype.onGraphLoaded = function () 
-{
+XMLscene.prototype.onGraphLoaded = function () {
 	this.initCamerasOnGraphLoaded(); // Camera vec <-------------
 	this.initIlluminationOnGraphLoaded();
     this.initLightsOnGraphLoaded();
@@ -67,7 +66,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
     this.shader.bind();
-	
+
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
@@ -83,7 +82,7 @@ XMLscene.prototype.display = function () {
 	this.axis.display();
 
 	this.setDefaultAppearance();
-	
+
 	// ---- END Background, camera and axis setup
 
 	// it is important that things depending on the proper loading of the graph
@@ -98,7 +97,7 @@ XMLscene.prototype.display = function () {
 		for(var i=0; i<this.primitives.length; i++){
 			this.primitives[i].display();
 		}
-	};	
+	};
 
     this.shader.unbind();
 };
@@ -130,7 +129,7 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 
 		this.lights[i].update();
 	}
- 
+
     this.shader.unbind();
 };
 
@@ -174,6 +173,14 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 					this.graph.leaves[i].primitive.Point2[0], this.graph.leaves[i].primitive.Point2[1], this.graph.leaves[i].primitive.Point2[2],
 					this.graph.leaves[i].primitive.Point3[0], this.graph.leaves[i].primitive.Point3[1], this.graph.leaves[i].primitive.Point3[2]));
 				break;
+      case 'cylinder':
+        var l = this.graph.leaves[i];
+        this.primitives.push(new Cylinder(this, l.tagId,
+          l.primitive.heightC,
+          l.primitive.bottomRadius,
+          l.primitive.topRadius,
+          l.primitive.stacks,
+          l.primitive.slices));
 			case 'sphere':
 				this.primitives.push(new Sphere(this, this.graph.leaves[i].tagId,
 				this.graph.leaves[i].primitive.radius,

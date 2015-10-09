@@ -1,7 +1,7 @@
 function Rectangle(scene, id, p1x, p1y, p2x, p2y) {
 	CGFobject.call(this, scene);
 
-	this.ID=id;
+	this.ID = id;
 
 	this.p1x = p1x;
 	this.p1y = p1y;
@@ -10,7 +10,7 @@ function Rectangle(scene, id, p1x, p1y, p2x, p2y) {
 
 	this.rectHeight = Math.abs(p2y - p1y);
 	this.rectWidth = Math.abs(p2x - p1x);
-	
+
 	this.initBuffers();
 };
 
@@ -20,7 +20,7 @@ Rectangle.prototype.constructor=Rectangle;
 Rectangle.prototype.initBuffers = function () {
 
 	this.primitiveType=this.scene.gl.TRIANGLES;
-	
+
 	this.vertices = [
             this.p1x, this.p1y, 0,
             this.p2x, this.p1y, 0,
@@ -46,6 +46,6 @@ Rectangle.prototype.initBuffers = function () {
    		0,1,
    		1,1
 		];
-	
+
 	this.initGLBuffers();
 };

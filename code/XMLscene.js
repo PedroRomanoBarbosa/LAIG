@@ -174,8 +174,13 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 					this.graph.leaves[i].primitive.Point2[0], this.graph.leaves[i].primitive.Point2[1], this.graph.leaves[i].primitive.Point2[2],
 					this.graph.leaves[i].primitive.Point3[0], this.graph.leaves[i].primitive.Point3[1], this.graph.leaves[i].primitive.Point3[2]));
 				break;
+			case 'sphere':
+				/*this.primitives.push(new Sphere(this, this.graph.leaves[i].tagId,
+				this.graph.leaves[i].primitive.radius,
+				this.graph.leaves[i].primitive.partsAlongRadius,
+				this.graph.leaves[i].primitive.partsPerSection));*/
+				this.primitives.push(new Sphere(this, "o", 3, 1, 1));
+				break;
 		}
-
-		console.log(this.primitives);
 	}
 };

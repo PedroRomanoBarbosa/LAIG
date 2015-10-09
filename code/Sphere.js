@@ -1,10 +1,14 @@
 
- function Sphere(scene, radius, stacks, slices) {
+ function Sphere(scene, id, radius, stacks, slices) {
  	CGFobject.call(this, scene);
+
+ 	this.ID=id;
 
    this.radius=radius;
    this.stacks=stacks;
-   this.slices=slices;
+
+   if(slices<3) this.slices=3;
+   else this.slices=slices;
 
    this.initBuffers();
  };
@@ -20,15 +24,18 @@
   this.texCoords = [];
   
   var deg2rad=Math.PI/180.0;
-  var ang = 360/this.slices;
-  var a_rad=ang*deg2rad;
+  var angH = 360/this.slices;
+  var angV = 180/this.stacks;
+  var aH=angH*deg2rad;
+  var aV=angV*deg2rad;
 
   //CALCULO DOS VERTICES E DAS NORMAIS
-  for(var j = 0; j < this.stacks+1; j++){
+  for(var j = 0; j < this.stacks+2; j++){
     for(var i = 0; i < this.slices+1; i++){
-     this.vertices.push(this.radius*Math.cos());
-     this.normals.push();
-     this.texCoords.push((ang*i)/360, heightInc*j);
+      this.vertices.push(this.radius*Math.cos(i*aH)*Math.sin(j*aV), this.radius*Math.sin(i*aH)*Math.sin(j*aV), this.radius*Math.cos(j*aV));
+      this.normals.push(Math.cos(i*aH)*Math.sin(j*aV), Math.sin(i*aH)*Math.sin(j*aV), Math.cos(j*aV));
+      this.texCoords.push(0, 0);
+      console.log("x- "+this.radius*Math.cos(i*aH)*Math.sin(j*aV)+" y- "+this.radius*Math.sin(i*aH)*Math.sin(j*aV)+" z- "+this.radius*Math.cos(j*aV));
     }
  }
 

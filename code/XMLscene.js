@@ -173,7 +173,6 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 					this.graph.leaves[i].primitive.Point2[0], this.graph.leaves[i].primitive.Point2[1], this.graph.leaves[i].primitive.Point2[2],
 					this.graph.leaves[i].primitive.Point3[0], this.graph.leaves[i].primitive.Point3[1], this.graph.leaves[i].primitive.Point3[2]));
 				break;
-<<<<<<< HEAD
       case 'cylinder':
         var l = this.graph.leaves[i];
         this.primitives.push(new Cylinder(this, l.tagId,
@@ -182,7 +181,6 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
           l.primitive.topRadius,
           l.primitive.stacks,
           l.primitive.slices));
-=======
 			case 'sphere':
 				/*this.primitives.push(new Sphere(this, this.graph.leaves[i].tagId,
 				this.graph.leaves[i].primitive.radius,
@@ -190,7 +188,6 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 				this.graph.leaves[i].primitive.partsPerSection));*/
 				this.primitives.push(new Sphere(this, "o", 3, 1, 1));
 				break;
->>>>>>> 029bdc7611f60654af8f1d708872e0771b68ee36
 		}
 	}
 };

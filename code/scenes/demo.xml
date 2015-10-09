@@ -49,10 +49,10 @@
 
 
 	<LEAVES>
-		<!--<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
-		<LEAF id="c" type="cylinder" args="1.1 1.2 1.3 1 2.0" />
-		<LEAF id="r" type="rectangle" args="1 2 3 1" />-->
-		<LEAF id="s" type="sphere" args="3 15 15" />
+		<LEAF id="s" type="sphere" args="3 30 30" />
+		<LEAF id="r" type="rectangle" args="1 2 3 1" />
+		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
+		<!--<LEAF id="c" type="cylinder" args="1.1 1.2 1.3 1 2.0" />-->
 	</LEAVES>
 
 
@@ -62,6 +62,44 @@
         <NODE id="n">
         	<MATERIAL id="defaultMaterial" />
 	        <TEXTURE id="null" />
+	        <DESCENDANTS>
+	            <DESCENDANT id="n1" />
+	            <DESCENDANT id="n2" />
+	            <DESCENDANT id="n3" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="n1">
+        	<MATERIAL id="defaultMaterial" />
+	        <TEXTURE id="t1" />
+	        
+	        <TRANSLATION x="-5" y="0" z="0" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="t" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="n2">
+        	<MATERIAL id="defaultMaterial" />
+	        <TEXTURE id="t1" />
+
+	        <TRANSLATION x="0" y="-5" z="0" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="r" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="n3">
+        	<MATERIAL id="defaultMaterial" />
+	        <TEXTURE id="t1" />
+
+	        <TRANSLATION x="0" y="0" z="-5" />
+	        <TRANSLATION x="0" y="0" z="-5" />
+	        <ROTATION axis="x" angle="90" />
+	        <SCALE sx="1" sy="1.25" sz="1" />
+	        
 	        <DESCENDANTS>
 	            <DESCENDANT id="s" />
 	        </DESCENDANTS>

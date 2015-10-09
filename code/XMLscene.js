@@ -61,6 +61,11 @@ XMLscene.prototype.onGraphLoaded = function () {
 
 	this.primitives=[];
     this.loadPrimitivesOnGraphLoaded();
+
+    this.objects=[];
+    this.loadNodesOnGraphLoaded();
+
+    console.log(this.objects);
 };
 
 XMLscene.prototype.display = function () {
@@ -93,11 +98,7 @@ XMLscene.prototype.display = function () {
 		for(var i=0; i<8; i++){
 			this.lights[i].update();
 		}
-
-		for(var i=0; i<this.primitives.length; i++){
-			this.primitives[i].display();
-		}
-	};
+	};	
 
     this.shader.unbind();
 };
@@ -183,10 +184,57 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
           l.primitive.slices));
 			case 'sphere':
 				this.primitives.push(new Sphere(this, this.graph.leaves[i].tagId,
-				this.graph.leaves[i].primitive.radius,
-				this.graph.leaves[i].primitive.partsAlongRadius,
-				this.graph.leaves[i].primitive.partsPerSection));
+					this.graph.leaves[i].primitive.radius,
+					this.graph.leaves[i].primitive.partsAlongRadius,
+					this.graph.leaves[i].primitive.partsPerSection));
 				break;
 		}
+	}
+};
+
+XMLscene.prototype.loadNodesOnGraphLoaded = function () {
+
+	this.rootID=this.graph.root.tagId;
+
+	for(var i=0; i<this.graph.nodes.length; i++){
+		var nodeN = {};
+		nodeN.ID=this.graph.nodes[i].tagId;
+		nodeN.materialID=this.graph.nodes[i].materialID;
+		nodeN.textureID=this.graph.nodes[i].TextureID;
+
+		nodeN.transformations = [];
+		for(var j=0; j<this.graph.nodes[i].transformations.length; j++){
+			var transformationN = {};
+			switch(this.graph.nodes[i].transformations[j].typeOf){
+				case 'translation':
+					transformationN.typeOf=this.graph.nodes[i].transformations[j].typeOf;
+
+					transformationN.xyz = [];
+					for(var e=0; e<this.graph.nodes[i].transformations[j].xyz.length; e++){
+						transformationN.xyz.push(this.graph.nodes[i].transformations[j].xyz[e]);
+					}
+					break;
+				case 'rotation':
+					transformationN.typeOf=this.graph.nodes[i].transformations[j].typeOf;
+					break;
+				case 'scale':
+					transformationN.typeOf=this.graph.nodes[i].transformations[j].typeOf;
+
+					transformationN.xyz = [];
+					for(var e=0; e<this.graph.nodes[i].transformations[j].xyz.length; e++){
+						transformationN.xyz.push(this.graph.nodes[i].transformations[j].xyz[e]);
+					}
+					break;
+			}
+
+			nodeN.transformations.push(transformationN);
+		}
+
+		nodeN.descendants = [];
+		for(var u=0; u<this.graph.nodes[i].children.length; u++){
+			nodeN.descendants.push(this.graph.nodes[i].children[u]);
+		}
+
+		this.objects.push(nodeN);
 	}
 };

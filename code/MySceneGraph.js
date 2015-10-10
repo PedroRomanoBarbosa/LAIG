@@ -454,7 +454,7 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 	//Parse Geometric Transformations
 	var geoTransformsTag = [];
 	node.transformations = [];
-	geoTransformsTag = geoTransformsTag.concat(this.getOnlyChildsWithName(rootElement, 'TRANSLATION'), this.getOnlyChildsWithName(rootElement, 'ROTATION'),this.getOnlyChildsWithName(rootElement, 'SCALE'));
+	geoTransformsTag = rootElement.childNodes;
 	for (var i = 0; i < geoTransformsTag.length; i++) {
 		switch(geoTransformsTag[i].tagName){
 			case 'TRANSLATION':

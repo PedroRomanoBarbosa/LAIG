@@ -442,7 +442,7 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 
 	//Parse Material
 	this.IsTagUnique('MATERIAL', rootElement);
-	this.existsID('MATERIAL', rootElement, this.materials, []);
+	this.existsID('MATERIAL', rootElement, this.materials, ["null"]);
 	node.materialID = this.parseString('MATERIAL', rootElement, 'id');
 
 	//Parse Texture

@@ -98,13 +98,13 @@ XMLscene.prototype.display = function () {
 		for(var i=0; i<8; i++){
 			this.lights[i].update();
 		}
-		
+
 		/*for(var i=0; i<this.primitives.length; i++){
 			this.primitives[i].display();
 		}*/
 
 		this.nodesDisplay();
-	};	
+	};
 
     this.shader.unbind();
 };
@@ -188,6 +188,7 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
           l.primitive.topRadius,
           l.primitive.stacks,
           l.primitive.slices));
+        break;
 			case 'sphere':
 				this.primitives.push(new Sphere(this, this.graph.leaves[i].tagId,
 					this.graph.leaves[i].primitive.radius,
@@ -253,7 +254,7 @@ XMLscene.prototype.nodesDisplay = function () {
 		if(this.rootID==this.objects[i].ID){
 			this.processNodeDisplay(this.objects[i].ID);
 			break;
-		}		
+		}
 	}
 };
 

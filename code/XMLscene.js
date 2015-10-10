@@ -1,3 +1,4 @@
+var degToRad = Math.PI / 180.0;
 
 function XMLscene() {
     CGFscene.call(this);
@@ -64,7 +65,6 @@ XMLscene.prototype.onGraphLoaded = function () {
 
     this.objects=[];
     this.loadNodesOnGraphLoaded();
-
     console.log(this.objects);
 };
 
@@ -98,6 +98,12 @@ XMLscene.prototype.display = function () {
 		for(var i=0; i<8; i++){
 			this.lights[i].update();
 		}
+		
+		/*for(var i=0; i<this.primitives.length; i++){
+			this.primitives[i].display();
+		}*/
+
+		this.nodesDisplay();
 	};	
 
     this.shader.unbind();
@@ -216,6 +222,8 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 					break;
 				case 'rotation':
 					transformationN.typeOf=this.graph.nodes[i].transformations[j].typeOf;
+					transformationN.angle=this.graph.nodes[i].transformations[j].angle;
+					transformationN.axis=this.graph.nodes[i].transformations[j].axisRot;
 					break;
 				case 'scale':
 					transformationN.typeOf=this.graph.nodes[i].transformations[j].typeOf;
@@ -237,4 +245,73 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 
 		this.objects.push(nodeN);
 	}
+};
+
+XMLscene.prototype.nodesDisplay = function () {
+
+	for(var i=0; i<this.objects.length; i++){
+		if(this.rootID==this.objects[i].ID){
+			this.processNodeDisplay(this.objects[i].ID);
+			break;
+		}		
+	}
+};
+
+XMLscene.prototype.processNodeDisplay = function (id) {
+	for(var i=0; i<this.objects.length; i++){
+		if(id==this.objects[i].ID){
+
+			this.pushMatrix();
+
+			for(var j=0; j<this.objects[i].transformations.length; j++){
+				switch(this.objects[i].transformations[j].typeOf){
+				case 'translation':
+					this.translate(this.objects[i].transformations[j].xyz[0], this.objects[i].transformations[j].xyz[1], this.objects[i].transformations[j].xyz[2]);
+					break;
+				case 'rotation':
+					switch(this.objects[i].transformations[j].axis){
+						case 'x':
+							this.rotate(this.objects[i].transformations[j].angle*degToRad,1,0,0);
+							break;
+						case 'y':
+							this.rotate(this.objects[i].transformations[j].angle*degToRad,0,1,0);
+							break;
+						case 'z':
+							this.rotate(this.objects[i].transformations[j].angle*degToRad,0,0,1);
+							break;
+					}
+					break;
+				case 'scale':
+					this.scale(this.objects[i].transformations[j].xyz[0], this.objects[i].transformations[j].xyz[1], this.objects[i].transformations[j].xyz[2]);
+					break;
+				}
+			}
+
+			for(var u=0; u<this.objects[i].descendants.length; u++){
+
+				if(this.isAPrimitive(this.objects[i].descendants[u])) this.processPrimitiveDisplay(this.objects[i].descendants[u]);
+				else this.processNodeDisplay(this.objects[i].descendants[u]);
+			}
+
+			this.popMatrix();
+		}
+	}
+};
+
+XMLscene.prototype.processPrimitiveDisplay = function (id) {
+	for(var i=0; i<this.primitives.length; i++){
+		if(id==this.primitives[i].ID){
+			this.primitives[i].display();
+		}
+	}
+};
+
+XMLscene.prototype.isAPrimitive = function (str) {
+	for(var i=0; i<this.primitives.length; i++){
+		if(str==this.primitives[i].ID){
+			return true;
+		}
+	}
+
+	return false;
 };

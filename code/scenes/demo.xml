@@ -19,11 +19,11 @@
 
 
 	<LIGHTS>
-		<LIGHT id="light0">
-	        <enable value ="1" />
-	        <position  x="0" y="10" z="0" w="1" />
-	        <ambient r="0" g="0" b="0" a="1.0" />
-	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+		<LIGHT id="light0">                                    
+	        <enable value ="1" />                   	       
+	        <position  x="4" y="0" z="0" w="1" />       	   
+	        <ambient r="0" g="0" b="0" a="1.0" />        	 
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />        
 	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
     	</LIGHT>
 	</LIGHTS>
@@ -50,7 +50,7 @@
 
 	<LEAVES>
 		<LEAF id="s" type="sphere" args="3 30 30" />
-		<LEAF id="r" type="rectangle" args="1 2 3 1" />
+		<LEAF id="r" type="rectangle" args="-1 1 1 -1" />
 		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
 		<!--<LEAF id="c" type="cylinder" args="1.1 1.2 1.3 1 2.0" />-->
 	</LEAVES>
@@ -64,44 +64,18 @@
 	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="n1" />
-	            <DESCENDANT id="n2" />
-	            <DESCENDANT id="n3" />
 	        </DESCENDANTS>
         </NODE>
 
         <NODE id="n1">
         	<MATERIAL id="defaultMaterial" />
 	        <TEXTURE id="t1" />
-	        
-	        <TRANSLATION x="-5" y="0" z="0" />
 
-	        <DESCENDANTS>
-	            <DESCENDANT id="t" />
-	        </DESCENDANTS>
-        </NODE>
-
-        <NODE id="n2">
-        	<MATERIAL id="defaultMaterial" />
-	        <TEXTURE id="t1" />
-
-	        <TRANSLATION x="0" y="-5" z="0" />
+	        <ROTATION axis="y" angle="90" />
+	        <TRANSLATION x="-1" y="1" z="0" />
 
 	        <DESCENDANTS>
 	            <DESCENDANT id="r" />
-	        </DESCENDANTS>
-        </NODE>
-
-        <NODE id="n3">
-        	<MATERIAL id="defaultMaterial" />
-	        <TEXTURE id="t1" />
-
-	        <TRANSLATION x="0" y="0" z="-5" />
-	        <TRANSLATION x="0" y="0" z="-5" />
-	        <ROTATION axis="x" angle="90" />
-	        <SCALE sx="1" sy="1.25" sz="1" />
-	        
-	        <DESCENDANTS>
-	            <DESCENDANT id="s" />
 	        </DESCENDANTS>
         </NODE>
 	</NODES>

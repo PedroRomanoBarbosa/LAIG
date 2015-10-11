@@ -76,7 +76,7 @@
 	        <TEXTURE id="t1" />
 
 	        <DESCENDANTS>
-	            <DESCENDANT id="t" />
+	            <DESCENDANT id="r" />
 	        </DESCENDANTS>
         </NODE>
 	</NODES>

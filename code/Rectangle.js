@@ -42,9 +42,9 @@ Rectangle.prototype.initBuffers = function () {
 
 	this.texCoords = [
    		0,0,
-   		1,0,
-   		0,1,
-   		1,1
+   		this.rectWidth,0,
+   		0,this.rectHeight,
+   		this.rectWidth,this.rectHeight
 		];
 
 	this.initGLBuffers();

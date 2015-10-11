@@ -56,6 +56,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 	Camera
 	como estão aplicadas as texturas nas esferas
 	Transformaçoes iniciais
+	Valores de default do enunciado
 	*/
 
 	this.initCamerasOnGraphLoaded(); // Camera vec <-------------

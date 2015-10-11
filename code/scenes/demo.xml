@@ -30,6 +30,10 @@
 
 
 	<TEXTURES>
+    	<TEXTURE id="t0">
+			<file path="scenes/images/trunk-image.jpg" />
+			<amplif_factor s="1" t="1" />
+		</TEXTURE>
 		<TEXTURE id="t1">
         	<file path="scenes/images/rocks.jpg" />
         	<amplif_factor s="2" t="3" />
@@ -38,11 +42,19 @@
 
 
 	<MATERIALS>
-		<MATERIAL id="defaultMaterial">
+		<MATERIAL id="m0">
 	        <shininess value="1" />
 	        <specular r="0.0" g="0.0" b="0.0" a="1" />
-	        <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+	        <diffuse r="0.0" g="0.0" b="0.0" a="1" />
 	        <ambient r="0.0" g="0.0" b="0.0" a="1" />
+	        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    	</MATERIAL>
+
+    	<MATERIAL id="m1">
+	        <shininess value="100" />
+	        <specular r="0.8" g="0.8" b="0.8" a="1" />
+	        <diffuse r="0.0" g="0.9" b="0.9" a="1" />
+	        <ambient r="0.9" g="0.9" b="0.9" a="1" />
 	        <emission r="0.0" g="0.0" b="0.0" a="1" />
     	</MATERIAL>
 	</MATERIALS>
@@ -52,7 +64,7 @@
 		<LEAF id="s" type="sphere" args="3 30 30" />
 		<LEAF id="r" type="rectangle" args="-1 1 1 -1" />
 		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
-		<LEAF id="c" type="cylinder" args="1 2 1 10 10" />
+		<LEAF id="c" type="cylinder" args="1 1 2 1 3" />
 	</LEAVES>
 
 
@@ -60,20 +72,8 @@
 		<ROOT id="n"/>
 
         <NODE id="n">
-        	<MATERIAL id="defaultMaterial" />
-	        <TEXTURE id="null" />
-	        <DESCENDANTS>
-	            <DESCENDANT id="n1" />
-	        </DESCENDANTS>
-        </NODE>
-
-        <NODE id="n1">
-        	<MATERIAL id="defaultMaterial" />
+        	<MATERIAL id="null" />
 	        <TEXTURE id="t1" />
-
-	        <ROTATION axis="y" angle="90" />
-					<TRANSLATION x="-1" y="1" z="0" />-->
-
 
 	        <DESCENDANTS>
 	            <DESCENDANT id="c" />

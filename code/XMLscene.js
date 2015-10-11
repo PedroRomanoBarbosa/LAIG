@@ -49,6 +49,15 @@ XMLscene.prototype.setDefaultAppearance = function () {
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () {
+
+	/*Texturas anulam o material aplicado?
+	Aviso de erros..
+	Espaços entre coordenadas das primitivas
+	Camera
+	Texturas de Triangulo mal aplicadas, e as outras primitivas tambem
+	Texturas mal aplicadas as primitivas
+	*/
+
 	this.initCamerasOnGraphLoaded(); // Camera vec <-------------
 	this.initIlluminationOnGraphLoaded();
     this.initLightsOnGraphLoaded();
@@ -154,14 +163,22 @@ XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
 XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
 
+	this.materials.push(new CGFappearance(this));
+	this.materials[0].ID="_default_material_";
+	this.materials[0].shininess=10;
+	this.materials[0].setSpecular(0.5, 0.5, 0.5, 1);
+	this.materials[0].setDiffuse(0.5, 0.5, 0.5, 1);
+	this.materials[0].setAmbient(0.2, 0.2, 0.2, 1);
+	this.materials[0].setEmission(0.0, 0.0, 0.0, 1);
+
 	for(var i=0; i<this.graph.materials.length; i++){
 		this.materials.push(new CGFappearance(this));
-		this.materials[i].ID=this.graph.materials[i].tagId;
-		this.materials[i].shininess=this.graph.materials[i].shininess;
-		this.materials[i].setSpecular(this.graph.materials[i].specular[0],this.graph.materials[i].specular[1],this.graph.materials[i].specular[2],this.graph.materials[i].specular[3]);
-		this.materials[i].setDiffuse(this.graph.materials[i].diffuse[0],this.graph.materials[i].diffuse[1],this.graph.materials[i].diffuse[2],this.graph.materials[i].diffuse[3]);
-		this.materials[i].setAmbient(this.graph.materials[i].ambient[0],this.graph.materials[i].ambient[1],this.graph.materials[i].ambient[2],this.graph.materials[i].ambient[3]);
-		this.materials[i].setEmission(this.graph.materials[i].emission[0],this.graph.materials[i].emission[1],this.graph.materials[i].emission[2],this.graph.materials[i].emission[3]);
+		this.materials[i+1].ID=this.graph.materials[i].tagId;
+		this.materials[i+1].shininess=this.graph.materials[i].shininess;
+		this.materials[i+1].setSpecular(this.graph.materials[i].specular[0],this.graph.materials[i].specular[1],this.graph.materials[i].specular[2],this.graph.materials[i].specular[3]);
+		this.materials[i+1].setDiffuse(this.graph.materials[i].diffuse[0],this.graph.materials[i].diffuse[1],this.graph.materials[i].diffuse[2],this.graph.materials[i].diffuse[3]);
+		this.materials[i+1].setAmbient(this.graph.materials[i].ambient[0],this.graph.materials[i].ambient[1],this.graph.materials[i].ambient[2],this.graph.materials[i].ambient[3]);
+		this.materials[i+1].setEmission(this.graph.materials[i].emission[0],this.graph.materials[i].emission[1],this.graph.materials[i].emission[2],this.graph.materials[i].emission[3]);
 	}
 };
 
@@ -180,15 +197,15 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 					this.graph.leaves[i].primitive.Point2[0], this.graph.leaves[i].primitive.Point2[1], this.graph.leaves[i].primitive.Point2[2],
 					this.graph.leaves[i].primitive.Point3[0], this.graph.leaves[i].primitive.Point3[1], this.graph.leaves[i].primitive.Point3[2]));
 				break;
-      case 'cylinder':
-        var l = this.graph.leaves[i];
-        this.primitives.push(new Cylinder(this, l.tagId,
-          l.primitive.heightC,
-          l.primitive.bottomRadius,
-          l.primitive.topRadius,
-          l.primitive.stacks,
-          l.primitive.slices));
-        break;
+	      case 'cylinder':
+	      		var l = this.graph.leaves[i];
+	      		this.primitives.push(new Cylinder(this, l.tagId,
+	      			l.primitive.heightC,
+	      			l.primitive.bottomRadius,
+	      			l.primitive.topRadius,
+	      			l.primitive.stacks,
+	      			l.primitive.slices));
+	      		break;
 			case 'sphere':
 				this.primitives.push(new Sphere(this, this.graph.leaves[i].tagId,
 					this.graph.leaves[i].primitive.radius,
@@ -264,6 +281,30 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 
 			this.pushMatrix();
 
+			var mat;
+			if(this.objects[i].materialID!='null'){
+				for(var t=0; t<this.materials.length; t++){
+					if(this.objects[i].materialID==this.materials[t].ID){
+						mat=this.materials[t];
+						mat.apply();
+						break;
+					}
+				}
+			}else{
+				mat=this.materials[0];
+			}
+
+			var tex;
+			if(this.objects[i].textureID!='null' && this.objects[i].textureID!='clear'){
+				for(var w=0; w<this.textures.length; w++){
+					if(this.objects[i].textureID==this.textures[w].ID){
+						tex=this.textures[w];
+						tex.apply();
+						break;
+					}
+				}
+			}
+
 			for(var j=0; j<this.objects[i].transformations.length; j++){
 				switch(this.objects[i].transformations[j].typeOf){
 				case 'translation':
@@ -290,7 +331,7 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 
 			for(var u=0; u<this.objects[i].descendants.length; u++){
 
-				if(this.isAPrimitive(this.objects[i].descendants[u])) this.processPrimitiveDisplay(this.objects[i].descendants[u]);
+				if(this.isAPrimitive(this.objects[i].descendants[u])) this.processPrimitiveDisplay(this.objects[i].descendants[u], mat, tex);
 				else this.processNodeDisplay(this.objects[i].descendants[u]);
 			}
 
@@ -299,9 +340,11 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 	}
 };
 
-XMLscene.prototype.processPrimitiveDisplay = function (id) {
+XMLscene.prototype.processPrimitiveDisplay = function (id, m, t) {
 	for(var i=0; i<this.primitives.length; i++){
 		if(id==this.primitives[i].ID){
+			m.apply();
+			t.apply();
 			this.primitives[i].display();
 		}
 	}

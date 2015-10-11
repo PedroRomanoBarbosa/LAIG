@@ -4,45 +4,47 @@
 
  	this.ID=id;
 
-   this.p1x = p1x;
-   this.p1y = p1y;
-   this.p1z = p1z;
+ 	this.amplifS = 1;
+	this.amplifT = 1;
 
-   this.p2x = p2x;
-   this.p2y = p2y;
-   this.p2z = p2z;
+	this.p1x = p1x;
+   	this.p1y = p1y;
+   	this.p1z = p1z;
 
-   this.p3x = p3x;
-   this.p3y = p3y;
-   this.p3z = p3z;
+   	this.p2x = p2x;
+   	this.p2y = p2y;
+   	this.p2z = p2z;
 
-   this.a = Math.sqrt(
-   (this.p1x - this.p3x) * (this.p1x - this.p3x) +
-   (this.p1y - this.p3y) * (this.p1y - this.p3y) +
-   (this.p1z - this.p3z) * (this.p1z - this.p3z)
-   );
+   	this.p3x = p3x;
+   	this.p3y = p3y;
+   	this.p3z = p3z;
 
-   this.b = Math.sqrt(
-   (this.p2x - this.p1x) * (this.p2x - this.p1x) +
-   (this.p2y - this.p1y) * (this.p2y - this.p1y) +
-   (this.p2z - this.p1z) * (this.p2z - this.p1z)
-   );
+   	this.a = Math.sqrt(
+   	(this.p2x - this.p1x) * (this.p2x - this.p1x) +
+   	(this.p2y - this.p1y) * (this.p2y - this.p1y) +
+   	(this.p2z - this.p1z) * (this.p2z - this.p1z)
+   	);
 
-   this.c = Math.sqrt(
-   (this.p3x - this.p2x) * (this.p3x - this.p2x) +
-   (this.p3y - this.p2y) * (this.p3y - this.p2y) +
-   (this.p3z - this.p2z) * (this.p3z - this.p2z)
-   );
+   	this.b = Math.sqrt(
+   	(this.p1x - this.p3x) * (this.p1x - this.p3x) +
+   	(this.p1y - this.p3y) * (this.p1y - this.p3y) +
+   	(this.p1z - this.p3z) * (this.p1z - this.p3z)
+   	);
+
+   	this.c = Math.sqrt(
+   	(this.p3x - this.p2x) * (this.p3x - this.p2x) +
+   	(this.p3y - this.p2y) * (this.p3y - this.p2y) +
+   	(this.p3z - this.p2z) * (this.p3z - this.p2z)
+   	);
    
-   this.cosAlpha = (-this.a*this.a + this.b*this.b + this.c * this.c) / (2 * this.b * this.c);
-   this.cosBeta =  ( this.a*this.a - this.b*this.b + this.c * this.c) / (2 * this.a * this.c);
-   this.cosGamma = ( this.a*this.a + this.b*this.b - this.c * this.c) / (2 * this.a * this.b);
+   	this.cosA = ( (-1) * this.c * this.c + this.b * this.b + this.a * this.a) / ( 2 * this.b * this.a);
 
-   this.beta = Math.acos(this.cosBeta);
-   this.alpha = Math.acos(this.cosAlpha);
-   this.gamma = Math.acos(this.cosGamma);
+   	this.angA = Math.acos(this.cosA);
 
-   this.initBuffers();
+   	this.ang = ( this.c * this.c - this.b * this.b + this.a * this.a ) / ( 2 * this.a * this.c );
+   	this.beta = Math.acos(this.ang);
+
+   	this.initBuffers();
  };
 
  Triangle.prototype = Object.create(CGFobject.prototype);
@@ -69,9 +71,9 @@
 		];
 
    this.texCoords = [
-   		(this.c - this.a * Math.cos(this.beta)), 0.0,
-   		0.0, 1,
-   		this.c, 1.0
+   			0.0, 1.0,
+   			this.a, 1.0,
+   			this.a - this.c * Math.cos(this.beta), 1 - Math.sqrt( (this.b * this.b) - ((this.a - this.c * Math.cos(this.beta)) * (this.a - this.c * Math.cos(this.beta))))
 		];
 
    this.initGLBuffers();

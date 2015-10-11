@@ -2,19 +2,19 @@
 <SCENE>
 
 	<INITIALS>
-			<frustum  near="0.1" far="500"/>
-			<translation x="0" y="0" z="0"/>
-			<rotation axis="x" angle="0"/>
-    	<rotation axis="y" angle="0"/>
-    	<rotation axis="z" angle="0"/>
+		<frustum  near="0.1" far="500"/>
+		<translation x="-20" y="-15" z="-15"/>
+		<rotation axis="z" angle="0" />                  
+    	<rotation axis="x" angle="0" />                  
+    	<rotation axis="y" angle="-45" />                  
     	<scale sx="1" sy="1" sz="1" />
     	<reference length="1"/>
 	</INITIALS>
 
 
 	<ILLUMINATION>
-		<ambient r="0.1" g="0.1" b="0.1" a="1" />
-	    <background r="1" g="1" b="1" a="1" />
+		<ambient r="0.1" g="0.1" b="0.1" a="0.1" />
+		<background r="0" g="0" b="0" a="1" />
 	</ILLUMINATION>
 
 
@@ -22,7 +22,7 @@
 		<LIGHT id="light0">
 	        <enable value ="1" />
 	        <position  x="4" y="0" z="0" w="1" />
-	        <ambient r="0" g="0" b="0" a="1.0" />
+	        <ambient r="1" g="1" b="1" a="1.0" />
 	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
 	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
     	</LIGHT>
@@ -35,7 +35,7 @@
 			<amplif_factor s="1" t="1" />
 		</TEXTURE>
 		<TEXTURE id="t1">
-        	<file path="scenes/images/rocks.jpg" />
+        	<file path="scenes/images/grid.jpg" />
         	<amplif_factor s="2" t="3" />
     	</TEXTURE>
 	</TEXTURES>
@@ -63,8 +63,8 @@
 	<LEAVES>
 		<LEAF id="s" type="sphere" args="3 30 30" />
 		<LEAF id="r" type="rectangle" args="-1 1 1 -1" />
-		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
-		<LEAF id="c" type="cylinder" args="1 1 2 1 3" />
+		<LEAF id="t" type="triangle" args="0 1 0  7 1 0  2 7 0" />
+		<LEAF id="c" type="cylinder" args="1 0.5 1 15 15" />
 	</LEAVES>
 
 
@@ -72,11 +72,11 @@
 		<ROOT id="n"/>
 
         <NODE id="n">
-        	<MATERIAL id="null" />
+        	<MATERIAL id="m1" />
 	        <TEXTURE id="t1" />
 
 	        <DESCENDANTS>
-	            <DESCENDANT id="c" />
+	            <DESCENDANT id="t" />
 	        </DESCENDANTS>
         </NODE>
 	</NODES>

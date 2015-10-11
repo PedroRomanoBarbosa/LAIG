@@ -51,11 +51,11 @@ XMLscene.prototype.setDefaultAppearance = function () {
 XMLscene.prototype.onGraphLoaded = function () {
 
 	/*Texturas anulam o material aplicado?
-	Aviso de erros..
+	Aviso de erros
 	Espaços entre coordenadas das primitivas
 	Camera
-	Texturas de Triangulo mal aplicadas, e as outras primitivas tambem
-	Texturas mal aplicadas as primitivas
+	como estão aplicadas as texturas nas esferas
+	Transformaçoes iniciais
 	*/
 
 	this.initCamerasOnGraphLoaded(); // Camera vec <-------------

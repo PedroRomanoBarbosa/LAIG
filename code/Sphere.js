@@ -36,7 +36,7 @@
     for(var i = 0; i < this.slices+1; i++){
       this.vertices.push(this.radius*Math.cos(i*aH)*Math.cos(j*aV-Math.PI/2), this.radius*Math.sin(i*aH)*Math.cos(j*aV-Math.PI/2), this.radius*Math.sin(j*aV-Math.PI/2));
       this.normals.push(Math.cos(i*aH)*Math.sin(j*aV), Math.sin(i*aH)*Math.sin(j*aV), Math.cos(j*aV));
-      this.texCoords.push(0, 0);
+      this.texCoords.push(Math.cos(i*aH)*Math.cos(j*aV-Math.PI/2), Math.sin(i*aH)*Math.cos(j*aV-Math.PI/2));
     }
  }
 

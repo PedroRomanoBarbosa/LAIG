@@ -39,17 +39,17 @@
   var a_rad=ang*deg2rad;
   //Vertices, normals, and textures
  for(var j = 0; j < this.stacks+1; j++){
-   for(var i = 0; i < this.slices; i++){
+   for(var i = 0; i < this.slices+1; i++){
     this.vertices.push( (this.topRadius-j*this.radiusInc)*Math.cos(a_rad*i), (this.topRadius-j*this.radiusInc)*Math.sin(a_rad*i), /*(this.cylHeight/2) -*/ j*this.heigthInc);
     this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),normal_z);
-    this.texCoords.push((ang*i)/360, this.heigthInc*j);
+    this.texCoords.push((ang*i)/360, 1-this.heigthInc*j);
    }
  }
 
  //Indexes
  var init, init2;
- for(var j = 0; j < this.stacks; j++){
-   for(var i = 0; i < (this.slices-1); i++){
+ for(var j = 0; j < this.stacks+1; j++){
+   for(var i = 0; i < (this.slices); i++){
     init = i+j*this.slices;
     init2 = i+(j+1)*this.slices;
     /*this.indices.push(init, init2, init2+1);

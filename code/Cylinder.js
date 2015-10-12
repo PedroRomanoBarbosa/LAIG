@@ -7,15 +7,14 @@
    if(stacks < 1){ this.stacks=1; }
    else{ this.stacks=stacks; }
 
-   if(stacks < 3){ this.slices=3; }
-   else{ this.slice=slices; }
+   if(slices < 3){ this.slices=3; }
+   else{ this.slices=slices; }
 
-   this.slices=slices;
    this.cylHeight=height;
    this.bottomRadius = bottomRadius;
    this.topRadius = topRadius;
-   this.radiusInc=(topRadius - bottomRadius)/stacks;
-   this.heigthInc = height/stacks;
+   this.radiusInc=(topRadius - bottomRadius)/this.stacks;
+   this.heigthInc = this.cylHeight/this.stacks;
 
    this.initBuffers();
  };
@@ -40,7 +39,7 @@
   //Vertices, normals, and textures
  for(var j = 0; j < this.stacks+1; j++){
    for(var i = 0; i < this.slices+1; i++){
-    this.vertices.push( (this.topRadius-j*this.radiusInc)*Math.cos(a_rad*i), (this.topRadius-j*this.radiusInc)*Math.sin(a_rad*i), /*(this.cylHeight/2) -*/ j*this.heigthInc);
+    this.vertices.push( (this.bottomRadius+j*this.radiusInc)*Math.cos(a_rad*i), (this.bottomRadius+j*this.radiusInc)*Math.sin(a_rad*i), j*this.heigthInc);
     this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),normal_z);
     this.texCoords.push((ang*i)/360, 1-this.heigthInc*j);
    }
@@ -48,22 +47,13 @@
 
  //Indexes
  var init, init2;
- for(var j = 0; j < this.stacks+1; j++){
-   for(var i = 0; i < (this.slices); i++){
-    init = i+j*this.slices;
-    init2 = i+(j+1)*this.slices;
-    /*this.indices.push(init, init2, init2+1);
-    this.indices.push(init, init2+1, init+1);*/
+ for(var j = 0; j < this.stacks; j++){
+   for(var i = 0; i < this.slices; i++){
+    init = i+j*(this.slices + 1);
+    init2 = init + this.slices + 1;
     this.indices.push(init2+1, init2, init);
     this.indices.push(init+1, init2+1, init);
    }
-   //Last side
-   init = i+j*this.slices;
-   init2 = i+(j+1)*this.slices;
-   /*this.indices.push(init, init2, init2-(this.slices-1));
-   this.indices.push(init, init2-(this.slices-1), init-(this.slices-1));*/
-   this.indices.push(init2-(this.slices-1), init2, init);
-   this.indices.push(init-(this.slices-1), init2-(this.slices-1), init);
  }
 
 this.primitiveType = this.scene.gl.TRIANGLES;

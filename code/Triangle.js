@@ -3,9 +3,7 @@
  	CGFobject.call(this, scene);
 
  	this.ID=id;
-
- 	this.amplifS = 1;
-	this.amplifT = 1;
+ 	this.updatableTexCoords=true;
 
 	this.p1x = p1x;
    	this.p1y = p1y;
@@ -77,4 +75,15 @@
 		];
 
    this.initGLBuffers();
+};
+
+Triangle.prototype.updateTexCoords = function (ampS, ampT) {
+
+	this.texCoords = [
+   			0.0, 1.0,
+   			this.a/ampS, 1.0,
+   			(this.a - this.c * Math.cos(this.beta))/ampS, 1 - (Math.sqrt( (this.b * this.b) - ((this.a - this.c * Math.cos(this.beta)) * (this.a - this.c * Math.cos(this.beta)))))/ampT
+		];
+
+	this.updateTexCoordsGLBuffers();
 };

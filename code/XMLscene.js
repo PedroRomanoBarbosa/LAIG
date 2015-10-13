@@ -68,14 +68,15 @@ XMLscene.prototype.onGraphLoaded = function () {
     this.initTexturesOnGraphLoaded();
 
     this.materials=[];
+    this.parentMaterial;
     this.initMaterialsOnGraphLoaded();
 
 	this.primitives=[];
+	this.parentTexture;
     this.loadPrimitivesOnGraphLoaded();
 
     this.objects=[];
     this.loadNodesOnGraphLoaded();
-    console.log(this.objects);
 };
 
 XMLscene.prototype.display = function () {
@@ -153,9 +154,8 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
 	for(var i=0; i<this.graph.textures.length; i++){
-		this.textures.push(new CGFappearance(this));
+		this.textures.push(new CGFtexture(this, this.graph.textures[i].filepath));
 		this.textures[i].ID=this.graph.textures[i].tagId;
-		this.textures[i].loadTexture(this.graph.textures[i].filepath);
 		this.textures[i].amplif_factor = {};
 		this.textures[i].amplif_factor.s=this.graph.textures[i].amplif_factor.s;
 		this.textures[i].amplif_factor.t=this.graph.textures[i].amplif_factor.t;
@@ -171,6 +171,8 @@ XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
 	this.materials[0].setDiffuse(0.5, 0.5, 0.5, 1);
 	this.materials[0].setAmbient(0.2, 0.2, 0.2, 1);
 	this.materials[0].setEmission(0.0, 0.0, 0.0, 1);
+
+	this.parentMaterial=this.materials[0];
 
 	for(var i=0; i<this.graph.materials.length; i++){
 		this.materials.push(new CGFappearance(this));
@@ -282,27 +284,38 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 
 			this.pushMatrix();
 
-			var mat;
+			var mat, matAnt;
+			matAnt=this.parentMaterial;
 			if(this.objects[i].materialID!='null'){
 				for(var t=0; t<this.materials.length; t++){
 					if(this.objects[i].materialID==this.materials[t].ID){
+						this.parentMaterial=this.materials[t];
 						mat=this.materials[t];
 						mat.apply();
 						break;
 					}
 				}
 			}else{
-				mat=this.materials[0];
+				mat=this.parentMaterial;
 			}
 
 			var tex;
 			if(this.objects[i].textureID!='null' && this.objects[i].textureID!='clear'){
 				for(var w=0; w<this.textures.length; w++){
 					if(this.objects[i].textureID==this.textures[w].ID){
+						this.parentTexture=this.textures[w];
 						tex=this.textures[w];
-						tex.apply();
+						tex.bind();
 						break;
 					}
+				}
+			}else{
+				if(this.objects[i].textureID=='null'){
+					if(this.parentTexture!=null) tex=this.parentTexture;
+				}
+				if(this.objects[i].textureID=='clear'){
+					this.parentTexture=null;
+					tex=null;
 				}
 			}
 
@@ -336,6 +349,8 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 				else this.processNodeDisplay(this.objects[i].descendants[u]);
 			}
 
+			this.parentMaterial=matAnt;
+
 			this.popMatrix();
 		}
 	}
@@ -345,7 +360,10 @@ XMLscene.prototype.processPrimitiveDisplay = function (id, m, t) {
 	for(var i=0; i<this.primitives.length; i++){
 		if(id==this.primitives[i].ID){
 			m.apply();
-			t.apply();
+			if(t!=null){
+				if(this.primitives[i].updatableTexCoords) this.primitives[i].updateTexCoords(t.amplif_factor.s, t.amplif_factor.t);
+				t.bind();
+			}
 			this.primitives[i].display();
 		}
 	}

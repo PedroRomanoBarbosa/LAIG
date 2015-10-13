@@ -3,6 +3,7 @@
  	CGFobject.call(this, scene);
 
   this.ID = id;
+  this.updatableTexCoords=false;
 
    if(stacks < 1){ this.stacks=1; }
    else{ this.stacks=stacks; }

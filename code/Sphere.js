@@ -3,6 +3,7 @@
  	CGFobject.call(this, scene);
 
  	this.ID=id;
+ 	this.updatableTexCoords=false;
 
    this.radius=radius;
 

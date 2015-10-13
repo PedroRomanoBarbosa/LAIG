@@ -2,6 +2,7 @@ function Rectangle(scene, id, p1x, p1y, p2x, p2y) {
 	CGFobject.call(this, scene);
 
 	this.ID = id;
+	this.updatableTexCoords=true;
 
 	this.p1x = p1x;
 	this.p1y = p1y;
@@ -48,4 +49,16 @@ Rectangle.prototype.initBuffers = function () {
 		];
 
 	this.initGLBuffers();
+};
+
+Rectangle.prototype.updateTexCoords = function (ampS, ampT) {
+
+	this.texCoords = [
+   		0,0,
+   		this.rectWidth/ampS,0,
+   		0,this.rectHeight/ampT,
+   		this.rectWidth/ampS,this.rectHeight/ampT
+		];
+
+	this.updateTexCoordsGLBuffers();
 };

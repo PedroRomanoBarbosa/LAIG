@@ -50,9 +50,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () {
 
-	/*Texturas anulam o material aplicado?
-	Aviso de erros
-	Espaços entre coordenadas das primitivas
+	/*
 	Camera
 	como estão aplicadas as texturas nas esferas
 	Transformaçoes iniciais
@@ -72,7 +70,7 @@ XMLscene.prototype.onGraphLoaded = function () {
     this.initMaterialsOnGraphLoaded();
 
 	this.primitives=[];
-	this.parentTexture;
+	this.parentTexture=null;
     this.loadPrimitivesOnGraphLoaded();
 
     this.objects=[];
@@ -299,7 +297,8 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 				mat=this.parentMaterial;
 			}
 
-			var tex;
+			var tex, texAnt;
+			texAnt=this.parentTexture;
 			if(this.objects[i].textureID!='null' && this.objects[i].textureID!='clear'){
 				for(var w=0; w<this.textures.length; w++){
 					if(this.objects[i].textureID==this.textures[w].ID){
@@ -315,7 +314,6 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 				}
 				if(this.objects[i].textureID=='clear'){
 					this.parentTexture=null;
-					tex=null;
 				}
 			}
 
@@ -350,6 +348,7 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 			}
 
 			this.parentMaterial=matAnt;
+			this.parentTexture=texAnt;
 
 			this.popMatrix();
 		}

@@ -100,23 +100,23 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
 	this.rot1Axis = this.reader.getString(rotation[0], 'axis', true);
 	this.rot1Angle = this.reader.getFloat(rotation[0], 'angle', true);
 	if(this.rot1Axis != 'x' && this.rot1Axis != 'y' && this.rot1Axis != 'z')
-		this.onXMLError("axis attribute in rotation nº1 is not 'x', 'y' or 'z'");
+		this.onXMLError("axis attribute in rotation number:1 is not 'x', 'y' or 'z'");
 	if(isNaN(this.rot1Angle))
-		this.onXMLError("angle attribute in rotation nº1 is not a float.");
+		this.onXMLError("angle attribute in rotation number:1 is not a float.");
 	//2
 	this.rot2Axis = this.reader.getString(rotation[1], 'axis', true);
 	this.rot2Angle = this.reader.getFloat(rotation[1], 'angle', true);
 	if(this.rot2Axis != 'x' && this.rot2Axis != 'y' && this.rot2Axis != 'z')
-		this.onXMLError("axis attribute in rotation nº2 is not 'x', 'y' or 'z'");
+		this.onXMLError("axis attribute in rotation number:2 is not 'x', 'y' or 'z'");
 	if(isNaN(this.rot2Angle))
-		this.onXMLError("angle attribute in rotation nº2 is not a float.");
+		this.onXMLError("angle attribute in rotation number:2 is not a float.");
 	//3
 	this.rot3Axis = this.reader.getString(rotation[2], 'axis', true);
 	this.rot3Angle = this.reader.getFloat(rotation[2], 'angle', true);
 	if(this.rot3Axis != 'x' && this.rot3Axis != 'y' && this.rot3Axis != 'z')
-		this.onXMLError("axis attribute in rotation nº3 is not 'x', 'y' or 'z'");
+		this.onXMLError("axis attribute in rotation number:3 is not 'x', 'y' or 'z'");
 	if(isNaN(this.rot3Angle))
-		this.onXMLError("angle attribute in rotation nº3 is not a float.");
+		this.onXMLError("angle attribute in rotation number:3 is not a float.");
 
 	//Parse scale tag
 	var scale = initials.getElementsByTagName('scale');
@@ -678,14 +678,14 @@ MySceneGraph.prototype.getOnlyChilds = function(array,parent){
 
 MySceneGraph.prototype.parseRectangleCoord = function(s, parent){
 	var rectangle = {};
-	var coordArray = s.split(" ");
+	var coordArray = s.match(/\S+/g);
 	if(coordArray.length != 4){
 		this.onXMLError("The number of arguments in the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not 4. format:'ff ff ff ff'");
 	}
 	for (var i = 0; i < coordArray.length; i++) {
 		var n = parseFloat(coordArray[i]);
 		if(isNaN(n)){
-			this.onXMLError("The value nº " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
+			this.onXMLError("The value number:" + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
 		}else{
 			switch(i){
 				case 0:
@@ -709,7 +709,7 @@ MySceneGraph.prototype.parseRectangleCoord = function(s, parent){
 MySceneGraph.prototype.parseCylinderCoord = function(s, parent){
 	var cylinder = {};
 	var error = false;
-	var coordArray = s.split(" ");
+	var coordArray = s.match(/\S+/g);
 	if(coordArray.length != 5){
 		this.onXMLError("The number of arguments in the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not 5. format:'ff ff ff ii ii'");
 	}
@@ -718,12 +718,12 @@ MySceneGraph.prototype.parseCylinderCoord = function(s, parent){
 		if(i < 3){
 			if(isNaN(n)){
 				error = true;
-				this.onXMLError("The value nº " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
+				this.onXMLError("The value number: " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
 			}
 		}else if(i >= 3){
 			if(!this.isInteger(n)){
 				error = true;
-				this.onXMLError("The value nº " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
+				this.onXMLError("The value number: " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
 			}
 		}
 		if(!error){
@@ -752,7 +752,7 @@ MySceneGraph.prototype.parseCylinderCoord = function(s, parent){
 MySceneGraph.prototype.parseSphereCoord = function(s, parent){
 	var sphere = {};
 	var error = false;
-	var coordArray = s.split(" ");
+	var coordArray = s.match(/\S+/g);
 	if(coordArray.length != 3){
 		this.onXMLError("The number of arguments in the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not 3. format:'ff ii ii'");
 	}
@@ -761,12 +761,12 @@ MySceneGraph.prototype.parseSphereCoord = function(s, parent){
 		if(i < 1){
 			if(isNaN(n)){
 				error = true;
-				this.onXMLError("The value nº " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
+				this.onXMLError("The value number: " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
 			}
 		}else if(i >= 1){
 			if(!this.isInteger(n)){
 				error = true;
-				this.onXMLError("The value nº " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
+				this.onXMLError("The value number: " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
 			}
 		}
 		if(!error){
@@ -791,16 +791,14 @@ MySceneGraph.prototype.parseTriangleCoord = function(s){
 	triangle.Point1 = [];
 	triangle.Point2 = [];
 	triangle.Point3 = [];
-	var temp = s.split("  ");
-	var coordArray = [];
-	coordArray = coordArray.concat(temp[0].split(" "), temp[1].split(" "), temp[2].split(" "));
+	coordArray = s.match(/\S+/g);
 	if(coordArray.length != 9){
 		this.onXMLError("The number of arguments in the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not 9. format:'ff ff ff  ff ff ff  ff ff ff'");
 	}
 	for (var i = 0; i < coordArray.length; i++) {
 		var n = parseFloat(coordArray[i]);
 		if(isNaN(n)){
-			this.onXMLError("The value nº " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
+			this.onXMLError("The value number: " + (i+1) + " of the attribute 'args' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not a float.");
 		}else{
 			if(i < 3){
 				triangle.Point1.push(n);

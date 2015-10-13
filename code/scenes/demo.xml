@@ -43,19 +43,27 @@
 			<amplif_factor s="1" t="1" />
 		</TEXTURE>
 		<TEXTURE id="t1">
-        	<file path="scenes/images/trunk-image.jpg" />
+        	<file path="scenes/images/deathStarTexture.jpg" />
         	<amplif_factor s="2" t="3" />
     </TEXTURE>
 		<TEXTURE id="space">
-        	<file path="scenes/images/trunk-image.jpg" />
+        	<file path="scenes/images/spaceText.jpg" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
 		<TEXTURE id="deathStarTexture">
-        	<file path="scenes/images/trunk-image.jpg" />
+        	<file path="scenes/images/deathStarTexture.jpg" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
 		<TEXTURE id="spaceShipTexture">
-        	<file path="scenes/images/trunk-image.jpg" />
+        	<file path="scenes/images/spaceShipTexture.jpg" />
+        	<amplif_factor s="1" t="1" />
+    </TEXTURE>
+		<TEXTURE id="cockPitTexture">
+        	<file path="scenes/images/glassTexture.png" />
+        	<amplif_factor s="1" t="1" />
+    </TEXTURE>
+		<TEXTURE id="tfCockPitTexture">
+        	<file path="scenes/images/tfCockPitTexture.png" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
 	</TEXTURES>
@@ -86,8 +94,9 @@
 		<LEAF id="spaceWall" type="rectangle" args="0 5 5 0" />
 		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
 		<LEAF id="unityTriangle" type="triangle" args="1 0 0  0 0 1  0 0 0" />
-		<LEAF id="c" type="cylinder" args="1 1 1 1 5" />
-		<LEAF id="coneSection" type="cylinder" args="1 0.5 1 1 5" />
+		<LEAF id="tfTriangle" type="triangle" args="0 1 0.5  0 0 1  0 0 0" />
+		<LEAF id="c" type="cylinder" args="1 1 1 1 20" />
+		<LEAF id="coneSection" type="cylinder" args="1 0.5 1 1 20" />
 	</LEAVES>
 
 
@@ -101,13 +110,16 @@
 							<DESCENDANT id="spaceCube" />
 							<DESCENDANT id="deathStar" />
 							<DESCENDANT id="milleniumFalcon" />
+							<DESCENDANT id="tieFighter1" />
+							<DESCENDANT id="tieFighter2" />
+							<DESCENDANT id="tieFighter3" />
 					</DESCENDANTS>
 				</NODE>
 
 				<NODE id="deathStar">
         	<MATERIAL id="m1" />
 	        <TEXTURE id="deathStarTexture" />
-					<TRANSLATION x="1" y="3" z="4" />
+					<TRANSLATION x="1" y="4" z="4" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="s" />
 	        </DESCENDANTS>
@@ -186,6 +198,209 @@
         </NODE>
 
 
+
+
+
+				<NODE id="tieFighter1">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="4" y="4" z="5" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tieFighter" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tieFighter2">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="5" y="3" z="6" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tieFighter" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tieFighter3">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="3" y="4" z="6" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tieFighter" />
+	        </DESCENDANTS>
+        </NODE>
+
+
+				<NODE id="tieFighter">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<SCALE sx="0.5" sy="0.5" sz="0.5" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfCentralPart" />
+							<DESCENDANT id="tfRightPart" />
+							<DESCENDANT id="tfLeftPart" />
+							<DESCENDANT id="tfRightWing1" />
+							<DESCENDANT id="tfLeftWing1" />
+							<DESCENDANT id="tfRightWing2" />
+							<DESCENDANT id="tfLeftWing2" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfCentralPart">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="tfCockPitTexture" />
+					<SCALE sx="0.25" sy="0.25" sz="0.25" />
+	        <DESCENDANTS>
+							<DESCENDANT id="s" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfRightPart">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfArm" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfLeftPart">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<ROTATION axis="y" angle="180" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfArm" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfArm">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfArmInsidePart" />
+							<DESCENDANT id="tfArmOutsidePart" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfArmInsidePart">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="spaceShipTexture" />
+					<TRANSLATION x="0.1" y="0" z="0" />
+					<ROTATION axis="y" angle="90" />
+					<SCALE sx="0.1" sy="0.1" sz="0.2" />
+	        <DESCENDANTS>
+							<DESCENDANT id="c" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfArmOutsidePart">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="spaceShipTexture" />
+					<TRANSLATION x="0.3" y="0" z="0" />
+					<ROTATION axis="y" angle="90" />
+					<SCALE sx="0.2" sy="0.2" sz="0.2" />
+	        <DESCENDANTS>
+							<DESCENDANT id="coneSection" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfRightWing1">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="-0.5" y="0" z="0" />
+					<ROTATION axis="y" angle="180" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWing" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfRightWing2">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="-0.5" y="0" z="0" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWing" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfLeftWing1">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="0.5" y="0" z="0" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWing" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfLeftWing2">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="0.5" y="0" z="0" />
+					<ROTATION axis="y" angle="180" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWing" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfWing">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<SCALE sx="0.5" sy="0.7" sz="0.5" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWingTop" />
+							<DESCENDANT id="tfWingBot" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfWingTop">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWingTriangleRight" />
+							<DESCENDANT id="tfWingTriangleMiddle" />
+							<DESCENDANT id="tfWingTriangleLeft" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfWingTriangleMiddle">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="0" y="1" z="0.5" />
+					<ROTATION axis="x" angle="180" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWingTriangleLeft" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfWingTriangleRight">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<TRANSLATION x="0" y="0" z="-1" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWingTriangleLeft" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfWingTriangleLeft">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="deathStarTexture" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfTriangle" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="tfWingBot">
+        	<MATERIAL id="m1" />
+	        <TEXTURE id="t1" />
+					<ROTATION axis="x" angle="180" />
+	        <DESCENDANTS>
+							<DESCENDANT id="tfWingTop" />
+	        </DESCENDANTS>
+        </NODE>
+
+
+
+
+
+
+
 				<NODE id="milleniumFalcon">
         	<MATERIAL id="m1" />
 	        <TEXTURE id="t1" />
@@ -219,7 +434,7 @@
 
 				<NODE id="cockPitFront">
 					<MATERIAL id="m1" />
-					<TEXTURE id="t1" />
+					<TEXTURE id="cockPitTexture" />
 					<TRANSLATION x="-0.8" y="0.10" z="1" />
 					<SCALE sx="0.15" sy="0.15" sz="0.2" />
 					<ROTATION axis="y" angle="180" />

@@ -42,6 +42,9 @@ MySceneGraph.prototype.onXMLReady=function() {
 
 	// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
 	this.scene.onGraphLoaded();
+
+	console.log(this);
+
 };
 
 
@@ -59,85 +62,49 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 };
 
 MySceneGraph.prototype.parseInitials = function(rootElement) {
+	this.IsTagUnique('INITIALS', rootElement);
 	var initialsArray = this.getOnlyChilds(rootElement.getElementsByTagName('INITIALS'), rootElement);
-	if(initialsArray.length == 0)
-		this.onXMLError("<INITIALS> tag is missing.");
-	if(initialsArray.length > 1)
-		this.onXMLError("<INITIALS> tag appears more than once.");
 	var initials = initialsArray[0];
 
 	//Parse frustum tag
-	var frustum = initials.getElementsByTagName('frustum');
-	if(frustum.length != 1)
-		this.onXMLError("<frustum> tag is missing or appears more than once");
-	this.near = this.reader.getFloat(frustum[0],'near',true);
-	if(isNaN(this.near))
-		this.onXMLError("near attribute is not a float.");
-	this.frustumFar = this.reader.getFloat(frustum[0],'far',true);
-	if(isNaN(this.frustumFar))
-		this.onXMLError("far attribute is not a float.");
+	this.IsTagUnique('frustum', initials);
+	this.near = this.parseFloat('frustum', initials, 'near');
+	this.frustumFar = this.parseFloat('frustum', initials, 'far');
 
 	//Parse translate tag
-	var translate = initials.getElementsByTagName('translation');
-	if(translate.length != 1)
-		this.onXMLError("<translation> tag is missing or appears more than once");
-	this.translateX = this.reader.getFloat(translate[0], 'x', true);
-	this.translateY = this.reader.getFloat(translate[0], 'y', true);
-	this.translateZ = this.reader.getFloat(translate[0], 'z', true);
-	if(isNaN(this.translateX))
-		this.onXMLError("x attribute is not a float.");
-	if(isNaN(this.translateY))
-		this.onXMLError("y attribute is not a float.");
-	if(isNaN(this.translateZ))
-		this.onXMLError("z attribute is not a float.");
+	this.IsTagUnique('translation', initials);
+	var translation = this.parseTranslation(this.getOnlyChilds(initials.getElementsByTagName('translation'), initials)[0], initials);
+	this.translateX = translation[0];
+	this.translateY = translation[1];
+	this.translateZ = translation[2];
 
 	//Parse rotation tags
-	var rotation = initials.getElementsByTagName('rotation');
+	var rotation = this.getOnlyChilds(initials.getElementsByTagName('rotation'), initials);
 	if(rotation.length != 3)
 		this.onXMLError(" a <rotation> tag is missing or there are more than 3");
 	//1
-	this.rot1Axis = this.reader.getString(rotation[0], 'axis', true);
-	this.rot1Angle = this.reader.getFloat(rotation[0], 'angle', true);
-	if(this.rot1Axis != 'x' && this.rot1Axis != 'y' && this.rot1Axis != 'z')
-		this.onXMLError("axis attribute in rotation number:1 is not 'x', 'y' or 'z'");
-	if(isNaN(this.rot1Angle))
-		this.onXMLError("angle attribute in rotation number:1 is not a float.");
+	var rotation1 = this.parseRotation(rotation[0], initials);
+	this.rot1Axis = rotation1[0];
+	this.rot1Angle = rotation1[1];
 	//2
-	this.rot2Axis = this.reader.getString(rotation[1], 'axis', true);
-	this.rot2Angle = this.reader.getFloat(rotation[1], 'angle', true);
-	if(this.rot2Axis != 'x' && this.rot2Axis != 'y' && this.rot2Axis != 'z')
-		this.onXMLError("axis attribute in rotation number:2 is not 'x', 'y' or 'z'");
-	if(isNaN(this.rot2Angle))
-		this.onXMLError("angle attribute in rotation number:2 is not a float.");
+	var rotation2 = this.parseRotation(rotation[1], initials);
+	this.rot2Axis = rotation2[0];
+	this.rot2Angle = rotation2[1];
 	//3
-	this.rot3Axis = this.reader.getString(rotation[2], 'axis', true);
-	this.rot3Angle = this.reader.getFloat(rotation[2], 'angle', true);
-	if(this.rot3Axis != 'x' && this.rot3Axis != 'y' && this.rot3Axis != 'z')
-		this.onXMLError("axis attribute in rotation number:3 is not 'x', 'y' or 'z'");
-	if(isNaN(this.rot3Angle))
-		this.onXMLError("angle attribute in rotation number:3 is not a float.");
+	var rotation3 = this.parseRotation(rotation[2], initials);
+	this.rot3Axis = rotation3[0];
+	this.rot3Angle = rotation3[1];
 
 	//Parse scale tag
-	var scale = initials.getElementsByTagName('scale');
-	if(scale.length != 1)
-		this.onXMLError("<scale> tag is missing or appears more than once");
-	this.scaleX = this.reader.getFloat(scale[0], 'sx', true);
-	this.scaleY = this.reader.getFloat(scale[0], 'sy', true);
-	this.scaleZ = this.reader.getFloat(scale[0], 'sz', true);
-	if(isNaN(this.scaleX))
-		this.onXMLError("x attribute in scale tag is not a float.");
-	if(isNaN(this.scaleY))
-		this.onXMLError("y attribute in scale tag is not a float.");
-	if(isNaN(this.scaleZ))
-		this.onXMLError("z attribute in scale tag is not a float.");
+	this.IsTagUnique('scale', initials);
+	var scale = this.parseScale(this.getOnlyChilds(initials.getElementsByTagName('scale'), initials)[0], initials);
+	this.scaleX = scale[0];
+	this.scaleY = scale[1];
+	this.scaleZ = scale[2];
 
 	//Parse reference tag
-	var reference = initials.getElementsByTagName('reference');
-	if(reference.length != 1)
-		this.onXMLError("<reference> tag is missing or appears more than once");
-	this.referenceLength = this.reader.getFloat(reference[0], 'length', true);
-	if(isNaN(this.referenceLength))
-		this.onXMLError("length attribute reference tag is not a float.");
+	this.IsTagUnique('reference', initials);
+	this.referenceLength = this.parseFloat('reference', initials, 'length');
 }
 
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
@@ -148,52 +115,13 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 		this.onXMLError("<ILLUMINATION> tag appears more than once.");
 
 	//Parse ambient tag
-	this.ambientRGBA = [];
-	var ambient = illumination[0].getElementsByTagName('ambient');
-	if(ambient.length != 1)
-		this.onXMLError("<ambient> tag is missing or appears more than once");
-	this.ambientRGBA[0] = this.reader.getFloat(ambient[0],'r',true);
-	if(isNaN(this.ambientRGBA[0]))
-		this.onXMLError("'r' attribute value in ambient tag is not a float.");
-	this.ambientRGBA[1] = this.reader.getFloat(ambient[0],'g',true);
-	if(isNaN(this.ambientRGBA[1]))
-		this.onXMLError("'g' attribute value in ambient tag is not a float.");
-	this.ambientRGBA[2] = this.reader.getFloat(ambient[0],'g',true);
-	if(isNaN(this.ambientRGBA[2]))
-		this.onXMLError("'b' attribute value in ambient tag is not a float.");
-	this.ambientRGBA[3] = this.reader.getFloat(ambient[0],'a',true);
-	if(isNaN(this.ambientRGBA[3]))
-		this.onXMLError("'a' attribute value in ambient tag is not a float.");
-
-	//Parse doubleside tag
-	/*
-	var doubleside = illumination[0].getElementsByTagName('doubleside');
-	if(doubleside.length != 1)
-		this.onXMLError("<doubleside> tag is missing or appears more than once");
-	this.doublesideValue = this.reader.getFloat(doubleside[0],'value',true);
-	if(isNaN(this.doublesideValue))
-		this.onXMLError("'value' attribute value in doubleside tag is not a float.");
-	this.IsTagUnique('doubleside', rootElement);
-	this.doubleside = this.parseBool('doubleside', 'value', rootElement);*/
-
+	this.IsTagUnique('ambient', illumination[0]);
+	this.ambientRGBA = this.parseRGBA('ambient', illumination[0]);
 
 	//Parse background tag
-	this.backgroundRGBA = [];
-	var background = illumination[0].getElementsByTagName('background');
-	if(background.length != 1)
-		this.onXMLError("<background> tag is missing or appears more than once");
-	this.backgroundRGBA[0] = this.reader.getFloat(background[0],'r',true);
-	if(isNaN(this.backgroundRGBA[0]))
-		this.onXMLError("'r' attribute value in background tag is not a float.");
-	this.backgroundRGBA[1] = this.reader.getFloat(background[0],'g',true);
-	if(isNaN(this.backgroundRGBA[1]))
-		this.onXMLError("'g' attribute value in background tag is not a float.");
-	this.backgroundRGBA[2] = this.reader.getFloat(background[0],'g',true);
-	if(isNaN(this.backgroundRGBA[2]))
-		this.onXMLError("'b' attribute value in background tag is not a float.");
-	this.backgroundRGBA[3] = this.reader.getFloat(background[0],'a',true);
-	if(isNaN(this.backgroundRGBA[3]))
-		this.onXMLError("'a' attribute value in background tag is not a float.");
+	this.IsTagUnique('background', illumination[0]);
+	this.backgroundRGBA = this.parseRGBA('background', illumination[0]);
+
 }
 
 MySceneGraph.prototype.parseLights = function(rootElement) {
@@ -411,7 +339,7 @@ MySceneGraph.prototype.parseNodes = function(rootElement) {
 	};
 
 	//Parse root
-	this.IsTagUnique('ROOT', rootElement);
+	this.IsTagUnique('ROOT', nodesTag[0]);
 	this.parseRoot(rootElement);
 }
 
@@ -587,7 +515,6 @@ MySceneGraph.prototype.parseScale = function(tag, element){
 	return [sx,sy,sz];
 }
 
-
 MySceneGraph.prototype.parseBool = function(element, attribute, parent){
 	var tags = parent.getElementsByTagName(element);
 	var bool = this.reader.getFloat(tags[0],attribute,true);
@@ -653,7 +580,7 @@ MySceneGraph.prototype.parseFloat = function(element, parent, attribute){
 }
 
 MySceneGraph.prototype.IsTagUnique = function(tag, parent){
-	var tags = parent.getElementsByTagName(tag);
+	var tags = this.getOnlyChilds(parent.getElementsByTagName(tag), parent);
 	if(tags.length != 1)
 		this.onXMLError("<'" + tag + "'> tag inside <'" + parent.tagName + "'> with id '" + parent.id + "' is missing or appears more than once");
 }
@@ -668,7 +595,7 @@ MySceneGraph.prototype.existsID = function(tag, parent, array, accepted){
 MySceneGraph.prototype.getOnlyChilds = function(array,parent){
 	var newArray = [];
 	for (var i = 0; i < array.length; i++) {
-			if (array[i].parentNode == parent){
+			if (array[i].parentNode === parent){
 				newArray.push(array[i]);
 			}
 	};

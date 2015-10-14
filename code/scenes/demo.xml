@@ -101,7 +101,7 @@
 
 
 	<NODES>
-		<ROOT id="scene"/>
+				<ROOT id="scene"/>
 
 				<NODE id="scene">
 					<MATERIAL id="m1" />
@@ -732,8 +732,6 @@
 	            <DESCENDANT id="r" />
 	        </DESCENDANTS>
         </NODE>
-
-
 
 	</NODES>
 

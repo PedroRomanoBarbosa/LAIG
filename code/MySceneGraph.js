@@ -71,6 +71,21 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
 	this.near = this.parseFloat('frustum', initials, 'near');
 	this.frustumFar = this.parseFloat('frustum', initials, 'far');
 
+	//Check order of geometric transformations
+	var order = ['translation', 'rotation', 'rotation', 'rotation', 'scale'];
+	var itr = 0;
+	for (var i = 0; i < initials.childNodes.length; i++) {
+		var x = initials.childNodes[i].tagName;
+		if(x == "translation" || x == "rotation" || x == "scale"){
+			if(x != order[itr]){
+				this.onXMLError("The geometric trasformations on the <INITIALS> tag are not in order. Order: translation, rotation, rotation, rotation, scale");
+			}
+			itr++;
+			if(itr > 4)
+				break;
+		}
+	}
+
 	//Parse translate tag
 	this.IsTagUnique('translation', initials);
 	var translation = this.parseTranslation(this.getOnlyChilds(initials.getElementsByTagName('translation'), initials)[0], initials);
@@ -529,18 +544,26 @@ MySceneGraph.prototype.parseRGBA = function(rgbaElement, parent){
 	var r = this.reader.getFloat(tags[0],'r',true);
 	if(isNaN(r)){
 		this.onXMLError("'r' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}else if (r < 0 || r > 1 ) {
+		console.warn("The value of 'r' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not inside the accepted range(0-1). If its lesser than 0 it will be converted to zero. If its higher than 1 it will be converted to 1");
 	}
 	var g = this.reader.getFloat(tags[0],'g',true);
 	if(isNaN(g)){
 		this.onXMLError("'g' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}else if (g < 0 || g > 1 ) {
+		console.warn("The value of 'g' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not inside the accepted range(0-1). If its lesser than 0 it will be converted to zero. If its higher than 1 it will be converted to 1");
 	}
 	var b = this.reader.getFloat(tags[0],'b',true);
 	if(isNaN(b)){
 		this.onXMLError("'b' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}else if (b < 0 || b > 1 ) {
+		console.warn("The value of 'b' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not inside the accepted range(0-1). If its lesser than 0 it will be converted to zero. If its higher than 1 it will be converted to 1");
 	}
 	var a = this.reader.getFloat(tags[0],'a',true);
 	if(isNaN(a)){
 		this.onXMLError("'a' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}else if (a < 0 || a > 1 ) {
+		console.warn("The value of 'a' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not inside the accepted range(0-1). If its lesser than 0 it will be converted to zero. If its higher than 1 it will be converted to 1");
 	}
 	return [r,g,b,a];
 }
@@ -750,4 +773,5 @@ MySceneGraph.prototype.isInteger = function(x){
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: " + message);
 	this.loadedOk=false;
+	throw "error";
 };

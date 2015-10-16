@@ -28,7 +28,7 @@
 
 			<LIGHT id="light1">
 		        <enable value="1" />
-		        <position  x="6" y="10" z="3" w="1" />
+		        <position  x="6" y="0" z="3" w="1" />
 		        <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
 		        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
 		        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -69,18 +69,11 @@
 
 
 	<MATERIALS>
-		<MATERIAL id="m0">
-	        <shininess value="1" />
-	        <specular r="0.0" g="0.0" b="0.0" a="1" />
-	        <diffuse r="0.0" g="0.0" b="0.0" a="1" />
-	        <ambient r="0.0" g="0.0" b="0.0" a="1" />
-	        <emission r="0.0" g="0.0" b="0.0" a="1" />
-    	</MATERIAL>
     	<MATERIAL id="m1">
 	        <shininess value="100" />
 	        <specular r="0.5" g="0.5" b="0.5" a="1" />
-	        <diffuse r="0.5" g="0.5" b="0.5" a="1" />
-	        <ambient r="0.5" g="0.5" b="0.5" a="1" />
+	        <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+	        <ambient r="0.7" g="0.7" b="0.7" a="1" />
 	        <emission r="0.0" g="0.0" b="0.0" a="1" />
     	</MATERIAL>
 			<MATERIAL id="deathStar">
@@ -140,6 +133,7 @@
         	<MATERIAL id="deathStar" />
 	        <TEXTURE id="deathStarTexture" />
 					<TRANSLATION x="1" y="4" z="4" />
+					<ROTATION axis="x" angle="90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="s" />
 	        </DESCENDANTS>
@@ -543,6 +537,7 @@
 	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0.1" z="0" />
 					<SCALE sx="1" sy="0.1" sz="1" />
+					<ROTATION axis="x" angle="90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="s" />
 	        </DESCENDANTS>

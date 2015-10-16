@@ -1,4 +1,6 @@
-
+/**
+*
+*/
 function MySceneGraph(filename, scene) {
 	this.loadedOk = null;
 	this.counter = 0;

@@ -38,10 +38,6 @@
 
 
 	<TEXTURES>
-    	<TEXTURE id="t0">
-			<file path="scenes/images/trunk-image.jpg" />
-			<amplif_factor s="1" t="1" />
-		</TEXTURE>
 		<TEXTURE id="t1">
         	<file path="scenes/images/deathStarTexture.jpg" />
         	<amplif_factor s="2" t="3" />
@@ -63,7 +59,7 @@
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
 		<TEXTURE id="tfCockPitTexture">
-        	<file path="scenes/images/tfCockPitTexture.png" />
+        	<file path="scenes/images/tfCockPitTexture.jpg" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
 	</TEXTURES>
@@ -77,12 +73,32 @@
 	        <ambient r="0.0" g="0.0" b="0.0" a="1" />
 	        <emission r="0.0" g="0.0" b="0.0" a="1" />
     	</MATERIAL>
-
     	<MATERIAL id="m1">
 	        <shininess value="100" />
-	        <specular r="0.8" g="0.8" b="0.8" a="1" />
-	        <diffuse r="0.0" g="0.9" b="0.9" a="1" />
-	        <ambient r="0.9" g="0.9" b="0.9" a="1" />
+	        <specular r="0.5" g="0.5" b="0.5" a="1" />
+	        <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+	        <ambient r="0.5" g="0.5" b="0.5" a="1" />
+	        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    	</MATERIAL>
+			<MATERIAL id="deathStar">
+	        <shininess value="100" />
+	        <specular r="1" g="1" b="1" a="1" />
+	        <diffuse r="1" g="1" b="1" a="1" />
+	        <ambient r="1" g="1" b="1" a="1" />
+	        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    	</MATERIAL>
+			<MATERIAL id="window">
+	        <shininess value="10" />
+	        <specular r="1" g="1" b="1" a="1" />
+	        <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+	        <ambient r="0.5" g="0.5" b="0.5" a="1" />
+	        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    	</MATERIAL>
+			<MATERIAL id="tieFighter">
+	        <shininess value="10" />
+	        <specular r="0" g="0" b="0" a="1" />
+	        <diffuse r="0.8" g="0.8" b="1" a="1" />
+	        <ambient r="0.1" g="0.1" b="0.1" a="1" />
 	        <emission r="0.0" g="0.0" b="0.0" a="1" />
     	</MATERIAL>
 	</MATERIALS>
@@ -90,6 +106,7 @@
 
 	<LEAVES>
 		<LEAF id="s" type="sphere" args="1 20 20" />
+		<LEAF id="space" type="sphere" args="1 50 50" />
 		<LEAF id="r" type="rectangle" args="0 1 1 0" />
 		<LEAF id="spaceWall" type="rectangle" args="0 5 5 0" />
 		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
@@ -105,9 +122,9 @@
 
 				<NODE id="scene">
 					<MATERIAL id="m1" />
-					<TEXTURE id="t1" />
+					<TEXTURE id="null" />
 					<DESCENDANTS>
-							<DESCENDANT id="spaceCube" />
+							<DESCENDANT id="spaceCube2" />
 							<DESCENDANT id="deathStar" />
 							<DESCENDANT id="milleniumFalcon" />
 							<DESCENDANT id="tieFighter1" />
@@ -117,7 +134,7 @@
 				</NODE>
 
 				<NODE id="deathStar">
-        	<MATERIAL id="m1" />
+        	<MATERIAL id="deathStar" />
 	        <TEXTURE id="deathStarTexture" />
 					<TRANSLATION x="1" y="4" z="4" />
 	        <DESCENDANTS>
@@ -125,9 +142,18 @@
 	        </DESCENDANTS>
         </NODE>
 
+				<NODE id="spaceCube2">
+        	<MATERIAL id="deathStar" />
+	        <TEXTURE id="space" />
+					<SCALE sx="-50" sy="-50" sz="-50" />
+	        <DESCENDANTS>
+	            <DESCENDANT id="space" />
+	        </DESCENDANTS>
+        </NODE>
+
 				<NODE id="spaceCube">
         	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+	        <TEXTURE id="space" />
 					<SCALE sx="2.5" sy="2.5" sz="2.5" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="wall1" />
@@ -140,16 +166,16 @@
         </NODE>
 
 				<NODE id="wall1">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="space" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="spaceWall" />
 	        </DESCENDANTS>
         </NODE>
 
 				<NODE id="wall2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="space" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0" z="5" />
 					<ROTATION axis="x" angle="-90" />
 	        <DESCENDANTS>
@@ -158,8 +184,8 @@
         </NODE>
 
 				<NODE id="wall3">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="space" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0" z="5" />
 					<ROTATION axis="y" angle="90" />
 	        <DESCENDANTS>
@@ -168,8 +194,8 @@
         </NODE>
 
 				<NODE id="wall4">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="space" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="5" y="0" z="5" />
 					<ROTATION axis="y" angle="180" />
 	        <DESCENDANTS>
@@ -178,8 +204,8 @@
         </NODE>
 
 				<NODE id="wall5">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="space" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="5" y="0" z="0" />
 					<ROTATION axis="y" angle="-90" />
 	        <DESCENDANTS>
@@ -188,8 +214,8 @@
         </NODE>
 
 				<NODE id="wall6">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="space" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="5" z="0" />
 					<ROTATION axis="x" angle="90" />
 	        <DESCENDANTS>
@@ -202,8 +228,8 @@
 
 
 				<NODE id="tieFighter1">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="4" y="4" z="5" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tieFighter" />
@@ -211,8 +237,8 @@
         </NODE>
 
 				<NODE id="tieFighter2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="5" y="3" z="6" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tieFighter" />
@@ -220,8 +246,8 @@
         </NODE>
 
 				<NODE id="tieFighter3">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="3" y="4" z="6" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tieFighter" />
@@ -230,8 +256,8 @@
 
 
 				<NODE id="tieFighter">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="tieFighter" />
+	        <TEXTURE id="spaceShipTexture" />
 					<SCALE sx="0.5" sy="0.5" sz="0.5" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfCentralPart" />
@@ -245,7 +271,7 @@
         </NODE>
 
 				<NODE id="tfCentralPart">
-        	<MATERIAL id="m1" />
+        	<MATERIAL id="window" />
 	        <TEXTURE id="tfCockPitTexture" />
 					<SCALE sx="0.25" sy="0.25" sz="0.25" />
 	        <DESCENDANTS>
@@ -254,16 +280,16 @@
         </NODE>
 
 				<NODE id="tfRightPart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfArm" />
 	        </DESCENDANTS>
         </NODE>
 
 				<NODE id="tfLeftPart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<ROTATION axis="y" angle="180" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfArm" />
@@ -271,8 +297,8 @@
         </NODE>
 
 				<NODE id="tfArm">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfArmInsidePart" />
 							<DESCENDANT id="tfArmOutsidePart" />
@@ -280,8 +306,8 @@
         </NODE>
 
 				<NODE id="tfArmInsidePart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0.1" y="0" z="0" />
 					<ROTATION axis="y" angle="90" />
 					<SCALE sx="0.1" sy="0.1" sz="0.2" />
@@ -291,8 +317,8 @@
         </NODE>
 
 				<NODE id="tfArmOutsidePart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0.3" y="0" z="0" />
 					<ROTATION axis="y" angle="90" />
 					<SCALE sx="0.2" sy="0.2" sz="0.2" />
@@ -302,8 +328,8 @@
         </NODE>
 
 				<NODE id="tfRightWing1">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="-0.5" y="0" z="0" />
 					<ROTATION axis="y" angle="180" />
 	        <DESCENDANTS>
@@ -312,8 +338,8 @@
         </NODE>
 
 				<NODE id="tfRightWing2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="-0.5" y="0" z="0" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfWing" />
@@ -321,8 +347,8 @@
         </NODE>
 
 				<NODE id="tfLeftWing1">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0.5" y="0" z="0" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfWing" />
@@ -330,8 +356,8 @@
         </NODE>
 
 				<NODE id="tfLeftWing2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0.5" y="0" z="0" />
 					<ROTATION axis="y" angle="180" />
 	        <DESCENDANTS>
@@ -340,8 +366,8 @@
         </NODE>
 
 				<NODE id="tfWing">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<SCALE sx="0.5" sy="0.7" sz="0.5" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfWingTop" />
@@ -350,8 +376,8 @@
         </NODE>
 
 				<NODE id="tfWingTop">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfWingTriangleRight" />
 							<DESCENDANT id="tfWingTriangleMiddle" />
@@ -360,8 +386,8 @@
         </NODE>
 
 				<NODE id="tfWingTriangleMiddle">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="1" z="0.5" />
 					<ROTATION axis="x" angle="180" />
 	        <DESCENDANTS>
@@ -370,8 +396,8 @@
         </NODE>
 
 				<NODE id="tfWingTriangleRight">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0" z="-1" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfWingTriangleLeft" />
@@ -380,15 +406,15 @@
 
 				<NODE id="tfWingTriangleLeft">
         	<MATERIAL id="m1" />
-	        <TEXTURE id="deathStarTexture" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfTriangle" />
 	        </DESCENDANTS>
         </NODE>
 
 				<NODE id="tfWingBot">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<ROTATION axis="x" angle="180" />
 	        <DESCENDANTS>
 							<DESCENDANT id="tfWingTop" />
@@ -403,7 +429,7 @@
 
 				<NODE id="milleniumFalcon">
         	<MATERIAL id="m1" />
-	        <TEXTURE id="t1" />
+	        <TEXTURE id="spaceShipTexture" />
 					<TRANSLATION x="4" y="2" z="2" />
 					<ROTATION axis="x" angle="-20" />
 					<ROTATION axis="z" angle="-10" />
@@ -433,7 +459,7 @@
 				</NODE>
 
 				<NODE id="cockPitFront">
-					<MATERIAL id="m1" />
+					<MATERIAL id="window" />
 					<TEXTURE id="cockPitTexture" />
 					<TRANSLATION x="-0.8" y="0.10" z="1" />
 					<SCALE sx="0.15" sy="0.15" sz="0.2" />
@@ -444,8 +470,8 @@
 				</NODE>
 
 				<NODE id="cockPitHead">
-					<MATERIAL id="m1" />
-					<TEXTURE id="t1" />
+					<MATERIAL id="null" />
+					<TEXTURE id="null" />
 					<TRANSLATION x="-0.8" y="0.10" z="1" />
 					<SCALE sx="0.075" sy="0.075" sz="0.01" />
 					<DESCENDANTS>
@@ -454,8 +480,8 @@
 				</NODE>
 
 				<NODE id="tubeMiddle">
-					<MATERIAL id="m1" />
-					<TEXTURE id="t1" />
+					<MATERIAL id="null" />
+					<TEXTURE id="null" />
 					<ROTATION axis="y" angle="220" />
 					<TRANSLATION x="0.4" y="0.10" z="0" />
 					<SCALE sx="0.7" sy="0.15" sz="0.15" />
@@ -466,8 +492,8 @@
 				</NODE>
 
 				<NODE id="tubeLeft">
-					<MATERIAL id="m1" />
-					<TEXTURE id="t1" />
+					<MATERIAL id="null" />
+					<TEXTURE id="null" />
 					<ROTATION axis="y" angle="180" />
 					<DESCENDANTS>
 							<DESCENDANT id="tubeRight" />
@@ -475,8 +501,8 @@
 				</NODE>
 
 				<NODE id="tubeRight">
-					<MATERIAL id="m1" />
-					<TEXTURE id="t1" />
+					<MATERIAL id="null" />
+					<TEXTURE id="null" />
 					<ROTATION axis="z" angle="-7" />
 					<TRANSLATION x="0.2" y="0.15" z="0" />
 					<SCALE sx="0.7" sy="0.15" sz="0.15" />
@@ -487,8 +513,8 @@
 				</NODE>
 
 				<NODE id="frontPart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0.1" z="0.6" />
 					<ROTATION axis="x" angle="10" />
 					<SCALE sx="0.2" sy="0.2" sz="0.9" />
@@ -498,8 +524,8 @@
         </NODE>
 
 				<NODE id="centralPart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="topPart" />
 							<DESCENDANT id="bottomPart" />
@@ -510,8 +536,8 @@
         </NODE>
 
 				<NODE id="topPart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0.1" z="0" />
 					<SCALE sx="1" sy="0.1" sz="1" />
 	        <DESCENDANTS>
@@ -520,8 +546,8 @@
         </NODE>
 
 				<NODE id="ceilling">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0.25" z="0" />
 					<SCALE sx="0.2" sy="0.05" sz="0.2" />
 	        <DESCENDANTS>
@@ -530,8 +556,8 @@
         </NODE>
 
 				<NODE id="ceilling2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0.25" z="0" />
 					<SCALE sx="0.2" sy="0.15" sz="0.2" />
 					<ROTATION axis="x" angle="90" />
@@ -541,8 +567,8 @@
         </NODE>
 
 				<NODE id="bottomPart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="-0.1" z="0" />
 					<SCALE sx="1" sy="0.1" sz="1" />
 					<ROTATION axis="x" angle="90" />
@@ -552,8 +578,8 @@
         </NODE>
 
 				<NODE id="middlePart">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0.1" z="0" />
 					<SCALE sx="1" sy="0.2" sz="1" />
 					<ROTATION axis="x" angle="90" />
@@ -563,8 +589,8 @@
         </NODE>
 
 				<NODE id="sideRight">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 							<DESCENDANT id="slice" />
 							<DESCENDANT id="prism" />
@@ -572,8 +598,8 @@
         </NODE>
 
 				<NODE id="sideLeft">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<ROTATION axis="z" angle="180" />
 	        <DESCENDANTS>
 							<DESCENDANT id="sideRight" />
@@ -581,8 +607,8 @@
         </NODE>
 
 				<NODE id="prism">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0.15" y="-0.1" z="0.3" />
 					<SCALE sx="0.2" sy="0.2" sz="1.2"/>
 					<TRANSLATION x="0.5" y="0.5" z="0.5" />
@@ -592,8 +618,8 @@
         </NODE>
 
 				<NODE id="slice">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0.35" y="-0.1" z="0.3" />
 					<SCALE sx="0.6" sy="0.2" sz="1.2"/>
 	        <DESCENDANTS>
@@ -602,8 +628,8 @@
         </NODE>
 
 				<NODE id="unitySlice">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="back" />
 							<DESCENDANT id="side1" />
@@ -614,8 +640,8 @@
         </NODE>
 
 				<NODE id="back">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="1" y="0" z="0" />
 					<ROTATION axis="y" angle="180" />
 	        <DESCENDANTS>
@@ -624,8 +650,8 @@
         </NODE>
 
 				<NODE id="side1">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<ROTATION axis="y" angle="270" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="r" />
@@ -633,8 +659,8 @@
         </NODE>
 
 				<NODE id="side2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0" z="1" />
 					<ROTATION axis="y" angle="45" />
 					<SCALE sx="1.414213562" sy="1" sz="1" />
@@ -644,16 +670,16 @@
         </NODE>
 
 				<NODE id="triangleSide1">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="unityTriangle" />
 	        </DESCENDANTS>
         </NODE>
 
 				<NODE id="triangleSide2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="1" z="0" />
 					<ROTATION axis="y" angle="-90" />
 					<ROTATION axis="x" angle="180" />
@@ -663,8 +689,8 @@
         </NODE>
 
 				<NODE id="unityCube">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="-0.5" y="-0.5" z="-0.5" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="cubeSide1" />
@@ -677,8 +703,8 @@
         </NODE>
 
 				<NODE id="cubeSide1">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="0" z="1" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="r" />
@@ -686,8 +712,8 @@
         </NODE>
 
 				<NODE id="cubeSide2">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<ROTATION axis="y" angle="270" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="r" />
@@ -695,8 +721,8 @@
         </NODE>
 
 				<NODE id="cubeSide3">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<ROTATION axis="x" angle="90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="r" />
@@ -704,8 +730,8 @@
         </NODE>
 
 				<NODE id="cubeSide4">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="1" y="0" z="0" />
 					<ROTATION axis="y" angle="180" />
 	        <DESCENDANTS>
@@ -714,8 +740,8 @@
         </NODE>
 
 				<NODE id="cubeSide5">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="0" y="1" z="1" />
 					<ROTATION axis="x" angle="-90" />
 	        <DESCENDANTS>
@@ -724,8 +750,8 @@
         </NODE>
 
 				<NODE id="cubeSide6">
-        	<MATERIAL id="m1" />
-	        <TEXTURE id="spaceShipTexture" />
+        	<MATERIAL id="null" />
+	        <TEXTURE id="null" />
 					<TRANSLATION x="1" y="0" z="1" />
 					<ROTATION axis="y" angle="90" />
 	        <DESCENDANTS>

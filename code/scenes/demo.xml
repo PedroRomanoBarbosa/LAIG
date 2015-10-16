@@ -8,7 +8,7 @@
     	<rotation axis="y" angle="0"/>
 			<rotation axis="z" angle="0"/>
 			<scale sx="1" sy="1" sz="1" />
-    	<reference length="f"/>
+    	<reference length="1"/>
 	</INITIALS>
 
 

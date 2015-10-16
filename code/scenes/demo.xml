@@ -104,7 +104,7 @@
 		<LEAF id="s" type="sphere" args="1 20 20" />
 		<LEAF id="space" type="sphere" args="1 50 50" />
 		<LEAF id="r" type="rectangle" args="0 1 1 0" />
-		<LEAF id="spaceWall" type="rectangle" args="0 5 5 0" />
+		<LEAF id="spaceWall" type="rectangle" args="0 1 1 0" />
 		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
 		<LEAF id="unityTriangle" type="triangle" args="1 0 0  0 0 1  0 0 0" />
 		<LEAF id="tfTriangle" type="triangle" args="0 1 0.5  0 0 1  0 0 0" />
@@ -120,7 +120,7 @@
 					<MATERIAL id="m1" />
 					<TEXTURE id="null" />
 					<DESCENDANTS>
-							<DESCENDANT id="spaceCube2" />
+							<DESCENDANT id="spaceCube" />
 							<DESCENDANT id="deathStar" />
 							<DESCENDANT id="milleniumFalcon" />
 							<DESCENDANT id="tieFighter1" />
@@ -151,7 +151,8 @@
 				<NODE id="spaceCube">
         	<MATERIAL id="m1" />
 	        <TEXTURE id="space" />
-					<SCALE sx="2.5" sy="2.5" sz="2.5" />
+					<SCALE sx="50" sy="50" sz="50" />
+					<TRANSLATION x="-0.5" y="-0.5" z="-0.5" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="wall1" />
 							<DESCENDANT id="wall2" />
@@ -173,7 +174,7 @@
 				<NODE id="wall2">
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
-					<TRANSLATION x="0" y="0" z="5" />
+					<TRANSLATION x="0" y="0" z="1" />
 					<ROTATION axis="x" angle="-90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="spaceWall" />
@@ -183,7 +184,7 @@
 				<NODE id="wall3">
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
-					<TRANSLATION x="0" y="0" z="5" />
+					<TRANSLATION x="0" y="0" z="1" />
 					<ROTATION axis="y" angle="90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="spaceWall" />
@@ -193,7 +194,7 @@
 				<NODE id="wall4">
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
-					<TRANSLATION x="5" y="0" z="5" />
+					<TRANSLATION x="1" y="0" z="1" />
 					<ROTATION axis="y" angle="180" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="spaceWall" />
@@ -203,7 +204,7 @@
 				<NODE id="wall5">
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
-					<TRANSLATION x="5" y="0" z="0" />
+					<TRANSLATION x="1" y="0" z="0" />
 					<ROTATION axis="y" angle="-90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="spaceWall" />
@@ -213,7 +214,7 @@
 				<NODE id="wall6">
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
-					<TRANSLATION x="0" y="5" z="0" />
+					<TRANSLATION x="0" y="1" z="0" />
 					<ROTATION axis="x" angle="90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="spaceWall" />

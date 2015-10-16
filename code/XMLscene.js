@@ -36,7 +36,7 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -57,7 +57,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 	Valores de default do enunciado
 	*/
 
-	this.initCamerasOnGraphLoaded(); // Camera vec <-------------
+	this.initCamerasOnGraphLoaded();
 	this.initIlluminationOnGraphLoaded();
     this.initLightsOnGraphLoaded();
 
@@ -93,7 +93,7 @@ XMLscene.prototype.display = function () {
 	this.applyViewMatrix();
 
 	// Draw axis
-	this.axis.display();
+	if(this.graph.referenceLength != 0) this.axis.display();
 
 	this.setDefaultAppearance();
 
@@ -108,10 +108,6 @@ XMLscene.prototype.display = function () {
 			this.lights[i].update();
 		}
 
-		/*for(var i=0; i<this.primitives.length; i++){
-			this.primitives[i].display();
-		}*/
-
 		this.nodesDisplay();
 	};
 
@@ -119,7 +115,10 @@ XMLscene.prototype.display = function () {
 };
 
 XMLscene.prototype.initCamerasOnGraphLoaded = function () {
-    //this.camera = new CGFcamera(0.4, this.graph.near, this.graph.frustumFar, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0)); //MOVE CAMERA
+	this.camera.near=this.graph.near;
+	this.camera.far=this.graph.frustumFar;
+
+	this.axis = new CGFaxis(this, this.graph.referenceLength, 0.1);
 };
 
 XMLscene.prototype.initIlluminationOnGraphLoaded = function () {

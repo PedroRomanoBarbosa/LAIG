@@ -25,7 +25,7 @@
   this.normals = [];
   this.indices = [];
   this.texCoords = [];
-  
+
   var deg2rad=Math.PI/180.0;
   var angH = 360/this.slices;
   var angV = 180/this.stacks;

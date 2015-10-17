@@ -1,6 +1,5 @@
 /**
-* MySceneGraph constructor
-* @constructs
+* @constructs MySceneGraph constructor
 * @param {string} filename Name of the .lsx file
 * @param {XMLscene} scene Scene object
 */

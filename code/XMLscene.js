@@ -50,12 +50,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () {
 
-	/*
-	Camera
-	como estão aplicadas as texturas nas esferas
-	Transformaçoes iniciais
-	Valores de default do enunciado
-	*/
+	this.initMatrixOnGraphLoaded();
 
 	this.initCamerasOnGraphLoaded();
 	this.initIlluminationOnGraphLoaded();
@@ -92,9 +87,6 @@ XMLscene.prototype.display = function () {
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 
-	// Draw axis
-	if(this.graph.referenceLength != 0) this.axis.display();
-
 	this.setDefaultAppearance();
 
 	// ---- END Background, camera and axis setup
@@ -104,6 +96,11 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
+		this.multMatrix(this.m);
+
+		// Draw axis
+		if(this.graph.referenceLength != 0) this.axis.display();
+
 		for(var i=0; i<8; i++){
 			this.lights[i].update();
 		}
@@ -112,6 +109,20 @@ XMLscene.prototype.display = function () {
 	};
 
     this.shader.unbind();
+};
+
+XMLscene.prototype.initMatrixOnGraphLoaded = function () {
+	
+	this.m=mat4.create();
+	mat4.identity(this.m);
+
+	mat4.translate(this.m, this.m, [this.graph.translateX, this.graph.translateY, this.graph.translateZ]);
+
+	mat4.rotate(this.m, this.m, this.graph.rot1Angle * Math.PI / 180, [1, 0, 0]);
+	mat4.rotate(this.m, this.m, this.graph.rot2Angle * Math.PI / 180, [0, 1, 0]);
+	mat4.rotate(this.m, this.m, this.graph.rot3Angle * Math.PI / 180, [0, 0, 1]);
+
+	mat4.scale(this.m, this.m, [this.graph.scaleX, this.graph.scaleY, this.graph.scaleZ]);
 };
 
 XMLscene.prototype.initCamerasOnGraphLoaded = function () {

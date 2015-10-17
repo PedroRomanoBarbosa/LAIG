@@ -1,44 +1,56 @@
+/* Global var to pass degrees to radius */
 var degToRad = Math.PI / 180.0;
 
+/**
+* @constructs XMLscene constructor
+*/
 function XMLscene() {
     CGFscene.call(this);
 }
 
+
 XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
+/**
+* @function Initializes the scene's axis and the scene's default attributes
+* @param application The application object
+*/
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
     this.initCameras();
-
     this.initLights();
-
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
-	this.gl.enable(this.gl.CULL_FACE);
+	  this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 
-	this.axis=new CGFaxis(this);
+	  this.axis=new CGFaxis(this);
 };
 
+/**
+* @function Initializes the scene's lights
+*/
 XMLscene.prototype.initLights = function () {
-
-    this.shader.bind();
-
+  this.shader.bind();
 	this.lights[0].setPosition(2, 3, 3, 1);
-    this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-    this.lights[0].update();
-
-    this.shader.unbind();
+  this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
+  this.lights[0].update();
+  this.shader.unbind();
 };
 
+/**
+* @function Initializes scene's cameras
+*/
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
+/**
+* @function Sets the default appearance for the scene
+*/
 XMLscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
     this.setDiffuse(0.2, 0.4, 0.8, 1.0);
@@ -46,10 +58,11 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);
 };
 
-// Handler called when the graph is finally loaded.
-// As loading is asynchronous, this may be called already after the application has started the run loop
+/**
+* @function Handler called when the graph is finally loaded. As loading is asynchronous, this may be called already after the application has started the run loop
+* @param application The application object
+*/
 XMLscene.prototype.onGraphLoaded = function () {
-
 	/*
 	Camera
 	como estão aplicadas as texturas nas esferas
@@ -59,24 +72,27 @@ XMLscene.prototype.onGraphLoaded = function () {
 
 	this.initCamerasOnGraphLoaded();
 	this.initIlluminationOnGraphLoaded();
-    this.initLightsOnGraphLoaded();
+  this.initLightsOnGraphLoaded();
 
-    this.enableTextures(true);
-    this.textures=[];
-    this.initTexturesOnGraphLoaded();
+  this.enableTextures(true);
+  this.textures=[];
+  this.initTexturesOnGraphLoaded();
 
-    this.materials=[];
-    this.parentMaterial;
-    this.initMaterialsOnGraphLoaded();
+  this.materials=[];
+  this.parentMaterial;
+  this.initMaterialsOnGraphLoaded();
 
 	this.primitives=[];
 	this.parentTexture=null;
-    this.loadPrimitivesOnGraphLoaded();
+  this.loadPrimitivesOnGraphLoaded();
 
-    this.objects=[];
-    this.loadNodesOnGraphLoaded();
+  this.objects=[];
+  this.loadNodesOnGraphLoaded();
 };
 
+/**
+* @function Displays the scene
+*/
 XMLscene.prototype.display = function () {
 	// ---- BEGIN Background, camera and axis setup
     this.shader.bind();
@@ -114,6 +130,9 @@ XMLscene.prototype.display = function () {
     this.shader.unbind();
 };
 
+/**
+* @function Initializes the scene's cameras after the scene's graph is loaded
+*/
 XMLscene.prototype.initCamerasOnGraphLoaded = function () {
 	this.camera.near=this.graph.near;
 	this.camera.far=this.graph.frustumFar;
@@ -121,11 +140,17 @@ XMLscene.prototype.initCamerasOnGraphLoaded = function () {
 	this.axis = new CGFaxis(this, this.graph.referenceLength, 0.1);
 };
 
+/**
+* @function Initializes the scene's illumination after the scene's graph is loaded
+*/
 XMLscene.prototype.initIlluminationOnGraphLoaded = function () {
 	this.setGlobalAmbientLight(this.graph.ambientRGBA[0],this.graph.ambientRGBA[1],this.graph.ambientRGBA[2],this.graph.ambientRGBA[3]);
     this.gl.clearColor(this.graph.backgroundRGBA[0],this.graph.backgroundRGBA[1],this.graph.backgroundRGBA[2],this.graph.backgroundRGBA[3]);
 };
 
+/**
+* @function Initializes the scene's lights after the scene's graph is loaded
+*/
 XMLscene.prototype.initLightsOnGraphLoaded = function () {
 
     this.shader.bind();
@@ -148,6 +173,9 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
     this.shader.unbind();
 };
 
+/**
+* @function Initializes the scene's textures after the scene's graph is loaded
+*/
 XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
 	for(var i=0; i<this.graph.textures.length; i++){
@@ -159,6 +187,9 @@ XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 	}
 };
 
+/**
+* @function Initializes the scene's textures after the scene's graph is loaded
+*/
 XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
 
 	this.materials.push(new CGFappearance(this));
@@ -182,6 +213,9 @@ XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
 	}
 };
 
+/**
+* @function Loads the scene's primitives after the scene's graph is loaded
+*/
 XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 
 	for(var i=0; i<this.graph.leaves.length; i++){
@@ -216,6 +250,9 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 	}
 };
 
+/**
+* @function Loads the scene's nodes after the scene's graph is loaded
+*/
 XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 
 	this.rootID=this.graph.root.tagId;
@@ -265,6 +302,9 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 	}
 };
 
+/**
+* @function Displays the scene's nodes
+*/
 XMLscene.prototype.nodesDisplay = function () {
 
 	for(var i=0; i<this.objects.length; i++){
@@ -275,6 +315,10 @@ XMLscene.prototype.nodesDisplay = function () {
 	}
 };
 
+/**
+* @function Processes the display of the nodes
+* @param id The identification of the node to process
+*/
 XMLscene.prototype.processNodeDisplay = function (id) {
 	for(var i=0; i<this.objects.length; i++){
 		if(id==this.objects[i].ID){
@@ -354,6 +398,12 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 	}
 };
 
+/**
+* @function Processes the display of the primitives
+* @param id The identification of the primitive to process
+* @param m The material of the primitive to process
+* @param t The texture of the primitive to process
+*/
 XMLscene.prototype.processPrimitiveDisplay = function (id, m, t) {
 	for(var i=0; i<this.primitives.length; i++){
 		if(id==this.primitives[i].ID){
@@ -367,6 +417,11 @@ XMLscene.prototype.processPrimitiveDisplay = function (id, m, t) {
 	}
 };
 
+/**
+* @function Checks if a certain id is an id of a primitive
+* @param {string} str The id of the primitive to process
+* @returns {Boolean} True if the str matches a primitive ID, false if otherwise
+*/
 XMLscene.prototype.isAPrimitive = function (str) {
 	for(var i=0; i<this.primitives.length; i++){
 		if(str==this.primitives[i].ID){

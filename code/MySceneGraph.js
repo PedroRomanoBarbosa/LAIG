@@ -1,5 +1,7 @@
 /**
-*
+* @constructs MySceneGraph constructor
+* @param {string} filename Name of the .lsx file
+* @param {XMLscene} scene Scene object
 */
 function MySceneGraph(filename, scene) {
 	this.loadedOk = null;
@@ -22,8 +24,8 @@ function MySceneGraph(filename, scene) {
 }
 
 
-/*
- * Callback to be executed after successful reading
+/**
+ * @function Callback to be executed after successful reading
  */
 MySceneGraph.prototype.onXMLReady=function() {
 	console.log("XML Loading finished.");
@@ -50,9 +52,10 @@ MySceneGraph.prototype.onXMLReady=function() {
 };
 
 
-/*
- * Example of method that parses elements of one block and stores information in a specific data structure
- */
+/**
+* @function Parses the .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseScene = function(rootElement) {
 	this.parseInitials(rootElement);
 	this.parseIllumination(rootElement);
@@ -63,6 +66,10 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 	this.parseNodes(rootElement);
 };
 
+/**
+* @function Parses the INITIALS tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseInitials = function(rootElement) {
 	this.IsTagUnique('INITIALS', rootElement);
 	var initialsArray = this.getOnlyChilds(rootElement.getElementsByTagName('INITIALS'), rootElement);
@@ -124,6 +131,10 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
 	this.referenceLength = this.parseFloat('reference', initials, 'length');
 }
 
+/**
+* @function Parses the ILLUMINATION tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	var illumination = rootElement.getElementsByTagName('ILLUMINATION');
 	if(illumination.length == 0)
@@ -141,6 +152,10 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 
 }
 
+/**
+* @function Parses the LIGHTS tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseLights = function(rootElement) {
 	var lightsTag = rootElement.getElementsByTagName('LIGHTS');
 	if(lightsTag.length == 0)
@@ -161,6 +176,10 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 	};
 }
 
+/**
+* @function Parses a LIGHT tag in .lsx file and stores it's information in this class
+* @param parent The parent element of the LIGHT tag. It should be a tag element with name 'LIGHTS'
+*/
 MySceneGraph.prototype.parseLight = function(parent){
 	//Set id
 	var light = { tagId:parent.id };
@@ -168,14 +187,6 @@ MySceneGraph.prototype.parseLight = function(parent){
 	//Parse enable value
 	//var enableTags = parent.getElementsByTagName('enable');
 	this.IsTagUnique('enable',parent);
-	/*
-	light.enable = this.reader.getFloat(enableTags[0],'value',true);
-	if(!light.enable == null){
-		if(light.enable != 1 && light.enable != 0){
-			this.onXMLError("enable value on <enable> tag on light with the id '" + parent.id + "' it's not 0 nor 1.");
-		}
-	}
-	*/
 
 	light.enable = this.parseBool('enable', 'value', parent);
 
@@ -199,6 +210,10 @@ MySceneGraph.prototype.parseLight = function(parent){
 	this.lights.push(light);
 }
 
+/**
+* @function Parses the TEXTURES tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseTextures = function(rootElement) {
 	var texturesTag = this.getOnlyChilds(rootElement.getElementsByTagName('TEXTURES'), rootElement);
 	if(texturesTag.length == 0)
@@ -219,6 +234,10 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 	};
 }
 
+/**
+* @function Parses a TEXTURE tag in .lsx file and stores it's information in this class
+* @param parent The parent element of the TEXTURE tag. It should be a tag element with name 'TEXTURES'
+*/
 MySceneGraph.prototype.parseTexture = function(parent){
 	//Set id
 	var texture = { tagId:parent.id };
@@ -238,6 +257,10 @@ MySceneGraph.prototype.parseTexture = function(parent){
 	this.textures.push(texture);
 }
 
+/**
+* @function Parses the MATERIALS tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
 	var materialsTag = rootElement.getElementsByTagName('MATERIALS');
 	if(materialsTag.length == 0)
@@ -258,6 +281,10 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 	};
 }
 
+/**
+* @function Parses a MATERIAL tag in .lsx file and stores it's information in this class
+* @param parent The parent element of the MATERIAL tag. It should be a tag element with name 'MATERIALS'
+*/
 MySceneGraph.prototype.parseMaterial = function(parent){
 	//Set id
 	var material = { tagId:parent.id };
@@ -286,6 +313,10 @@ MySceneGraph.prototype.parseMaterial = function(parent){
 	this.materials.push(material);
 }
 
+/**
+* @function Parses the LEAFS tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseLeafs = function(rootElement) {
 	var leavesTag = rootElement.getElementsByTagName('LEAVES');
 	if(leavesTag.length == 0)
@@ -306,6 +337,10 @@ MySceneGraph.prototype.parseLeafs = function(rootElement) {
 	};
 }
 
+/**
+* @function Parses a LEAF tag in .lsx file and stores it's information in this class
+* @param parent The parent element of the LEAF tag. It should be a tag element with name 'LEAFS'
+*/
 MySceneGraph.prototype.parseLeaf = function(parent){
 	var leaf = { tagId:parent.id };
 
@@ -334,6 +369,10 @@ MySceneGraph.prototype.parseLeaf = function(parent){
 	this.leaves.push(leaf);
 }
 
+/**
+* @function Parses the NODES tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
 MySceneGraph.prototype.parseNodes = function(rootElement) {
 	var nodesTag = rootElement.getElementsByTagName('NODES');
 	if(nodesTag.length == 0)
@@ -360,6 +399,10 @@ MySceneGraph.prototype.parseNodes = function(rootElement) {
 	this.parseRoot(rootElement);
 }
 
+/**
+* @function Parses the ROOT tag in .lsx file and stores it's information in this class
+* @param parent The parent element of the ROOT tag. It should be a tag element with name 'NODES'
+*/
 MySceneGraph.prototype.parseRoot = function(rootElement){
 	var rootArray = rootElement.getElementsByTagName('ROOT');
 	this.root = {};
@@ -372,6 +415,10 @@ MySceneGraph.prototype.parseRoot = function(rootElement){
 	}
 }
 
+/**
+* @function Parses a NODE tag in .lsx file and stores it's information in this class
+* @param parent The parent element of the NODE tag. It should be a tag element with name 'NODES'
+*/
 MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 	var node = {};
 	node.children = [];
@@ -442,9 +489,15 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 }
 
 /*
- *	Helping functions
- */
+*	Helping functions
+*/
 
+/**
+* @function Get only the direct children of a tag element in the .lsx file with a certain name
+* @param parent The parent element.
+* @param {string} tagName The name of the children tags to search
+* @returns {Array} The array of the direct children
+*/
 MySceneGraph.prototype.getOnlyChildsWithName = function(parent, tagName){
 	var children = [];
 	for (var i = 0; i < parent.childNodes.length; i++) {
@@ -455,7 +508,13 @@ MySceneGraph.prototype.getOnlyChildsWithName = function(parent, tagName){
 	return children;
 }
 
-/* Checks if an Id is already in an array */
+/**
+* @function Checks if an Id is already in an array or if the new ID is accepted from a set of values
+* @param {string} newId The new ID to test
+* @param {Array} array The array to search the ID on
+* @param {Array} accepted The array with the accepted values for the newId
+* @returns {Boolean} True if the Id matches and false if it doesn't
+*/
 MySceneGraph.prototype.checkID = function(newId, array, accepted){
 	for (var i = 0; i < accepted.length; i++) {
 			if(accepted[i] == newId){
@@ -470,7 +529,12 @@ MySceneGraph.prototype.checkID = function(newId, array, accepted){
 	return false;
 }
 
-/* Checks if an tagId is already in an array */
+/**
+* @function Checks if an Id is already in an array
+* @param {string} newId The new ID to test
+* @param {Array} array The array to search the ID on
+* @returns {Boolean} True if the Id matches and false if it doesn't
+*/
 MySceneGraph.prototype.checkIDother = function(newId, array){
 	for (var i = 0; i < array.length; i++) {
 		if(array[i].id == newId){
@@ -480,16 +544,12 @@ MySceneGraph.prototype.checkIDother = function(newId, array){
 	return false;
 }
 
-/* Checks if an Id is already in an String array */
-MySceneGraph.prototype.checkIDString = function(newId, array){
-	for (var i = 0; i < array.length; i++) {
-		if(array[i] == newId){
-			return true;
-		}
-	};
-	return false;
-}
-
+/**
+* @function Parses a a tag with this configuration: <NAME x="ff" y="ff" z="ff">. Example: TRANSLATION or translation tags
+* @param tag The tag element to parse
+* @param parent The parent tag of the tag to parse
+* @returns {Array}o Array of the translation values with this configuration: [x,y,z]
+*/
 MySceneGraph.prototype.parseTranslation = function(tag, parent){
 	var x = this.reader.getFloat(tag,'x',true);
 	if(isNaN(x)){
@@ -506,6 +566,12 @@ MySceneGraph.prototype.parseTranslation = function(tag, parent){
 	return [x,y,z];
 }
 
+/**
+* @function Parses a a tag with this configuration: <NAME axis="cc" angle="ff">. Example: ROTATION or rotation tags
+* @param tag The tag element to parse
+* @param parent The parent tag of the tag to parse
+* @returns {Array} Array of the rotation values with this configuration: [axis,angle]
+*/
 MySceneGraph.prototype.parseRotation = function(tag, parent){
 	var axis = this.reader.getString(tag, 'axis', true);
 	if(axis != 'x' && axis != 'y' && axis != 'z')
@@ -516,6 +582,12 @@ MySceneGraph.prototype.parseRotation = function(tag, parent){
 	return [axis,angle];
 }
 
+/**
+* @function Parses a a tag with this configuration: <NAME sx="ff" sy="ff" sz="ff">. Example: SCALE or scale tags
+* @param tag The tag element to parse
+* @param parent The parent tag of the tag to parse
+* @returns {Array} Array of the scale values with this configuration: [sx,sy,sz]
+*/
 MySceneGraph.prototype.parseScale = function(tag, element){
 	var sx = this.reader.getFloat(tag,'sx',true);
 	if(isNaN(sx)){
@@ -532,6 +604,13 @@ MySceneGraph.prototype.parseScale = function(tag, element){
 	return [sx,sy,sz];
 }
 
+/**
+* @function Parses a a boolean tag attribute with this configuration: <NAME ... name="tt">.
+* @param {string} element The element tag name of the tag to parse
+* @param {string} attribute The attribute name on the tag to parse
+* @param parent The tag element's parent
+* @returns  {Boolean} the boolean value
+*/
 MySceneGraph.prototype.parseBool = function(element, attribute, parent){
 	var tags = parent.getElementsByTagName(element);
 	var bool = this.reader.getFloat(tags[0],attribute,true);
@@ -541,6 +620,12 @@ MySceneGraph.prototype.parseBool = function(element, attribute, parent){
 	return bool;
 }
 
+/**
+* @function Parses a a tag with this configuration: <NAME r="ff" g="ff" b="ff" a="ff">.
+* @param {string} rgbaElement The tag element's name to parse
+* @param parent The parent tag of the tag to parse
+* @returns {Array} Array of the rgba values with this configuration: [r,g,b,a]
+*/
 MySceneGraph.prototype.parseRGBA = function(rgbaElement, parent){
 	var tags = parent.getElementsByTagName(rgbaElement);
 	var r = this.reader.getFloat(tags[0],'r',true);
@@ -570,6 +655,12 @@ MySceneGraph.prototype.parseRGBA = function(rgbaElement, parent){
 	return [r,g,b,a];
 }
 
+/**
+* @function Parses a a tag with this configuration: <NAME x="ff" y="ff" z="ff" w="ff">.
+* @param {string} rgbaElement The tag element's name to parse
+* @param parent The parent tag of the tag to parse
+* @returns {Array} Array of the rgba values with this configuration: [x,y,z,w]
+*/
 MySceneGraph.prototype.parseXYZW = function(xyzwElement, parent){
 	var tags = parent.getElementsByTagName(xyzwElement);
 	var x = this.reader.getFloat(tags[0],'x',true);
@@ -591,11 +682,25 @@ MySceneGraph.prototype.parseXYZW = function(xyzwElement, parent){
 	return [x,y,z,w];
 }
 
+/**
+* @function Parses a a string tag attribute with this configuration: <NAME ... name="ss">.
+* @param {string} stringElement The element tag name of the tag to parse
+* @param {string} attribute The attribute name on the tag to parse
+* @param parent The tag element's parent
+* @returns  {string} the string
+*/
 MySceneGraph.prototype.parseString = function(stringElement, parent, attribute){
 	var tags = parent.getElementsByTagName(stringElement);
 	return this.reader.getString(tags[0], attribute, true);
 }
 
+/**
+* @function Parses a a string tag attribute with this configuration: <NAME ... name="ss">.
+* @param {string} element The element tag name of the tag to parse
+* @param {string} attribute The attribute name on the tag to parse
+* @param parent The tag element's parent
+* @returns  {Float} the float value
+*/
 MySceneGraph.prototype.parseFloat = function(element, parent, attribute){
 	var tags = parent.getElementsByTagName(element);
 	var x = this.reader.getFloat(tags[0],attribute,true);
@@ -604,12 +709,26 @@ MySceneGraph.prototype.parseFloat = function(element, parent, attribute){
 	return x;
 }
 
+/**
+* @function Checks if a determined tag is unique from the direct children of the parent tag
+* @param {string} tag The tag name
+* @param parent The aparent of the tag to check
+* @returns  {Boolean} True if is unique, false if it isn't
+*/
 MySceneGraph.prototype.IsTagUnique = function(tag, parent){
 	var tags = this.getOnlyChilds(parent.getElementsByTagName(tag), parent);
 	if(tags.length != 1)
 		this.onXMLError("<'" + tag + "'> tag inside <'" + parent.tagName + "'> with id '" + parent.id + "' is missing or appears more than once");
 }
 
+/**
+* @function Checks if an Id is already in an array or if the new ID is accepted from a set of values
+* @param {string} newId The new ID to test
+* @param {Array} array The array to search the ID on
+* @param {Array} accepted The array with the accepted values for the newId
+* @param parent The parent of the tag to test
+* @returns {Boolean} True if the Id exists and false if it doesn't
+*/
 MySceneGraph.prototype.existsID = function(tag, parent, array, accepted){
 	var tags = parent.getElementsByTagName(tag);
 	if(!this.checkID(tags[0].id, array, accepted)){
@@ -617,6 +736,12 @@ MySceneGraph.prototype.existsID = function(tag, parent, array, accepted){
 	}
 }
 
+/**
+* @function Get only the direct children of a tag element in the .lsx file
+* @param parent The parent element.
+* @param {Array} array An array to push the children onto
+* @returns {Array} The array of the direct children
+*/
 MySceneGraph.prototype.getOnlyChilds = function(array,parent){
 	var newArray = [];
 	for (var i = 0; i < array.length; i++) {
@@ -627,6 +752,12 @@ MySceneGraph.prototype.getOnlyChilds = function(array,parent){
 	return newArray;
 }
 
+/**
+* @function Parses a string with this configuration "ff ff ff ff". Variable number os spaces between values
+* @param {string} s The string to parse
+* @param parent The parent of the tag
+* @returns The rectangle object formed by the coordinates parsed from the string
+*/
 MySceneGraph.prototype.parseRectangleCoord = function(s, parent){
 	var rectangle = {};
 	var coordArray = s.match(/\S+/g);
@@ -657,6 +788,12 @@ MySceneGraph.prototype.parseRectangleCoord = function(s, parent){
 	return rectangle;
 }
 
+/**
+* @function Parses a string with this configuration "ff ff ff ii ii". Variable number os spaces between values
+* @param {string} s The string to parse
+* @param parent The parent of the tag
+* @returns The cylinder object formed by the coordinates parsed from the string
+*/
 MySceneGraph.prototype.parseCylinderCoord = function(s, parent){
 	var cylinder = {};
 	var error = false;
@@ -700,6 +837,12 @@ MySceneGraph.prototype.parseCylinderCoord = function(s, parent){
 	return cylinder;
 }
 
+/**
+* @function Parses a string with this configuration "ff ii ii". Variable number os spaces between values
+* @param {string} s The string to parse
+* @param parent The parent of the tag
+* @returns The sphere object formed by the coordinates parsed from the string
+*/
 MySceneGraph.prototype.parseSphereCoord = function(s, parent){
 	var sphere = {};
 	var error = false;
@@ -737,6 +880,12 @@ MySceneGraph.prototype.parseSphereCoord = function(s, parent){
 	return sphere;
 }
 
+/**
+* @function Parses a string with this configuration "ff ff ff  ff ff ff  ff ff ff". Variable number os spaces between values
+* @param {string} s The string to parse
+* @param parent The parent of the tag
+* @returns The triangle object formed by the coordinates parsed from the string
+*/
 MySceneGraph.prototype.parseTriangleCoord = function(s){
 	var triangle = {};
 	triangle.Point1 = [];
@@ -763,15 +912,19 @@ MySceneGraph.prototype.parseTriangleCoord = function(s){
 	return triangle;
 }
 
+/**
+* @function Checks if a variable is an integer
+* @param x The variable to check
+* @returns {Boolean} True if the variable is an integer, false if otherwise
+*/
 MySceneGraph.prototype.isInteger = function(x){
 	var flag = (typeof x === 'number') && (x % 1 === 0);
     return flag;
 }
 
-/*
- * Callback to be executed on any read error
+/**
+ * @function Callback to be executed on any read error
  */
-
 MySceneGraph.prototype.onXMLError=function (message) {
 	console.error("XML Loading Error: " + message);
 	this.loadedOk=false;

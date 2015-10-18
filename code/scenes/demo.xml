@@ -37,10 +37,6 @@
 
 
 	<TEXTURES>
-		<TEXTURE id="t1">
-        	<file path="scenes/images/deathStarTexture.jpg" />
-        	<amplif_factor s="2" t="3" />
-    </TEXTURE>
 		<TEXTURE id="space">
         	<file path="scenes/images/spaceText.jpg" />
         	<amplif_factor s="1" t="1" />
@@ -448,7 +444,7 @@
 
 				<NODE id="cockPitBack">
 					<MATERIAL id="m1" />
-					<TEXTURE id="t1" />
+					<TEXTURE id="deathStarTexture" />
 					<TRANSLATION x="-0.8" y="0.10" z="0.6" />
 					<SCALE sx="0.15" sy="0.15" sz="0.2" />
 					<DESCENDANTS>

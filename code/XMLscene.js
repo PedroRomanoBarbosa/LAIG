@@ -84,6 +84,8 @@ XMLscene.prototype.onGraphLoaded = function () {
 
   this.objects=[];
   this.loadNodesOnGraphLoaded();
+
+  this.createGraph(this.rootID);
 };
 
 /**
@@ -321,7 +323,7 @@ XMLscene.prototype.nodesDisplay = function () {
 
 	for(var i=0; i<this.objects.length; i++){
 		if(this.rootID==this.objects[i].ID){
-			this.processNodeDisplay(this.objects[i].ID);
+			this.processNodeDisplay(this.objects[i]);
 			break;
 		}
 	}
@@ -331,17 +333,15 @@ XMLscene.prototype.nodesDisplay = function () {
 * @function Processes the display of the nodes
 * @param id The identification of the node to process
 */
-XMLscene.prototype.processNodeDisplay = function (id) {
-	for(var i=0; i<this.objects.length; i++){
-		if(id==this.objects[i].ID){
+XMLscene.prototype.processNodeDisplay = function (obj) {
 
 			this.pushMatrix();
 
 			var mat, matAnt;
 			matAnt=this.parentMaterial;
-			if(this.objects[i].materialID!='null'){
+			if(obj.materialID!='null'){
 				for(var t=0; t<this.materials.length; t++){
-					if(this.objects[i].materialID==this.materials[t].ID){
+					if(obj.materialID==this.materials[t].ID){
 						this.parentMaterial=this.materials[t];
 						mat=this.materials[t];
 						mat.apply();
@@ -354,9 +354,9 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 
 			var tex, texAnt;
 			texAnt=this.parentTexture;
-			if(this.objects[i].textureID!='null' && this.objects[i].textureID!='clear'){
+			if(obj.textureID!='null' && obj.textureID!='clear'){
 				for(var w=0; w<this.textures.length; w++){
-					if(this.objects[i].textureID==this.textures[w].ID){
+					if(obj.textureID==this.textures[w].ID){
 						this.parentTexture=this.textures[w];
 						tex=this.textures[w];
 						tex.bind();
@@ -364,50 +364,48 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 					}
 				}
 			}else{
-				if(this.objects[i].textureID=='null'){
+				if(obj.textureID=='null'){
 					if(this.parentTexture!=null) tex=this.parentTexture;
 				}
-				if(this.objects[i].textureID=='clear'){
+				if(obj.textureID=='clear'){
 					this.parentTexture=null;
 				}
 			}
 
-			for(var j=0; j<this.objects[i].transformations.length; j++){
-				switch(this.objects[i].transformations[j].typeOf){
+			for(var j=0; j<obj.transformations.length; j++){
+				switch(obj.transformations[j].typeOf){
 				case 'translation':
-					this.translate(this.objects[i].transformations[j].xyz[0], this.objects[i].transformations[j].xyz[1], this.objects[i].transformations[j].xyz[2]);
+					this.translate(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
 					break;
 				case 'rotation':
-					switch(this.objects[i].transformations[j].axis){
+					switch(obj.transformations[j].axis){
 						case 'x':
-							this.rotate(this.objects[i].transformations[j].angle*degToRad,1,0,0);
+							this.rotate(obj.transformations[j].angle*degToRad,1,0,0);
 							break;
 						case 'y':
-							this.rotate(this.objects[i].transformations[j].angle*degToRad,0,1,0);
+							this.rotate(obj.transformations[j].angle*degToRad,0,1,0);
 							break;
 						case 'z':
-							this.rotate(this.objects[i].transformations[j].angle*degToRad,0,0,1);
+							this.rotate(obj.transformations[j].angle*degToRad,0,0,1);
 							break;
 					}
 					break;
 				case 'scale':
-					this.scale(this.objects[i].transformations[j].xyz[0], this.objects[i].transformations[j].xyz[1], this.objects[i].transformations[j].xyz[2]);
+					this.scale(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
 					break;
 				}
 			}
 
-			for(var u=0; u<this.objects[i].descendants.length; u++){
+			for(var u=0; u<obj.descendants.length; u++){
 
-				if(this.isAPrimitive(this.objects[i].descendants[u])) this.processPrimitiveDisplay(this.objects[i].descendants[u], mat, tex);
-				else this.processNodeDisplay(this.objects[i].descendants[u]);
+				if(this.isAPrimitive(obj.descendants[u].ID)) this.processPrimitiveDisplay(obj.descendants[u], mat, tex);
+				else this.processNodeDisplay(obj.descendants[u]);
 			}
 
 			this.parentMaterial=matAnt;
 			this.parentTexture=texAnt;
 
 			this.popMatrix();
-		}
-	}
 };
 
 /**
@@ -416,17 +414,13 @@ XMLscene.prototype.processNodeDisplay = function (id) {
 * @param m The material of the primitive to process
 * @param t The texture of the primitive to process
 */
-XMLscene.prototype.processPrimitiveDisplay = function (id, m, t) {
-	for(var i=0; i<this.primitives.length; i++){
-		if(id==this.primitives[i].ID){
+XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t) {
 			m.apply();
 			if(t!=null){
-				if(this.primitives[i].updatableTexCoords) this.primitives[i].updateTexCoords(t.amplif_factor.s, t.amplif_factor.t);
+				if(obj.updatableTexCoords) obj.updateTexCoords(t.amplif_factor.s, t.amplif_factor.t);
 				t.bind();
 			}
-			this.primitives[i].display();
-		}
-	}
+			obj.display();
 };
 
 /**
@@ -442,4 +436,27 @@ XMLscene.prototype.isAPrimitive = function (str) {
 	}
 
 	return false;
+};
+
+XMLscene.prototype.createGraph = function (str) {
+
+	if(typeof str != 'string') return str;
+
+	if(this.isAPrimitive(str)){
+		for(var i=0; i<this.primitives.length; i++){
+			if(this.primitives[i].ID==str){
+				return this.primitives[i];
+			}
+		}
+	}else{
+		for(var t=0; t<this.objects.length; t++){
+			if(this.objects[t].ID==str){
+				for(var u=0; u<this.objects[t].descendants.length; u++){
+					this.objects[t].descendants[u]=this.createGraph(this.objects[t].descendants[u]);
+				}
+	
+				return this.objects[t];
+			}
+		}
+	}
 };

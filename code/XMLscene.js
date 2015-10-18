@@ -192,8 +192,10 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 */
 XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
+	var p="scenes/"+this.path.substring(0, this.path.lastIndexOf("/"))+"/";
+	
 	for(var i=0; i<this.graph.textures.length; i++){
-		this.textures.push(new CGFtexture(this, this.graph.textures[i].filepath));
+		this.textures.push(new CGFtexture(this, p+this.graph.textures[i].filepath));
 		this.textures[i].ID=this.graph.textures[i].tagId;
 		this.textures[i].amplif_factor = {};
 		this.textures[i].amplif_factor.s=this.graph.textures[i].amplif_factor.s;
@@ -335,77 +337,76 @@ XMLscene.prototype.nodesDisplay = function () {
 */
 XMLscene.prototype.processNodeDisplay = function (obj) {
 
-			this.pushMatrix();
+	this.pushMatrix();
 
-			var mat, matAnt;
-			matAnt=this.parentMaterial;
-			if(obj.materialID!='null'){
-				for(var t=0; t<this.materials.length; t++){
-					if(obj.materialID==this.materials[t].ID){
-						this.parentMaterial=this.materials[t];
-						mat=this.materials[t];
-						mat.apply();
+	var mat, matAnt;
+	matAnt=this.parentMaterial;
+	if(obj.materialID!='null'){
+		for(var t=0; t<this.materials.length; t++){
+			if(obj.materialID==this.materials[t].ID){
+				this.parentMaterial=this.materials[t];
+				mat=this.materials[t];
+				mat.apply();
+				break;
+			}
+		}
+	}else{
+		mat=this.parentMaterial;
+	}
+
+	var tex, texAnt;
+	texAnt=this.parentTexture;
+	if(obj.textureID!='null' && obj.textureID!='clear'){
+		for(var w=0; w<this.textures.length; w++){
+			if(obj.textureID==this.textures[w].ID){
+				this.parentTexture=this.textures[w];
+				tex=this.textures[w];
+				tex.bind();
+				break;
+			}
+		}
+	}else{
+		if(obj.textureID=='null'){
+			if(this.parentTexture!=null) tex=this.parentTexture;
+		}
+		if(obj.textureID=='clear'){
+			this.parentTexture=null;
+		}
+	}
+
+	for(var j=0; j<obj.transformations.length; j++){
+		switch(obj.transformations[j].typeOf){
+			case 'translation':
+				this.translate(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
+				break;
+			case 'rotation':
+				switch(obj.transformations[j].axis){
+					case 'x':
+						this.rotate(obj.transformations[j].angle*degToRad,1,0,0);
 						break;
-					}
-				}
-			}else{
-				mat=this.parentMaterial;
-			}
-
-			var tex, texAnt;
-			texAnt=this.parentTexture;
-			if(obj.textureID!='null' && obj.textureID!='clear'){
-				for(var w=0; w<this.textures.length; w++){
-					if(obj.textureID==this.textures[w].ID){
-						this.parentTexture=this.textures[w];
-						tex=this.textures[w];
-						tex.bind();
+					case 'y':
+						this.rotate(obj.transformations[j].angle*degToRad,0,1,0);
 						break;
-					}
+					case 'z':
+						this.rotate(obj.transformations[j].angle*degToRad,0,0,1);
+						break;
 				}
-			}else{
-				if(obj.textureID=='null'){
-					if(this.parentTexture!=null) tex=this.parentTexture;
-				}
-				if(obj.textureID=='clear'){
-					this.parentTexture=null;
-				}
-			}
+				break;
+			case 'scale':
+				this.scale(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
+				break;
+		}
+	}
 
-			for(var j=0; j<obj.transformations.length; j++){
-				switch(obj.transformations[j].typeOf){
-				case 'translation':
-					this.translate(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
-					break;
-				case 'rotation':
-					switch(obj.transformations[j].axis){
-						case 'x':
-							this.rotate(obj.transformations[j].angle*degToRad,1,0,0);
-							break;
-						case 'y':
-							this.rotate(obj.transformations[j].angle*degToRad,0,1,0);
-							break;
-						case 'z':
-							this.rotate(obj.transformations[j].angle*degToRad,0,0,1);
-							break;
-					}
-					break;
-				case 'scale':
-					this.scale(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
-					break;
-				}
-			}
+	for(var u=0; u<obj.descendants.length; u++){
+		if(this.isAPrimitive(obj.descendants[u].ID)) this.processPrimitiveDisplay(obj.descendants[u], mat, tex);
+		else this.processNodeDisplay(obj.descendants[u]);
+	}
 
-			for(var u=0; u<obj.descendants.length; u++){
+	this.parentMaterial=matAnt;
+	this.parentTexture=texAnt;
 
-				if(this.isAPrimitive(obj.descendants[u].ID)) this.processPrimitiveDisplay(obj.descendants[u], mat, tex);
-				else this.processNodeDisplay(obj.descendants[u]);
-			}
-
-			this.parentMaterial=matAnt;
-			this.parentTexture=texAnt;
-
-			this.popMatrix();
+	this.popMatrix();
 };
 
 /**
@@ -415,12 +416,14 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 * @param t The texture of the primitive to process
 */
 XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t) {
-			m.apply();
-			if(t!=null){
-				if(obj.updatableTexCoords) obj.updateTexCoords(t.amplif_factor.s, t.amplif_factor.t);
-				t.bind();
-			}
-			obj.display();
+
+	m.apply();
+	if(t!=null){
+		if(obj.updatableTexCoords) obj.updateTexCoords(t.amplif_factor.s, t.amplif_factor.t);
+		t.bind();
+	}
+
+	obj.display();
 };
 
 /**

@@ -45,7 +45,7 @@ XMLscene.prototype.initLights = function () {
 * @function Initializes scene's cameras
 */
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(25, 25, 25), vec3.fromValues(0, 0, 0));
 };
 
 /**
@@ -137,9 +137,41 @@ XMLscene.prototype.initMatrixOnGraphLoaded = function () {
 
 	mat4.translate(this.m, this.m, [this.graph.translateX, this.graph.translateY, this.graph.translateZ]);
 
-	mat4.rotate(this.m, this.m, this.graph.rot1Angle * Math.PI / 180, [1, 0, 0]);
-	mat4.rotate(this.m, this.m, this.graph.rot2Angle * Math.PI / 180, [0, 1, 0]);
-	mat4.rotate(this.m, this.m, this.graph.rot3Angle * Math.PI / 180, [0, 0, 1]);
+	switch(this.graph.rot1Axis){
+		case "x":
+			mat4.rotate(this.m, this.m, this.graph.rot1Angle * Math.PI / 180, [1, 0, 0]);
+			break;
+		case "y":
+			mat4.rotate(this.m, this.m, this.graph.rot1Angle * Math.PI / 180, [0, 1, 0]);
+			break;
+		case "z":
+			mat4.rotate(this.m, this.m, this.graph.rot1Angle * Math.PI / 180, [0, 0, 1]);
+			break;
+	}
+
+	switch(this.graph.rot2Axis){
+		case "x":
+			mat4.rotate(this.m, this.m, this.graph.rot2Angle * Math.PI / 180, [1, 0, 0]);
+			break;
+		case "y":
+			mat4.rotate(this.m, this.m, this.graph.rot2Angle * Math.PI / 180, [0, 1, 0]);
+			break;
+		case "z":
+			mat4.rotate(this.m, this.m, this.graph.rot2Angle * Math.PI / 180, [0, 0, 1]);
+			break;
+	}
+
+	switch(this.graph.rot3Axis){
+		case "x":
+			mat4.rotate(this.m, this.m, this.graph.rot3Angle * Math.PI / 180, [1, 0, 0]);
+			break;
+		case "y":
+			mat4.rotate(this.m, this.m, this.graph.rot3Angle * Math.PI / 180, [0, 1, 0]);
+			break;
+		case "z":
+			mat4.rotate(this.m, this.m, this.graph.rot3Angle * Math.PI / 180, [0, 0, 1]);
+			break;
+	}
 
 	mat4.scale(this.m, this.m, [this.graph.scaleX, this.graph.scaleY, this.graph.scaleZ]);
 };
@@ -193,7 +225,7 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
 	var p="scenes/"+this.path.substring(0, this.path.lastIndexOf("/"))+"/";
-	
+
 	for(var i=0; i<this.graph.textures.length; i++){
 		this.textures.push(new CGFtexture(this, p+this.graph.textures[i].filepath));
 		this.textures[i].ID=this.graph.textures[i].tagId;

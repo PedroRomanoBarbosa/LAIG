@@ -136,7 +136,7 @@ MySceneGraph.prototype.parseInitials = function(rootElement) {
 * @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
 */
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
-	var illumination = rootElement.getElementsByTagName('ILLUMINATION');
+	var illumination = this.getOnlyChilds(rootElement.getElementsByTagName('ILLUMINATION'), rootElement);
 	if(illumination.length == 0)
 		this.onXMLError("<ILLUMINATION> tag is missing.");
 	if(illumination.length > 1)
@@ -157,14 +157,14 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 * @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
 */
 MySceneGraph.prototype.parseLights = function(rootElement) {
-	var lightsTag = rootElement.getElementsByTagName('LIGHTS');
+	var lightsTag = this.getOnlyChilds(rootElement.getElementsByTagName('LIGHTS'), rootElement);
 	if(lightsTag.length == 0)
 		this.onXMLError("<LIGHTS> tag is missing");
 	if(lightsTag.length > 1)
 		this.onXMLError("<LIGHTS> tag appears more than once");
 
 	//Parse lights
-	lightsTagArray = lightsTag[0].getElementsByTagName('LIGHT');
+	lightsTagArray = this.getOnlyChilds(lightsTag[0].getElementsByTagName('LIGHT'), lightsTag[0]);
 	this.lights = [];
 	for (var i = 0; i < lightsTagArray.length; i++) {
 		var id = this.reader.getString(lightsTagArray[i], "id", true);
@@ -185,7 +185,6 @@ MySceneGraph.prototype.parseLight = function(parent){
 	var light = { tagId:parent.id };
 
 	//Parse enable value
-	//var enableTags = parent.getElementsByTagName('enable');
 	this.IsTagUnique('enable',parent);
 
 	light.enable = this.parseBool('enable', 'value', parent);
@@ -222,7 +221,7 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 		this.onXMLError("<TEXTURES> tag appears more than once.");
 
 	//Parse textures
-	texturesTagArray = texturesTag[0].getElementsByTagName('TEXTURE');
+	texturesTagArray = this.getOnlyChilds(texturesTag[0].getElementsByTagName('TEXTURE'),texturesTag[0]);
 	this.textures = [];
 	for (var i = 0; i < texturesTagArray.length; i++) {
 		var id = this.reader.getString(texturesTagArray[i], "id", true);
@@ -248,7 +247,7 @@ MySceneGraph.prototype.parseTexture = function(parent){
 
 	//Parse amplif_factor tag
 	this.IsTagUnique('amplif_factor',parent);
-	var amplif_factorTag = parent.getElementsByTagName('amplif_factor');
+	var amplif_factorTag = this.getOnlyChilds(parent.getElementsByTagName('amplif_factor'),parent);
 	texture.amplif_factor = {};
 	texture.amplif_factor.s = this.parseFloat('amplif_factor',parent,'s');
 	texture.amplif_factor.t = this.parseFloat('amplif_factor',parent,'t');
@@ -262,14 +261,14 @@ MySceneGraph.prototype.parseTexture = function(parent){
 * @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
 */
 MySceneGraph.prototype.parseMaterials = function(rootElement) {
-	var materialsTag = rootElement.getElementsByTagName('MATERIALS');
+	var materialsTag = this.getOnlyChilds(rootElement.getElementsByTagName('MATERIALS'),rootElement);
 	if(materialsTag.length == 0)
 		this.onXMLError("<MATERIALS> tag is missing.");
 	if(materialsTag.length > 1)
 		this.onXMLError("<MATERIALS> tag appears more than once.");
 
 	//Parse materials
-	materialsTagArray = materialsTag[0].getElementsByTagName('MATERIAL');
+	materialsTagArray = this.getOnlyChilds(materialsTag[0].getElementsByTagName('MATERIAL'),materialsTag[0]);
 	this.materials = [];
 	for (var i = 0; i < materialsTagArray.length; i++) {
 		var id = this.reader.getString(materialsTagArray[i], "id", true);
@@ -318,14 +317,14 @@ MySceneGraph.prototype.parseMaterial = function(parent){
 * @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
 */
 MySceneGraph.prototype.parseLeafs = function(rootElement) {
-	var leavesTag = rootElement.getElementsByTagName('LEAVES');
+	var leavesTag = this.getOnlyChilds(rootElement.getElementsByTagName('LEAVES'),rootElement);
 	if(leavesTag.length == 0)
 		this.onXMLError("<LEAVES> tag is missing.");
 	if(leavesTag.length > 1)
 		this.onXMLError("<LEAVES> tag appears more than once.");
 
 	//Parse leafs
-	leavesTagArray = leavesTag[0].getElementsByTagName('LEAF');
+	leavesTagArray = this.getOnlyChilds(leavesTag[0].getElementsByTagName('LEAF'),leavesTag[0]);
 	this.leaves = [];
 	for (var i = 0; i < leavesTagArray.length; i++) {
 		var id = this.reader.getString(leavesTagArray[i], "id", true);
@@ -374,7 +373,7 @@ MySceneGraph.prototype.parseLeaf = function(parent){
 * @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
 */
 MySceneGraph.prototype.parseNodes = function(rootElement) {
-	var nodesTag = rootElement.getElementsByTagName('NODES');
+	var nodesTag = this.getOnlyChilds(rootElement.getElementsByTagName('NODES'), rootElement);
 	if(nodesTag.length == 0)
 		this.onXMLError("<NODES> tag is missing.");
 	if(nodesTag.length > 1)
@@ -384,7 +383,7 @@ MySceneGraph.prototype.parseNodes = function(rootElement) {
 	this.nodes = [];
 
 	//Parse nodes
-	nodesTagArray = nodesTag[0].getElementsByTagName('NODE');
+	nodesTagArray = this.getOnlyChilds(nodesTag[0].getElementsByTagName('NODE'),nodesTag[0]);
 	for (var i = 0; i < nodesTagArray.length; i++) {
 		var id = this.reader.getString(nodesTagArray[i], "id", true);
 		if(this.checkID(id,this.nodes,[])){
@@ -473,8 +472,8 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 
 	//Parse descendants
 	this.IsTagUnique('DESCENDANTS', rootElement);
-	var descendantsTag = rootElement.getElementsByTagName('DESCENDANTS');
-	var descendants = descendantsTag[0].getElementsByTagName('DESCENDANT');
+	var descendantsTag = this.getOnlyChilds(rootElement.getElementsByTagName('DESCENDANTS'), rootElement);
+	var descendants = this.getOnlyChilds(descendantsTag[0].getElementsByTagName('DESCENDANT'),descendantsTag[0]);
 	if(descendants.length == 0){
 		this.onXMLError("The node with tag '" + rootElement.tagName + "' with id '" + rootElement.id + "' doesn't have any children node or leaf");
 	}else{
@@ -612,7 +611,7 @@ MySceneGraph.prototype.parseScale = function(tag, element){
 * @returns  {Boolean} the boolean value
 */
 MySceneGraph.prototype.parseBool = function(element, attribute, parent){
-	var tags = parent.getElementsByTagName(element);
+	var tags = this.getOnlyChilds(parent.getElementsByTagName(element), parent);
 	var bool = this.reader.getFloat(tags[0],attribute,true);
 		if( (bool != 1 && bool != 0) || !Number.isInteger(bool) ){
 			this.onXMLError("The attribute '" + attribute + "'  on tag '" + element + "' inside '" + parent.tagName + "' tag with the id '" + parent.id + "' it's not 0 nor 1.");
@@ -627,7 +626,7 @@ MySceneGraph.prototype.parseBool = function(element, attribute, parent){
 * @returns {Array} Array of the rgba values with this configuration: [r,g,b,a]
 */
 MySceneGraph.prototype.parseRGBA = function(rgbaElement, parent){
-	var tags = parent.getElementsByTagName(rgbaElement);
+	var tags = this.getOnlyChilds(parent.getElementsByTagName(rgbaElement),parent);
 	var r = this.reader.getFloat(tags[0],'r',true);
 	if(isNaN(r)){
 		this.onXMLError("'r' attribute on tag <'" + rgbaElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
@@ -662,7 +661,7 @@ MySceneGraph.prototype.parseRGBA = function(rgbaElement, parent){
 * @returns {Array} Array of the rgba values with this configuration: [x,y,z,w]
 */
 MySceneGraph.prototype.parseXYZW = function(xyzwElement, parent){
-	var tags = parent.getElementsByTagName(xyzwElement);
+	var tags = this.getOnlyChilds(parent.getElementsByTagName(xyzwElement),parent);
 	var x = this.reader.getFloat(tags[0],'x',true);
 	if(isNaN(x)){
 		this.onXMLError("'x' attribute on tag <'" + xyzwElement + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
@@ -690,7 +689,7 @@ MySceneGraph.prototype.parseXYZW = function(xyzwElement, parent){
 * @returns  {string} the string
 */
 MySceneGraph.prototype.parseString = function(stringElement, parent, attribute){
-	var tags = parent.getElementsByTagName(stringElement);
+	var tags = this.getOnlyChilds(parent.getElementsByTagName(stringElement), parent);
 	return this.reader.getString(tags[0], attribute, true);
 }
 
@@ -702,7 +701,7 @@ MySceneGraph.prototype.parseString = function(stringElement, parent, attribute){
 * @returns  {Float} the float value
 */
 MySceneGraph.prototype.parseFloat = function(element, parent, attribute){
-	var tags = parent.getElementsByTagName(element);
+	var tags = this.getOnlyChilds(parent.getElementsByTagName(element), parent);
 	var x = this.reader.getFloat(tags[0],attribute,true);
 	if( isNaN(x) )
 		this.onXMLError(attribute + " attribute in tag <" + element + "> inside tag <" + parent.tagName + "> with id: " + parent.id + " is not a float.");
@@ -730,7 +729,7 @@ MySceneGraph.prototype.IsTagUnique = function(tag, parent){
 * @returns {Boolean} True if the Id exists and false if it doesn't
 */
 MySceneGraph.prototype.existsID = function(tag, parent, array, accepted){
-	var tags = parent.getElementsByTagName(tag);
+	var tags = this.getOnlyChilds(parent.getElementsByTagName(tag), parent);
 	if(!this.checkID(tags[0].id, array, accepted)){
 		this.onXMLError("The id '" + tags[0].id + "' in tag '" + tag + "' inside tag '" + parent.tagName + "' with  id '" + parent.id + "' references a non-existant id or doesn't match the options");
 	}
@@ -739,7 +738,7 @@ MySceneGraph.prototype.existsID = function(tag, parent, array, accepted){
 /**
 * @function Get only the direct children of a tag element in the .lsx file
 * @param parent The parent element.
-* @param {Array} array An array to push the children onto
+* @param {Array} array The array with all the children of the parent node
 * @returns {Array} The array of the direct children
 */
 MySceneGraph.prototype.getOnlyChilds = function(array,parent){

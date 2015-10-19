@@ -1,3 +1,14 @@
+/**
+* @constructs Rectangle constructor
+* @param {XMLscene} scene The scene object
+* @param {string} id The id of the new rectangle
+* @param {Float} p1x X coordinate of first point of the rectangle
+* @param {Float} p1y Y coordinate of first point of the rectangle
+* @param {Float} p1z Z coordinate of first point of the rectangle
+* @param {Float} p2x X coordinate of second point of the rectangle
+* @param {Float} p2y Y coordinate of second point of the rectangle
+* @param {Float} p2z Z coordinate of second point of the rectangle
+*/
 function Rectangle(scene, id, p1x, p1y, p2x, p2y) {
 	CGFobject.call(this, scene);
 
@@ -18,6 +29,9 @@ function Rectangle(scene, id, p1x, p1y, p2x, p2y) {
 Rectangle.prototype = Object.create(CGFobject.prototype);
 Rectangle.prototype.constructor=Rectangle;
 
+/**
+* @function Initializes buffers of the rectangle
+*/
 Rectangle.prototype.initBuffers = function () {
 
 	this.primitiveType=this.scene.gl.TRIANGLES;
@@ -51,6 +65,11 @@ Rectangle.prototype.initBuffers = function () {
 	this.initGLBuffers();
 };
 
+/**
+* @function Updates texture coordinates
+* @param ampS amplification factor in S
+* @param ampT amplification factor in T
+*/
 Rectangle.prototype.updateTexCoords = function (ampS, ampT) {
 
 	this.texCoords = [

@@ -20,7 +20,13 @@ function MySceneGraph(filename, scene) {
 	 * If any error occurs, the reader calls onXMLError on this object, with an error message
 	 */
 
-	this.reader.open('scenes/' + filename, this);
+	 this.lights = [];
+	 this.materials = {};
+	 this.textures = {};
+
+	 this.reader.open('scenes/' + filename, this);
+
+	 console.log(this);
 }
 
 
@@ -163,10 +169,11 @@ MySceneGraph.prototype.parseLights = function(rootElement) {
 
 	//Parse lights
 	lightsTagArray = this.getChildrenWithName('LIGHT',lightsTag[0]);
-	this.lights = [];
+	if(lightsTagArray.length > 8)
+		this.onXMLError("More than 8 lights defined in the LIGHTS tag");
 	for (var i = 0; i < lightsTagArray.length; i++) {
 		var id = this.reader.getString(lightsTagArray[i], "id", true);
-		if(this.checkID(id,this.lights,[]))
+		if(this.checkID(id, this.lights, []))
 			this.onXMLError("Id: '" + id + "' duplicated in inside lights tag");
 		else{
 			this.parseLight(lightsTagArray[i]);
@@ -220,10 +227,9 @@ MySceneGraph.prototype.parseTextures = function(rootElement) {
 
 	//Parse textures
 	texturesTagArray = this.getChildrenWithName('TEXTURE',texturesTag[0]);
-	this.textures = [];
 	for (var i = 0; i < texturesTagArray.length; i++) {
 		var id = this.reader.getString(texturesTagArray[i], "id", true);
-		if(this.checkID(id,this.textures,[]))
+		if(id in this.textures)
 			this.onXMLError("Id: '" + id + "' duplicated in inside textures tag");
 		else{
 			this.parseTexture(texturesTagArray[i]);
@@ -251,7 +257,7 @@ MySceneGraph.prototype.parseTexture = function(parent){
 	texture.amplif_factor.t = this.parseFloat('amplif_factor',parent,'t');
 
 	//Add to array
-	this.textures.push(texture);
+	this.textures[texture.tagId] = texture;
 }
 
 /**
@@ -267,10 +273,9 @@ MySceneGraph.prototype.parseMaterials = function(rootElement) {
 
 	//Parse materials
 	materialsTagArray = this.getChildrenWithName('MATERIAL',materialsTag[0]);
-	this.materials = [];
 	for (var i = 0; i < materialsTagArray.length; i++) {
 		var id = this.reader.getString(materialsTagArray[i], "id", true);
-		if(this.checkID(id,this.materials,[]))
+		if(id in this.materials)
 			this.onXMLError("Id: '" + id + "' duplicated in inside materials tag");
 		else{
 			this.parseMaterial(materialsTagArray[i]);
@@ -307,7 +312,7 @@ MySceneGraph.prototype.parseMaterial = function(parent){
 	material.emission = this.parseRGBA('emission', parent);
 
 	//Add to array
-	this.materials.push(material);
+	this.materials[material.tagId] = material;
 }
 
 /**
@@ -430,12 +435,12 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 
 	//Parse Material
 	this.IsTagUnique('MATERIAL', rootElement);
-	this.existsID('MATERIAL', rootElement, this.materials, ["null"]);
+	this.existsIDInObject('MATERIAL', rootElement, this.materials, ["null"]);
 	node.materialID = this.parseString('MATERIAL', rootElement, 'id');
 
 	//Parse Texture
 	this.IsTagUnique('TEXTURE', rootElement);
-	this.existsID('TEXTURE', rootElement, this.textures, ["null", "clear"]);
+	this.existsIDInObject('TEXTURE', rootElement, this.textures, ["null", "clear"]);
 	node.TextureID = this.parseString('TEXTURE', rootElement, 'id');
 
 
@@ -515,7 +520,7 @@ MySceneGraph.prototype.getOnlyChildsWithName = function(parent, tagName){
 MySceneGraph.prototype.checkID = function(newId, array, accepted){
 	for (var i = 0; i < accepted.length; i++) {
 			if(accepted[i] == newId){
-			return true;
+				return true;
 		}
 	};
 	for (var i = 0; i < array.length; i++) {
@@ -523,6 +528,24 @@ MySceneGraph.prototype.checkID = function(newId, array, accepted){
 			return true;
 		}
 	};
+	return false;
+}
+
+/**
+* @function Checks if an Id is already in an object or if the new ID is accepted from a set of values
+* @param {string} newId The new ID to test
+* @param {Array} array The array to search the ID on
+* @param {Array} accepted The array with the accepted values for the newId
+* @returns {Boolean} True if the Id matches and false if it doesn't
+*/
+MySceneGraph.prototype.checkIDInObject = function(newId, object, accepted){
+	for (var i = 0; i < accepted.length; i++) {
+			if(accepted[i] == newId){
+				return true;
+		}
+	};
+	if(newId in object)
+		return true;
 	return false;
 }
 
@@ -729,6 +752,21 @@ MySceneGraph.prototype.IsTagUnique = function(tag, parent){
 MySceneGraph.prototype.existsID = function(tag, parent, array, accepted){
 	var tags = this.getChildrenWithName(tag,parent);
 	if(!this.checkID(tags[0].id, array, accepted)){
+		this.onXMLError("The id '" + tags[0].id + "' in tag '" + tag + "' inside tag '" + parent.tagName + "' with  id '" + parent.id + "' references a non-existant id or doesn't match the options");
+	}
+}
+
+/**
+* @function Checks if an Id is already in an object or if the new ID is accepted from a set of values
+* @param {string} newId The new ID to test
+* @param {Array} array The array to search the ID on
+* @param {Array} accepted The array with the accepted values for the newId
+* @param parent The parent of the tag to test
+* @returns {Boolean} True if the Id exists and false if it doesn't
+*/
+MySceneGraph.prototype.existsIDInObject = function(tag, parent, object, accepted){
+	var tags = this.getChildrenWithName(tag,parent);
+	if(!this.checkIDInObject(tags[0].id, object, accepted)){
 		this.onXMLError("The id '" + tags[0].id + "' in tag '" + tag + "' inside tag '" + parent.tagName + "' with  id '" + parent.id + "' references a non-existant id or doesn't match the options");
 	}
 }

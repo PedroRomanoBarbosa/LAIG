@@ -71,10 +71,10 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.initLightsOnGraphLoaded();
 
   this.enableTextures(true);
-  this.textures=[];
+  this.textures={};
   this.initTexturesOnGraphLoaded();
 
-  this.materials=[];
+  this.materials={};
   this.parentMaterial;
   this.initMaterialsOnGraphLoaded();
 
@@ -86,6 +86,7 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.loadNodesOnGraphLoaded();
 
   this.createGraph(this.rootID);
+  console.log(this);
 };
 
 /**
@@ -131,7 +132,7 @@ XMLscene.prototype.display = function () {
 };
 
 XMLscene.prototype.initMatrixOnGraphLoaded = function () {
-	
+
 	this.m=mat4.create();
 	mat4.identity(this.m);
 
@@ -198,25 +199,28 @@ XMLscene.prototype.initIlluminationOnGraphLoaded = function () {
 * @function Initializes the scene's lights after the scene's graph is loaded
 */
 XMLscene.prototype.initLightsOnGraphLoaded = function () {
-
     this.shader.bind();
 
-	for(var i=0; i<8 && i<this.graph.lights.length; i++){
-		this.lights[i].ID=this.graph.lights[i].tagId;
+    var light, i = 0;
+    for(var i = 0; i < this.graph.lights.length; i++){
+        light = this.graph.lights[i];
 
-		if(this.graph.lights[i].enable) this.lights[i].enable();
-		else this.lights[i].disable();
+		if(light.enable)
+      this.lights[i].enable();
+		else
+      this.lights[i].disable();
 
-		this.lights[i].setPosition(this.graph.lights[i].position[0], this.graph.lights[i].position[1], this.graph.lights[i].position[2], this.graph.lights[i].position[3]);
-		this.lights[i].setAmbient(this.graph.lights[i].ambient[0], this.graph.lights[i].ambient[1], this.graph.lights[i].ambient[2], this.graph.lights[i].ambient[3]);
-		this.lights[i].setDiffuse(this.graph.lights[i].diffuse[0], this.graph.lights[i].diffuse[1], this.graph.lights[i].diffuse[2], this.graph.lights[i].diffuse[3]);
-		this.lights[i].setSpecular(this.graph.lights[i].specular[0], this.graph.lights[i].specular[1], this.graph.lights[i].specular[2], this.graph.lights[i].specular[3]);
+    this.lights[i].ID = light.tagId;
+		this.lights[i].setPosition(light.position[0], light.position[1], light.position[2], light.position[3]);
+		this.lights[i].setAmbient(light.ambient[0], light.ambient[1], light.ambient[2], light.ambient[3]);
+		this.lights[i].setDiffuse(light.diffuse[0], light.diffuse[1], light.diffuse[2], light.diffuse[3]);
+		this.lights[i].setSpecular(light.specular[0], light.specular[1], light.specular[2], light.specular[3]);
 		this.lights[i].setVisible(true);
 
 		this.lights[i].update();
-	}
+	 }
 
-    this.shader.unbind();
+   this.shader.unbind();
 };
 
 /**
@@ -226,12 +230,15 @@ XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
 	var p="scenes/"+this.path.substring(0, this.path.lastIndexOf("/"))+"/";
 
-	for(var i=0; i<this.graph.textures.length; i++){
-		this.textures.push(new CGFtexture(this, p+this.graph.textures[i].filepath));
-		this.textures[i].ID=this.graph.textures[i].tagId;
-		this.textures[i].amplif_factor = {};
-		this.textures[i].amplif_factor.s=this.graph.textures[i].amplif_factor.s;
-		this.textures[i].amplif_factor.t=this.graph.textures[i].amplif_factor.t;
+  for(var key in this.graph.textures){
+    if (this.graph.textures.hasOwnProperty(key)) {
+      var texture = this.graph.textures[key];
+      this.textures[key] = (new CGFtexture(this, p + texture.filepath));
+      this.textures[key].ID = texture.tagId;
+      this.textures[key].amplif_factor = {};
+      this.textures[key].amplif_factor.s = texture.amplif_factor.s;
+      this.textures[key].amplif_factor.t = texture.amplif_factor.t;
+    }
 	}
 };
 
@@ -240,24 +247,27 @@ XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 */
 XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
 
-	this.materials.push(new CGFappearance(this));
-	this.materials[0].ID="_default_material_";
-	this.materials[0].shininess=10;
-	this.materials[0].setSpecular(0.5, 0.5, 0.5, 1);
-	this.materials[0].setDiffuse(0.5, 0.5, 0.5, 1);
-	this.materials[0].setAmbient(0.2, 0.2, 0.2, 1);
-	this.materials[0].setEmission(0.0, 0.0, 0.0, 1);
+	this.materials["_default_material_"] = (new CGFappearance(this));
+	this.materials["_default_material_"].ID="_default_material_";
+	this.materials["_default_material_"].shininess=10;
+	this.materials["_default_material_"].setSpecular(0.5, 0.5, 0.5, 1);
+	this.materials["_default_material_"].setDiffuse(0.5, 0.5, 0.5, 1);
+	this.materials["_default_material_"].setAmbient(0.2, 0.2, 0.2, 1);
+	this.materials["_default_material_"].setEmission(0.0, 0.0, 0.0, 1);
 
-	this.parentMaterial=this.materials[0];
+	this.parentMaterial=this.materials["_default_material_"];
 
-	for(var i=0; i<this.graph.materials.length; i++){
-		this.materials.push(new CGFappearance(this));
-		this.materials[i+1].ID=this.graph.materials[i].tagId;
-		this.materials[i+1].shininess=this.graph.materials[i].shininess;
-		this.materials[i+1].setSpecular(this.graph.materials[i].specular[0],this.graph.materials[i].specular[1],this.graph.materials[i].specular[2],this.graph.materials[i].specular[3]);
-		this.materials[i+1].setDiffuse(this.graph.materials[i].diffuse[0],this.graph.materials[i].diffuse[1],this.graph.materials[i].diffuse[2],this.graph.materials[i].diffuse[3]);
-		this.materials[i+1].setAmbient(this.graph.materials[i].ambient[0],this.graph.materials[i].ambient[1],this.graph.materials[i].ambient[2],this.graph.materials[i].ambient[3]);
-		this.materials[i+1].setEmission(this.graph.materials[i].emission[0],this.graph.materials[i].emission[1],this.graph.materials[i].emission[2],this.graph.materials[i].emission[3]);
+  for(var key in this.graph.materials){
+    if (this.graph.materials.hasOwnProperty(key)) {
+      var material = this.graph.materials[key];
+      this.materials[key] = (new CGFappearance(this));
+  		this.materials[key].ID = material.tagId;
+  		this.materials[key].shininess = material.shininess;
+  		this.materials[key].setSpecular(material.specular[0],material.specular[1],material.specular[2],material.specular[3]);
+  		this.materials[key].setDiffuse(material.diffuse[0],material.diffuse[1],material.diffuse[2],material.diffuse[3]);
+  		this.materials[key].setAmbient(material.ambient[0],material.ambient[1],material.ambient[2],material.ambient[3]);
+  		this.materials[key].setEmission(material.emission[0],material.emission[1],material.emission[2],material.emission[3]);
+    }
 	}
 };
 
@@ -358,7 +368,7 @@ XMLscene.prototype.nodesDisplay = function () {
 	for(var i=0; i<this.objects.length; i++){
 		if(this.rootID==this.objects[i].ID){
 			this.processNodeDisplay(this.objects[i]);
-			break;
+      break;
 		}
 	}
 };
@@ -372,31 +382,19 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 	this.pushMatrix();
 
 	var mat, matAnt;
-	matAnt=this.parentMaterial;
-	if(obj.materialID!='null'){
-		for(var t=0; t<this.materials.length; t++){
-			if(obj.materialID==this.materials[t].ID){
-				this.parentMaterial=this.materials[t];
-				mat=this.materials[t];
-				mat.apply();
-				break;
-			}
-		}
+	matAnt = this.parentMaterial;
+	if(obj.materialID != 'null'){
+    this.parentMaterial = this.materials[obj.materialID];
+    mat = this.materials[obj.materialID];
 	}else{
-		mat=this.parentMaterial;
+		mat = this.parentMaterial;
 	}
 
 	var tex, texAnt;
 	texAnt=this.parentTexture;
 	if(obj.textureID!='null' && obj.textureID!='clear'){
-		for(var w=0; w<this.textures.length; w++){
-			if(obj.textureID==this.textures[w].ID){
-				this.parentTexture=this.textures[w];
-				tex=this.textures[w];
-				tex.bind();
-				break;
-			}
-		}
+				this.parentTexture=this.textures[obj.textureID];
+				tex = this.textures[obj.textureID];
 	}else{
 		if(obj.textureID=='null'){
 			if(this.parentTexture!=null) tex=this.parentTexture;
@@ -435,8 +433,8 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		else this.processNodeDisplay(obj.descendants[u]);
 	}
 
-	this.parentMaterial=matAnt;
-	this.parentTexture=texAnt;
+	this.parentMaterial = matAnt;
+	this.parentTexture = texAnt;
 
 	this.popMatrix();
 };
@@ -489,7 +487,7 @@ XMLscene.prototype.createGraph = function (str) {
 				for(var u=0; u<this.objects[t].descendants.length; u++){
 					this.objects[t].descendants[u]=this.createGraph(this.objects[t].descendants[u]);
 				}
-	
+
 				return this.objects[t];
 			}
 		}

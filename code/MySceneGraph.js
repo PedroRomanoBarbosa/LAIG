@@ -23,6 +23,7 @@ function MySceneGraph(filename, scene) {
 	 this.lights = [];
 	 this.materials = {};
 	 this.textures = {};
+	 this.animations = {};
 
 	 this.reader.open('scenes/' + filename, this);
 
@@ -66,6 +67,7 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 	this.parseLights(rootElement);
 	this.parseTextures(rootElement);
 	this.parseMaterials(rootElement);
+	this.parseAnimations(rootElement);
 	this.parseLeafs(rootElement);
 	this.parseNodes(rootElement);
 };
@@ -313,6 +315,89 @@ MySceneGraph.prototype.parseMaterial = function(parent){
 
 	//Add to array
 	this.materials[material.tagId] = material;
+}
+
+/**
+* @function Parses the animations tag in .lsx file and stores it's information in this class
+* @param rootElement The root element of the .lsx file. It should be a tag element with name 'SCENE'
+*/
+MySceneGraph.prototype.parseAnimations = function(rootElement) {
+	var animationsTag = this.getChildrenWithName('animations',rootElement);
+	if(animationsTag.length > 1)
+		this.onXMLError("<animations> tag appears more than once.");
+	if(animationsTag.length == 1){
+		//Parse animations
+		animationsTagArray = this.getChildrenWithName('animation',animationsTag[0]);
+		for (var i = 0; i < animationsTagArray.length; i++) {
+			var id = this.reader.getString(animationsTagArray[i], "id", true);
+			if(id in this.animations)
+				this.onXMLError("Id: '" + id + "' duplicated in inside animations tag");
+			else{
+				this.parseAnimation(animationsTagArray[i], animationsTag[0], id);
+			}
+		};
+	}
+}
+
+/**
+* @function Parses a animation tag in .lsx file and stores it's information in this class
+* @param parent The parent element of the animation tag. It should be a tag element with name 'animations'
+*/
+MySceneGraph.prototype.parseAnimation = function(ani, parent, id){
+	//Set id
+	var animation = { tagId:id };
+
+	//Set span
+	animation.span= this.reader.getFloat(ani,'span',true);
+	if( isNaN(animation.span) )
+		this.onXMLError("span attribute in tag <animation> with id: " + ani.id +  " inside tag <" + parent.tagName + "> with id: " + parent.id + " is not a float.");
+
+	//Set type
+	animation.typeOf = this.reader.getString(ani,'type',true);
+	if(animation.typeOf == 'linear'){
+		//Parse control points
+		animation.controlPoints = [];
+		var controlPoints = this.getChildrenWithName('controlpoint', ani);
+		for(var i = 0; i < controlPoints.length; i++){
+			animation.controlPoints.push(this.parseXYZ(controlPoints[i],ani));
+		}
+	}else if(animation.typeOf == 'circular'){
+		//parse center
+		animation.center = [];
+		var centerStr = this.reader.getString(ani,'center',true);
+		var centerArray = centerStr.match(/\S+/g);
+		if(centerArray.length != 3){
+			this.onXMLError("center attribute on tag <'" + ani.tagName + "'> with id: " + ani.id + " inside <'" + parent.tagName + "'> with id " + parent.id + " doesn't have 3 values");
+		}
+		for (var i = 0; i < centerArray.length; i++) {
+			var n = parseFloat(centerArray[i]);
+			if(isNaN(n)){
+				this.onXMLError("the value number:" + (i+1) +  " of center attribute on tag <'" + ani.tagName + "'> with id: " + ani.id + " inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+			}else{
+				animation.center.push(n);
+			}
+		}
+		//parse radius
+		animation.radius = this.reader.getFloat(ani,'radius', true);
+		if( isNaN(animation.radius) ){
+			this.onXMLError("radius attribute in tag <animation> with id: " + ani.id +  " inside tag <" + parent.tagName + "> with id: " + parent.id + " is not a float.");
+		}
+
+		//parse startang
+		animation.startang = this.reader.getFloat(ani,'startang', true);
+		if( isNaN(animation.startang) ){
+			this.onXMLError("startang attribute in tag <animation> with id: " + ani.id +  " inside tag <" + parent.tagName + "> with id: " + parent.id + " is not a float.");
+		}
+
+		//parse rotang
+		animation.rotang = this.reader.getFloat(ani,'rotang', true);
+		if( isNaN(animation.rotang) ){
+			this.onXMLError("rotang attribute in tag <animation> with id: " + ani.id +  " inside tag <" + parent.tagName + "> with id: " + parent.id + " is not a float.");
+		}
+
+	}
+	//Add to object
+	this.animations[animation.tagId] = animation;
 }
 
 /**
@@ -703,6 +788,28 @@ MySceneGraph.prototype.parseXYZW = function(xyzwElement, parent){
 }
 
 /**
+* @function Parses a a tag with this configuration: <NAME xx="ff" yy="ff" zz="ff" ww="ff">.
+* @param {string} rgbaElement The tag element's name to parse
+* @param parent The parent tag of the tag to parse
+* @returns {Array} Array of the rgba values with this configuration: [x,y,z,w]
+*/
+MySceneGraph.prototype.parseXYZ = function(xyzElement, parent){
+	var x = this.reader.getFloat(xyzElement,'xx',true);
+	if(isNaN(x)){
+		this.onXMLError("'xx' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	var y = this.reader.getFloat(xyzElement,'yy',true);
+	if(isNaN(y)){
+		this.onXMLError("'yy' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	var z = this.reader.getFloat(xyzElement,'zz',true);
+	if(isNaN(z)){
+		this.onXMLError("'zz' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+	}
+	return [x,y,z];
+}
+
+/**
 * @function Parses a a string tag attribute with this configuration: <NAME ... name="ss">.
 * @param {string} stringElement The element tag name of the tag to parse
 * @param {string} attribute The attribute name on the tag to parse
@@ -725,7 +832,7 @@ MySceneGraph.prototype.parseFloat = function(element, parent, attribute){
 	var tags = this.getChildrenWithName(element,parent);
 	var x = this.reader.getFloat(tags[0],attribute,true);
 	if( isNaN(x) )
-		this.onXMLError(attribute + " attribute in tag <" + element + "> inside tag <" + parent.tagName + "> with id: " + parent.id + " is not a float.");
+		this.onXMLError(attribute + " attribute in tag <" + element + "> with id: " + tags[0].id +  " inside tag <" + parent.tagName + "> with id: " + parent.id + " is not a float.");
 	return x;
 }
 

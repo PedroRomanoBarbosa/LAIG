@@ -96,6 +96,18 @@
 	</MATERIALS>
 
 
+	<animations>
+		<animation id="ani1" span="2.5" type="linear">
+	  	<controlpoint xx="1.0" yy="1.5" zz="2.5" />
+			<controlpoint xx="1.3" yy="1.5" zz="2.5" />
+		</animation>
+		<animation id="ani2" span="3.0" type="circular" center=" 1.2   3.2   1.0  " radius="1" startang="2" rotang="3" />
+		<animation id="ani3" span="2.5" type="linear">
+	  	<controlpoint xx="3.5" yy="5.5" zz="1.5" />
+		</animation>
+	</animations>
+
+
 	<LEAVES>
 		<LEAF id="s" type="sphere" args="1 20 20" />
 		<LEAF id="space" type="sphere" args="1 50 50" />

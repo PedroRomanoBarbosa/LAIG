@@ -4,8 +4,11 @@ var degToRad = Math.PI / 180.0;
 /**
 * @constructs XMLscene constructor
 */
-function XMLscene() {
+function XMLscene(app, myInterface) {
     CGFscene.call(this);
+
+    this.app=app;
+    this.myInterface=myInterface;
 }
 
 
@@ -34,11 +37,9 @@ XMLscene.prototype.init = function (application) {
 * @function Initializes the scene's lights
 */
 XMLscene.prototype.initLights = function () {
-  this.shader.bind();
 	this.lights[0].setPosition(2, 3, 3, 1);
   this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
   this.lights[0].update();
-  this.shader.unbind();
 };
 
 /**
@@ -87,14 +88,14 @@ XMLscene.prototype.onGraphLoaded = function () {
 
   this.createGraph(this.rootID);
   console.log(this);
+
+  this.app.setInterface(this.myInterface);
 };
 
 /**
 * @function Displays the scene
 */
 XMLscene.prototype.display = function () {
-	// ---- BEGIN Background, camera and axis setup
-    this.shader.bind();
 
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -106,6 +107,9 @@ XMLscene.prototype.display = function () {
 
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
+
+	for (i = 0; i < this.lights.length; i++)
+		this.lights[i].update();
 
 	this.setDefaultAppearance();
 
@@ -127,8 +131,6 @@ XMLscene.prototype.display = function () {
 
 		this.nodesDisplay();
 	};
-
-    this.shader.unbind();
 };
 
 XMLscene.prototype.initMatrixOnGraphLoaded = function () {
@@ -199,16 +201,17 @@ XMLscene.prototype.initIlluminationOnGraphLoaded = function () {
 * @function Initializes the scene's lights after the scene's graph is loaded
 */
 XMLscene.prototype.initLightsOnGraphLoaded = function () {
-    this.shader.bind();
-
     var light, i = 0;
     for(var i = 0; i < this.graph.lights.length; i++){
         light = this.graph.lights[i];
 
-		if(light.enable)
-      this.lights[i].enable();
-		else
-      this.lights[i].disable();
+		if(light.enable){
+			this.lights[i].lightBool = true;
+      		this.lights[i].enable();
+		}else{
+			this.lights[i].lightBool = false;
+      		this.lights[i].disable();
+		}
 
     this.lights[i].ID = light.tagId;
 		this.lights[i].setPosition(light.position[0], light.position[1], light.position[2], light.position[3]);
@@ -219,8 +222,6 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 
 		this.lights[i].update();
 	 }
-
-   this.shader.unbind();
 };
 
 /**

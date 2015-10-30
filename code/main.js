@@ -11,19 +11,26 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js',  'Rectangle.js', 'Cylinder.js', 'Sphere.js', 'Triangle.js',
+serialInclude(['../lib/CGF.js',
+				 'XMLscene.js',
+				 'MySceneGraph.js',
+				 'Rectangle.js',
+				 'Cylinder.js',
+				 'Sphere.js',
+				 'Triangle.js',
+				 'MyInterface.js',
 
 main=function()
 {
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
-    var myScene = new XMLscene();
-    var myInterface = new CGFinterface();
+    var myInterface = new MyInterface();
+    var myScene = new XMLscene(app, myInterface);
+    //var myInterface = new CGFinterface();
 
     app.init();
 
     app.setScene(myScene);
-    app.setInterface(myInterface);
 
     myInterface.setActiveCamera(myScene.camera);
 

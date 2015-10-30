@@ -25,6 +25,7 @@
    this.topRadius = topRadius;
    this.radiusInc=(topRadius - bottomRadius)/this.stacks;
    this.heigthInc = this.cylHeight/this.stacks;
+   this.textureHeight = 1 / this.stacks;
 
    this.initBuffers();
  };
@@ -54,7 +55,7 @@
      for(var i = 0; i < this.slices+1; i++){
       this.vertices.push( (this.bottomRadius+j*this.radiusInc)*Math.cos(a_rad*i), (this.bottomRadius+j*this.radiusInc)*Math.sin(a_rad*i), j*this.heigthInc);
       this.normals.push(Math.cos(a_rad*i),Math.sin(a_rad*i),normal_z);
-      this.texCoords.push((ang*i)/360, 1-this.heigthInc*j);
+      this.texCoords.push((ang*i)/360, 1-this.textureHeight*j);
      }
    }
 

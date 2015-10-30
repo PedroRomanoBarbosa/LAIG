@@ -454,26 +454,3 @@ XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t) {
 
 	obj.display();
 };
-
-XMLscene.prototype.createGraph = function (str) {
-
-	if(typeof str != 'string') return str;
-
-	if(this.isAPrimitive(str)){
-		for(var i=0; i<this.primitives.length; i++){
-			if(this.primitives[i].ID==str){
-				return this.primitives[i];
-			}
-		}
-	}else{
-		for(var t=0; t<this.objects.length; t++){
-			if(this.objects[t].ID==str){
-				for(var u=0; u<this.objects[t].descendants.length; u++){
-					this.objects[t].descendants[u]=this.createGraph(this.objects[t].descendants[u]);
-				}
-
-				return this.objects[t];
-			}
-		}
-	}
-};

@@ -323,6 +323,9 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 		nodeN.materialID=this.graph.nodes[i].materialID;
 		nodeN.textureID=this.graph.nodes[i].TextureID;
 
+		nodeN.matx = mat4.create();
+		mat4.identity(nodeN.matx);
+
 		nodeN.transformations = [];
 		for(var j=0; j<this.graph.nodes[i].transformations.length; j++){
 			var transformationN = {};
@@ -334,11 +337,25 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 					for(var e=0; e<this.graph.nodes[i].transformations[j].xyz.length; e++){
 						transformationN.xyz.push(this.graph.nodes[i].transformations[j].xyz[e]);
 					}
+					mat4.translate(nodeN.matx, nodeN.matx, this.graph.nodes[i].transformations[j].xyz);
 					break;
 				case 'rotation':
 					transformationN.typeOf=this.graph.nodes[i].transformations[j].typeOf;
 					transformationN.angle=this.graph.nodes[i].transformations[j].angle;
 					transformationN.axis=this.graph.nodes[i].transformations[j].axisRot;
+
+					switch(transformationN.axis){
+						case "x":
+							mat4.rotate(nodeN.matx, nodeN.matx, transformationN.angle * Math.PI / 180, [1, 0, 0]);
+							break;
+						case "y":
+							mat4.rotate(nodeN.matx, nodeN.matx, transformationN.angle * Math.PI / 180, [0, 1, 0]);
+							break;
+						case "z":
+							mat4.rotate(nodeN.matx, nodeN.matx, transformationN.angle * Math.PI / 180, [0, 0, 1]);
+							break;
+					}
+
 					break;
 				case 'scale':
 					transformationN.typeOf=this.graph.nodes[i].transformations[j].typeOf;
@@ -347,6 +364,7 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 					for(var e=0; e<this.graph.nodes[i].transformations[j].xyz.length; e++){
 						transformationN.xyz.push(this.graph.nodes[i].transformations[j].xyz[e]);
 					}
+					mat4.scale(nodeN.matx, nodeN.matx, this.graph.nodes[i].transformations[j].xyz);
 					break;
 			}
 
@@ -400,29 +418,7 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		}
 	}
 
-	for(var j=0; j<obj.transformations.length; j++){
-		switch(obj.transformations[j].typeOf){
-			case 'translation':
-				this.translate(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
-				break;
-			case 'rotation':
-				switch(obj.transformations[j].axis){
-					case 'x':
-						this.rotate(obj.transformations[j].angle*degToRad,1,0,0);
-						break;
-					case 'y':
-						this.rotate(obj.transformations[j].angle*degToRad,0,1,0);
-						break;
-					case 'z':
-						this.rotate(obj.transformations[j].angle*degToRad,0,0,1);
-						break;
-				}
-				break;
-			case 'scale':
-				this.scale(obj.transformations[j].xyz[0], obj.transformations[j].xyz[1], obj.transformations[j].xyz[2]);
-				break;
-		}
-	}
+	this.multMatrix(obj.matx);
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){

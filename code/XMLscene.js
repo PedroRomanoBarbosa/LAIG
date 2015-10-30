@@ -79,14 +79,14 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.parentMaterial;
   this.initMaterialsOnGraphLoaded();
 
-	this.primitives=[];
+	this.primitives = {};
 	this.parentTexture=null;
   this.loadPrimitivesOnGraphLoaded();
 
-  this.objects=[];
+  this.objects = {};
+  this.rootId;
   this.loadNodesOnGraphLoaded();
 
-  this.createGraph(this.rootID);
   console.log(this);
 
   this.app.setInterface(this.myInterface);
@@ -130,6 +130,7 @@ XMLscene.prototype.display = function () {
 		}
 
 		this.nodesDisplay();
+
 	};
 };
 
@@ -280,30 +281,30 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 	for(var i=0; i<this.graph.leaves.length; i++){
 		switch(this.graph.leaves[i].typeOf){
 			case 'rectangle':
-				this.primitives.push(new Rectangle(this, this.graph.leaves[i].tagId,
+				this.primitives[this.graph.leaves[i].tagId] = new Rectangle(this, this.graph.leaves[i].tagId,
 					this.graph.leaves[i].primitive.leftTopX, this.graph.leaves[i].primitive.leftTopY,
-					this.graph.leaves[i].primitive.rightBottomX, this.graph.leaves[i].primitive.rightBottomY));
+					this.graph.leaves[i].primitive.rightBottomX, this.graph.leaves[i].primitive.rightBottomY);
 				break;
 			case 'triangle':
-				this.primitives.push(new Triangle(this, this.graph.leaves[i].tagId,
+				this.primitives[this.graph.leaves[i].tagId] = new Triangle(this, this.graph.leaves[i].tagId,
 					this.graph.leaves[i].primitive.Point1[0], this.graph.leaves[i].primitive.Point1[1], this.graph.leaves[i].primitive.Point1[2],
 					this.graph.leaves[i].primitive.Point2[0], this.graph.leaves[i].primitive.Point2[1], this.graph.leaves[i].primitive.Point2[2],
-					this.graph.leaves[i].primitive.Point3[0], this.graph.leaves[i].primitive.Point3[1], this.graph.leaves[i].primitive.Point3[2]));
+					this.graph.leaves[i].primitive.Point3[0], this.graph.leaves[i].primitive.Point3[1], this.graph.leaves[i].primitive.Point3[2]);
 				break;
 	      case 'cylinder':
 	      		var l = this.graph.leaves[i];
-	      		this.primitives.push(new Cylinder(this, l.tagId,
+	      		this.primitives[this.graph.leaves[i].tagId] = new Cylinder(this, l.tagId,
 	      			l.primitive.heightC,
 	      			l.primitive.bottomRadius,
 	      			l.primitive.topRadius,
 	      			l.primitive.stacks,
-	      			l.primitive.slices));
+	      			l.primitive.slices);
 	      		break;
 			case 'sphere':
-				this.primitives.push(new Sphere(this, this.graph.leaves[i].tagId,
+				this.primitives[this.graph.leaves[i].tagId] = new Sphere(this, this.graph.leaves[i].tagId,
 					this.graph.leaves[i].primitive.radius,
 					this.graph.leaves[i].primitive.partsAlongRadius,
-					this.graph.leaves[i].primitive.partsPerSection));
+					this.graph.leaves[i].primitive.partsPerSection);
 				break;
 		}
 	}
@@ -314,7 +315,7 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 */
 XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 
-	this.rootID=this.graph.root.tagId;
+	this.rootId = this.graph.root.tagId;
 
 	for(var i=0; i<this.graph.nodes.length; i++){
 		var nodeN = {};
@@ -357,7 +358,7 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 			nodeN.descendants.push(this.graph.nodes[i].children[u]);
 		}
 
-		this.objects.push(nodeN);
+		this.objects[nodeN.ID] = nodeN;
 	}
 };
 
@@ -365,13 +366,7 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 * @function Displays the scene's nodes
 */
 XMLscene.prototype.nodesDisplay = function () {
-
-	for(var i=0; i<this.objects.length; i++){
-		if(this.rootID==this.objects[i].ID){
-			this.processNodeDisplay(this.objects[i]);
-      break;
-		}
-	}
+			this.processNodeDisplay(this.objects[this.rootId]);
 };
 
 /**
@@ -429,9 +424,13 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		}
 	}
 
-	for(var u=0; u<obj.descendants.length; u++){
-		if(this.isAPrimitive(obj.descendants[u].ID)) this.processPrimitiveDisplay(obj.descendants[u], mat, tex);
-		else this.processNodeDisplay(obj.descendants[u]);
+	for(var u=0; u < obj.descendants.length; u++){
+		if(obj.descendants[u] in this.primitives ){
+      this.processPrimitiveDisplay(this.primitives[ obj.descendants[u] ], mat, tex);
+    }
+		else{
+      this.processNodeDisplay(this.objects[ obj.descendants[u] ] );
+    }
 	}
 
 	this.parentMaterial = matAnt;
@@ -455,42 +454,4 @@ XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t) {
 	}
 
 	obj.display();
-};
-
-/**
-* @function Checks if a certain id is an id of a primitive
-* @param {string} str The id of the primitive to process
-* @returns {Boolean} True if the str matches a primitive ID, false if otherwise
-*/
-XMLscene.prototype.isAPrimitive = function (str) {
-	for(var i=0; i<this.primitives.length; i++){
-		if(str==this.primitives[i].ID){
-			return true;
-		}
-	}
-
-	return false;
-};
-
-XMLscene.prototype.createGraph = function (str) {
-
-	if(typeof str != 'string') return str;
-
-	if(this.isAPrimitive(str)){
-		for(var i=0; i<this.primitives.length; i++){
-			if(this.primitives[i].ID==str){
-				return this.primitives[i];
-			}
-		}
-	}else{
-		for(var t=0; t<this.objects.length; t++){
-			if(this.objects[t].ID==str){
-				for(var u=0; u<this.objects[t].descendants.length; u++){
-					this.objects[t].descendants[u]=this.createGraph(this.objects[t].descendants[u]);
-				}
-
-				return this.objects[t];
-			}
-		}
-	}
 };

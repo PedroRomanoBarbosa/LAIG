@@ -509,6 +509,7 @@ MySceneGraph.prototype.parseRoot = function(rootElement){
 MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 	var node = {};
 	node.children = [];
+	node.animations = [];
 
 	//Parse and check ID
 	if(this.checkID(rootElement.id, this.nodes,[])){
@@ -528,6 +529,15 @@ MySceneGraph.prototype.parseNode = function(rootElement, nodesArray){
 	this.existsIDInObject('TEXTURE', rootElement, this.textures, ["null", "clear"]);
 	node.TextureID = this.parseString('TEXTURE', rootElement, 'id');
 
+	//Parse Animations
+	var animations = this.getChildrenWithName('ANIMATION', rootElement);
+	for (var i = 0; i < animations.length; i++) {
+		if( (animations[i].id in this.animations) ){
+			node.animations.push(animations[i].id);
+		}else {
+			this.onXMLError("The animation with teh id '" + animations[i].id + "' inside node with the id '" + rootElement.id + "' doesn't exist");
+		}
+	}
 
 	//Parse Geometric Transformations
 	var geoTransformsTag = [];

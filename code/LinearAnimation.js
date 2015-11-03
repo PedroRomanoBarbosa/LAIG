@@ -1,7 +1,12 @@
 
- function LinearAnimation(something) {
-     Animation.call(this);
- };
+function LinearAnimation(s, cP) {
+     Animation.call(s);
+     this.controlPoints = cP;
+};
 
-LinearAnimation.prototype = Object.create(LinearAnimation.prototype);
+LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
+
+LinearAnimation.prototype.move = function(){
+
+}

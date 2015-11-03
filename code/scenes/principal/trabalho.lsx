@@ -125,6 +125,9 @@
 				<ROOT id="scene"/>
 
 				<NODE id="scene">
+					<ANIMATION id="ani1"/>
+					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani3"/>
 					<MATERIAL id="m1" />
 					<TEXTURE id="null" />
 					<DESCENDANTS>

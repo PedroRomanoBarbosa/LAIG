@@ -16,6 +16,13 @@ XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
 /**
+*
+*/
+XMLscene.prototype.update = function(currTime){
+
+}
+
+/**
 * @function Initializes the scene's axis and the scene's default attributes
 * @param application The application object
 */
@@ -31,6 +38,9 @@ XMLscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
 
 	  this.axis=new CGFaxis(this);
+
+    /* Update scene */
+ 	  this.setUpdatePeriod(100);
 };
 
 /**
@@ -78,6 +88,9 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.materials={};
   this.parentMaterial;
   this.initMaterialsOnGraphLoaded();
+
+  this.animations = {};
+  this.initAnimationsOnGraphLoaded();
 
 	this.primitives = {};
 	this.parentTexture=null;
@@ -133,6 +146,7 @@ XMLscene.prototype.display = function () {
 
 	};
 };
+
 
 XMLscene.prototype.initMatrixOnGraphLoaded = function () {
 
@@ -228,7 +242,7 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 /**
 * @function Initializes the scene's textures after the scene's graph is loaded
 */
-XMLscene.prototype.initTexturesOnGraphLoaded = function () {
+aXMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
 	var p="scenes/"+this.path.substring(0, this.path.lastIndexOf("/"))+"/";
 
@@ -272,6 +286,25 @@ XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
     }
 	}
 };
+
+/**
+*
+*/
+XMLscene.prototype.initAnimationsOnGraphLoaded = function (){
+  for(var key in this.graph.animations){
+    if (this.graph.animations.hasOwnProperty(key)) {
+      var animation = this.graph.animations[key];
+      switch(animation.typeOf){
+        case "linear":
+          this.animations[key] = new LinearAnimation(animation.span, animation.controlPoints);
+          break;
+        case "circular":
+          this.animations[key] = new CircularAnimation(animation.span, animation.center, animation.radius, animation.startang, animation.rotang);
+          break;
+      }
+    }
+	}
+}
 
 /**
 * @function Loads the scene's primitives after the scene's graph is loaded
@@ -322,6 +355,11 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 		nodeN.ID=this.graph.nodes[i].tagId;
 		nodeN.materialID=this.graph.nodes[i].materialID;
 		nodeN.textureID=this.graph.nodes[i].TextureID;
+
+    nodeN.animations = [];
+    for (var j = 0; j < this.graph.nodes[i].animations.length; j++) {
+      nodeN.animations.push(this.graph.nodes[i].animations[j]);
+    }
 
 		nodeN.matx = mat4.create();
 		mat4.identity(nodeN.matx);

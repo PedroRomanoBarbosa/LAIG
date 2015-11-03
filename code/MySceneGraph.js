@@ -26,7 +26,10 @@ function MySceneGraph(filename, scene) {
 	 this.animations = {};
 
 	 this.reader.open('scenes/' + filename, this);
-
+	 this.ani = new Animation(this);
+	 this.linearAni = new LinearAnimation(this);
+	 this.ani.move();
+	 this.linearAni.move();
 	 console.log(this);
 }
 

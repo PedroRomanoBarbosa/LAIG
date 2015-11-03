@@ -1,8 +1,7 @@
 
- function Animation(something) {
+function Animation(something) {
+};
 
- };
-
- Animation.prototype.func = function(meh){
- 	
- };
+Animation.prototype.move = function(){
+  console.log("Animation moved!");
+};

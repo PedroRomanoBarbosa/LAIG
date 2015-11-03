@@ -144,7 +144,7 @@ XMLscene.prototype.display = function () {
 
 		this.nodesDisplay();
 
-	};
+	}
 };
 
 
@@ -242,7 +242,7 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 /**
 * @function Initializes the scene's textures after the scene's graph is loaded
 */
-aXMLscene.prototype.initTexturesOnGraphLoaded = function () {
+XMLscene.prototype.initTexturesOnGraphLoaded = function () {
 
 	var p="scenes/"+this.path.substring(0, this.path.lastIndexOf("/"))+"/";
 
@@ -304,7 +304,7 @@ XMLscene.prototype.initAnimationsOnGraphLoaded = function (){
       }
     }
 	}
-}
+};
 
 /**
 * @function Loads the scene's primitives after the scene's graph is loaded

@@ -1,7 +1,8 @@
 
-function Animation(something) {
+function Animation(s) {
+  this.span = s;
 };
 
 Animation.prototype.move = function(){
-  console.log("Animation moved!");
+
 };

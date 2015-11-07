@@ -39,8 +39,8 @@ XMLscene.prototype.init = function (application) {
 
 	  this.axis=new CGFaxis(this);
 
-    /* Update scene */
- 	  this.setUpdatePeriod(100);
+    /* Set time flag */
+    this.timeFlag = true;
 };
 
 /**
@@ -97,12 +97,68 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.loadPrimitivesOnGraphLoaded();
 
   this.objects = {};
-  this.rootId;
+  this.rootId = this.graph.root.tagId;
   this.loadNodesOnGraphLoaded();
+  this.root = this.objects[this.rootId];
 
   console.log(this);
+  /* Update scene */
+  this.setUpdatePeriod(100);
 
   this.app.setInterface(this.myInterface);
+
+};
+
+/**
+*
+*/
+XMLscene.prototype.update = function (){
+  /* Gets startTime */
+  if(this.lastUpdate != 0){
+    if(this.timeFlag){
+      this.startTime = this.lastUpdate;
+      this.timeFlag = false;
+    }else{
+      this.secondsPassed = (this.lastUpdate - this.startTime) / 1000;
+      this.updateNodes(this.root);
+    }
+  }
+};
+
+/**
+*
+*/
+XMLscene.prototype.updateNodes = function(obj){
+
+  /* Update animations */
+  if(obj.aniIter < obj.animations.length){
+    /* while the seconds passed are greater than the sum of the spans */
+    while(this.secondsPassed > this.animations[obj.animations[obj.aniIter]].span + obj.spanSum){
+      obj.spanSum = obj.spanSum + this.animations[obj.animations[obj.aniIter]].span;
+      obj.aniIter++;
+      if(obj.aniIter == obj.animations.length){
+        obj.aniIter--;
+        break;
+      }
+    }
+    this.animations[obj.animations[obj.aniIter]].updateMatrix(this.secondsPassed - obj.spanSum);
+  }
+
+  /* tree search */
+  for(var u = 0; u < obj.descendants.length; u++){
+		if(!(obj.descendants[u] in this.primitives) ){
+      this.updateNodes(this.objects[obj.descendants[u]]);
+    }
+	}
+};
+
+/**
+*
+*/
+XMLscene.prototype.updateAnimationMatrix = function(obj){
+  for (var i = 0; i < obj.animations.length; i++) {
+    obj.animations[i].updateMatrix();
+  }
 };
 
 /**
@@ -147,7 +203,9 @@ XMLscene.prototype.display = function () {
 	}
 };
 
-
+/**
+*
+*/
 XMLscene.prototype.initMatrixOnGraphLoaded = function () {
 
 	this.m=mat4.create();
@@ -352,6 +410,8 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 
 	for(var i=0; i<this.graph.nodes.length; i++){
 		var nodeN = {};
+    nodeN.aniIter = 0;
+    nodeN.spanSum = 0;
 		nodeN.ID=this.graph.nodes[i].tagId;
 		nodeN.materialID=this.graph.nodes[i].materialID;
 		nodeN.textureID=this.graph.nodes[i].TextureID;
@@ -422,7 +482,7 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 * @function Displays the scene's nodes
 */
 XMLscene.prototype.nodesDisplay = function () {
-			this.processNodeDisplay(this.objects[this.rootId]);
+			this.processNodeDisplay(this.root);
 };
 
 /**
@@ -456,7 +516,12 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		}
 	}
 
+  //Multiply transformations matrix
 	this.multMatrix(obj.matx);
+
+  //Multiply animations matrix
+
+
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){

@@ -1,5 +1,5 @@
 function CircularAnimation(s, c, r, sA, rA) {
-     Animation.call(s);
+     Animation.call(this,s);
      this.center = c;
      this.radius = r;
      this.startAng = sA;
@@ -9,6 +9,6 @@ function CircularAnimation(s, c, r, sA, rA) {
 CircularAnimation.prototype = Object.create(Animation.prototype);
 CircularAnimation.prototype.constructor = CircularAnimation;
 
-CircularAnimation.prototype.move = function(){
+Animation.prototype.updateMatrix = function(timePassed){
 
-}
+};

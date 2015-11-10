@@ -1,10 +1,6 @@
 
-function Animation(s) {
+function Animation(s, id) {
   this.span = s;
-  this.matrix = mat4.create();
-  mat4.identity(this.matrix);
-};
-
-Animation.prototype.updateMatrix = function(timePassed){
-  return this.matrix;
+  this.tagId = id;
+  this.angle = 0;
 };

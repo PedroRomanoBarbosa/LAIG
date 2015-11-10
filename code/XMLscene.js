@@ -16,13 +16,6 @@ XMLscene.prototype = Object.create(CGFscene.prototype);
 XMLscene.prototype.constructor = XMLscene;
 
 /**
-*
-*/
-XMLscene.prototype.update = function(currTime){
-
-}
-
-/**
 * @function Initializes the scene's axis and the scene's default attributes
 * @param application The application object
 */
@@ -130,18 +123,29 @@ XMLscene.prototype.update = function (){
 */
 XMLscene.prototype.updateNodes = function(obj){
 
-  /* Update animations */
-  if(obj.aniIter < obj.animations.length){
-    /* while the seconds passed are greater than the sum of the spans */
-    while(this.secondsPassed > this.animations[obj.animations[obj.aniIter]].span + obj.spanSum){
-      obj.spanSum = obj.spanSum + this.animations[obj.animations[obj.aniIter]].span;
-      obj.aniIter++;
-      if(obj.aniIter == obj.animations.length){
-        obj.aniIter--;
-        break;
+  if(obj.aniIter < obj.animations.length && obj.animated == true){
+      /* reset matrix */
+      mat4.identity(obj.matxAni);
+      /* while the seconds passed are greater than the sum of the spans */
+      while(this.secondsPassed > this.animations[obj.animations[obj.aniIter]].span + obj.spanSum){
+        obj.spanSum = obj.spanSum + this.animations[obj.animations[obj.aniIter]].span;
+        obj.aniIter++;
+        if(obj.aniIter == obj.animations.length){
+          obj.animated = false;
+          obj.aniIter--;
+          break;
+        }
       }
-    }
-    this.animations[obj.animations[obj.aniIter]].updateMatrix(this.secondsPassed - obj.spanSum);
+      if(obj.animated){
+        obj.lastTransformation = this.animations[obj.animations[obj.aniIter]].updateMatrix(this.secondsPassed - obj.spanSum);
+        /* Apply transformations */
+        mat4.translate(obj.matxAni, obj.matxAni, obj.lastTransformation.translation);
+        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, obj.lastTransformation.translation[1], 0]);
+      }else {
+        /* Apply transformations */
+        mat4.translate(obj.matxAni, obj.matxAni, obj.lastTransformation.translation);
+        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, obj.lastTransformation.translation[1], 0]);
+      }
   }
 
   /* tree search */
@@ -150,15 +154,6 @@ XMLscene.prototype.updateNodes = function(obj){
       this.updateNodes(this.objects[obj.descendants[u]]);
     }
 	}
-};
-
-/**
-*
-*/
-XMLscene.prototype.updateAnimationMatrix = function(obj){
-  for (var i = 0; i < obj.animations.length; i++) {
-    obj.animations[i].updateMatrix();
-  }
 };
 
 /**
@@ -354,7 +349,7 @@ XMLscene.prototype.initAnimationsOnGraphLoaded = function (){
       var animation = this.graph.animations[key];
       switch(animation.typeOf){
         case "linear":
-          this.animations[key] = new LinearAnimation(animation.span, animation.controlPoints);
+          this.animations[key] = new LinearAnimation(key, animation.span, animation.controlPoints);
           break;
         case "circular":
           this.animations[key] = new CircularAnimation(animation.span, animation.center, animation.radius, animation.startang, animation.rotang);
@@ -417,12 +412,17 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 		nodeN.textureID=this.graph.nodes[i].TextureID;
 
     nodeN.animations = [];
+    nodeN.lastTransformation = {};
+    nodeN.animated = true;
     for (var j = 0; j < this.graph.nodes[i].animations.length; j++) {
       nodeN.animations.push(this.graph.nodes[i].animations[j]);
     }
 
 		nodeN.matx = mat4.create();
 		mat4.identity(nodeN.matx);
+
+    nodeN.matxAni = mat4.create();
+    mat4.identity(nodeN.matxAni);
 
 		nodeN.transformations = [];
 		for(var j=0; j<this.graph.nodes[i].transformations.length; j++){
@@ -503,7 +503,7 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 	}
 
 	var tex, texAnt;
-	texAnt=this.parentTexture;
+	texAnt = this.parentTexture;
 	if(obj.textureID!='null' && obj.textureID!='clear'){
 				this.parentTexture=this.textures[obj.textureID];
 				tex = this.textures[obj.textureID];
@@ -518,10 +518,7 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 
   //Multiply transformations matrix
 	this.multMatrix(obj.matx);
-
-  //Multiply animations matrix
-
-
+  this.multMatrix(obj.matxAni);
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){

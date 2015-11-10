@@ -97,14 +97,16 @@
 
 
 	<animations>
-		<animation id="ani1" span="2.5" type="linear">
+		<animation id="ani1" span="1" type="linear">
 	  	<controlpoint xx="1.0" yy="1.5" zz="2.5" />
+			<controlpoint xx="0.0" yy="1.5" zz="2.5" />
+			<controlpoint xx="0.0" yy="2.5" zz="2.5" />
+		</animation>
+		<animation id="ani3" span="2.5" type="linear">
 			<controlpoint xx="1.3" yy="1.5" zz="2.5" />
+			<controlpoint xx="1.0" yy="1.5" zz="2.5" />
 		</animation>
 		<animation id="ani2" span="3.0" type="circular" center=" 1.2   3.2   1.0  " radius="1" startang="2" rotang="3" />
-		<animation id="ani3" span="2.5" type="linear">
-	  	<controlpoint xx="3.5" yy="5.5" zz="1.5" />
-		</animation>
 	</animations>
 
 
@@ -125,9 +127,6 @@
 				<ROOT id="scene"/>
 
 				<NODE id="scene">
-					<ANIMATION id="ani1"/>
-					<ANIMATION id="ani2"/>
-					<ANIMATION id="ani3"/>
 					<MATERIAL id="m1" />
 					<TEXTURE id="null" />
 					<DESCENDANTS>
@@ -437,6 +436,7 @@
 
 
 				<NODE id="milleniumFalcon">
+					<ANIMATION id="ani1"/>
         	<MATERIAL id="m1" />
 	        <TEXTURE id="spaceShipTexture" />
 					<TRANSLATION x="4" y="2" z="2" />

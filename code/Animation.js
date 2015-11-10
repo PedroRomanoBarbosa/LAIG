@@ -1,8 +1,6 @@
 
-function Animation(s) {
+function Animation(s, id) {
   this.span = s;
-};
-
-Animation.prototype.move = function(){
-
+  this.tagId = id;
+  this.angle = 0;
 };

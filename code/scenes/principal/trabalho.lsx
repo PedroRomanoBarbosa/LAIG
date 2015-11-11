@@ -97,16 +97,17 @@
 
 
 	<animations>
-		<animation id="ani1" span="1" type="linear">
-	  	<controlpoint xx="1.0" yy="1.5" zz="2.5" />
-			<controlpoint xx="0.0" yy="1.5" zz="2.5" />
-			<controlpoint xx="0.0" yy="2.5" zz="2.5" />
+		<animation id="ani1" span="3" type="linear">
+	  	<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="4" yy="3" zz="5" />
+			<controlpoint xx="0" yy="0" zz="0" />
 		</animation>
-		<animation id="ani3" span="2.5" type="linear">
-			<controlpoint xx="1.3" yy="1.5" zz="2.5" />
-			<controlpoint xx="1.0" yy="1.5" zz="2.5" />
+		<animation id="ani3" span="2" type="linear">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="-3" yy="0" zz="5" />
 		</animation>
-		<animation id="ani2" span="3.0" type="circular" center=" 1.2   3.2   1.0  " radius="1" startang="2" rotang="3" />
+		<animation id="ani2" span="3.0" type="circular" center="-2 0 0" radius="4" startang="0" rotang="360" />
+		<animation id="ani4" span="6.0" type="circular" center="-2 5 0" radius="3" startang="90" rotang="180" />
 	</animations>
 
 
@@ -118,6 +119,7 @@
 		<LEAF id="t" type="triangle" args="0 1 0  2 1 0  1 4 0" />
 		<LEAF id="unityTriangle" type="triangle" args="1 0 0  0 0 1  0 0 0" />
 		<LEAF id="tfTriangle" type="triangle" args="0 1 0.5  0 0 1  0 0 0" />
+		<LEAF id="testTriangle" type="triangle" args="-0.5 0 0  0 0 2  0.5 0 0" />
 		<LEAF id="c" type="cylinder" args="1 1 1 1 20" />
 		<LEAF id="coneSection" type="cylinder" args="1 0.5 1 1 20" />
 	</LEAVES>
@@ -131,21 +133,40 @@
 					<TEXTURE id="null" />
 					<DESCENDANTS>
 							<DESCENDANT id="spaceCube" />
-							<DESCENDANT id="deathStar" />
+							<DESCENDANT id="deathStar2" />
 							<DESCENDANT id="milleniumFalcon" />
 							<DESCENDANT id="tieFighter1" />
 							<DESCENDANT id="tieFighter2" />
 							<DESCENDANT id="tieFighter3" />
+							<!--<DESCENDANT id="test" />-->
 					</DESCENDANTS>
 				</NODE>
+
+				<NODE id="test">
+					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani1"/>
+        	<MATERIAL id="deathStar" />
+	        <TEXTURE id="deathStarTexture" />
+	        <DESCENDANTS>
+	            <DESCENDANT id="testTriangle" />
+	        </DESCENDANTS>
+        </NODE>
 
 				<NODE id="deathStar">
         	<MATERIAL id="deathStar" />
 	        <TEXTURE id="deathStarTexture" />
-					<TRANSLATION x="1" y="4" z="4" />
 					<ROTATION axis="x" angle="90" />
 	        <DESCENDANTS>
 	            <DESCENDANT id="s" />
+	        </DESCENDANTS>
+        </NODE>
+
+				<NODE id="deathStar2">
+					<ANIMATION id="ani4"/>
+					<MATERIAL id="null" />
+	        <TEXTURE id="null" />
+	        <DESCENDANTS>
+	            <DESCENDANT id="deathStar" />
 	        </DESCENDANTS>
         </NODE>
 
@@ -236,6 +257,8 @@
 
 
 				<NODE id="tieFighter1">
+					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani3"/>
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
 					<TRANSLATION x="4" y="4" z="5" />
@@ -245,6 +268,8 @@
         </NODE>
 
 				<NODE id="tieFighter2">
+					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani3"/>
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
 					<TRANSLATION x="5" y="3" z="6" />
@@ -254,6 +279,8 @@
         </NODE>
 
 				<NODE id="tieFighter3">
+					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani3"/>
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
 					<TRANSLATION x="3" y="4" z="6" />
@@ -436,7 +463,7 @@
 
 
 				<NODE id="milleniumFalcon">
-					<ANIMATION id="ani1"/>
+					<ANIMATION id="ani2"/>
         	<MATERIAL id="m1" />
 	        <TEXTURE id="spaceShipTexture" />
 					<TRANSLATION x="4" y="2" z="2" />

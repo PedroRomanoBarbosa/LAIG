@@ -140,11 +140,12 @@ XMLscene.prototype.updateNodes = function(obj){
         obj.lastTransformation = this.animations[obj.animations[obj.aniIter]].updateMatrix(this.secondsPassed - obj.spanSum);
         /* Apply transformations */
         mat4.translate(obj.matxAni, obj.matxAni, obj.lastTransformation.translation);
-        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, obj.lastTransformation.translation[1], 0]);
+        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, 1, 0]);
       }else {
         /* Apply transformations */
+        obj.lastTransformation = this.animations[obj.animations[obj.aniIter]].lastTransformation();
         mat4.translate(obj.matxAni, obj.matxAni, obj.lastTransformation.translation);
-        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, obj.lastTransformation.translation[1], 0]);
+        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, 1, 0]);
       }
   }
 

@@ -96,7 +96,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 
   console.log(this);
   /* Update scene */
-  this.setUpdatePeriod(100);
+  this.setUpdatePeriod(1000/60);
 
   this.app.setInterface(this.myInterface);
 

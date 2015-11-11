@@ -18,7 +18,7 @@ Animation.prototype.updateMatrix = function(timePassed){
   var z = this.radius * Math.sin(angle);
   var transformation = {};
   transformation.translation = [x + this.center[0], this.center[1], z + this.center[2]];
-  transformation.angle = 0;
+  transformation.angle = -1*angle;
   return transformation;
 };
 

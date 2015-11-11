@@ -143,8 +143,8 @@ XMLscene.prototype.updateNodes = function(obj){
         mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, 1, 0]);
       }else {
         /* Apply transformations */
-        var lastTranslation = this.animations[obj.animations[obj.aniIter]].controlPoints[this.animations[obj.animations[obj.aniIter]].controlPoints.length-1];
-        mat4.translate(obj.matxAni, obj.matxAni, lastTranslation);
+        obj.lastTransformation = this.animations[obj.animations[obj.aniIter]].lastTransformation();
+        mat4.translate(obj.matxAni, obj.matxAni, obj.lastTransformation.translation);
         mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, 1, 0]);
       }
   }

@@ -13,15 +13,17 @@ CircularAnimation.prototype = Object.create(Animation.prototype);
 CircularAnimation.prototype.constructor = CircularAnimation;
 
 Animation.prototype.updateMatrix = function(timePassed){
-  var angle = (timePassed * this.velocity + this.startAng) * Math.PI/180;
-  var x = this.radius * Math.cos(angle);
-  var z = this.radius * Math.sin(angle);
+  this.angle = (timePassed * this.velocity + this.startAng) * Math.PI/180;
+  var x = this.radius * Math.cos(this.angle);
+  var z = this.radius * Math.sin(this.angle);
   var transformation = {};
   transformation.translation = [x + this.center[0], this.center[1], z + this.center[2]];
-  transformation.angle = -1*angle;
+  transformation.angle = -1*this.angle;
   return transformation;
 };
 
-var calculateAngle = function(){
-
+CircularAnimation.prototype.lastTransformation = function(){
+  var transformation = {};
+  transformation = this.updateMatrix(this.span);
+  return transformation;
 }

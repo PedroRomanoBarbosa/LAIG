@@ -69,6 +69,8 @@ LinearAnimation.prototype.calculateAngle = function(p1,p2){
   if(x == 0 && z == 0 ){
     return null;
   }
+
+  // If z coord is negative
   if(z == 0){
     if(x < 0){
       return Math.PI * 0.5;
@@ -76,5 +78,14 @@ LinearAnimation.prototype.calculateAngle = function(p1,p2){
       return Math.PI * -0.5;
     }
   }
+
+  // Else
   return Math.atan2(x,z);
+}
+
+LinearAnimation.prototype.lastTransformation = function(){
+  var transformation = {};
+  transformation.translation = this.controlPoints[this.controlPoints.length-1];
+  transformation.angle = this.controlPointsAngle[this.controlPointsAngle.length-1];
+  return transformation;
 }

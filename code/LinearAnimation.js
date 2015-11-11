@@ -22,7 +22,6 @@ function LinearAnimation(id, s, cP) {
        this.controlPointsAngle.push(angle);
        this.distance += dist;
      }
-
      /* get the velocity */
      this.velocity = this.distance/this.span;
 };
@@ -70,9 +69,12 @@ LinearAnimation.prototype.calculateAngle = function(p1,p2){
   if(x == 0 && z == 0 ){
     return null;
   }
-  // If the x coordinate is negative
-  if(x < 0){
-    return Math.atan(z/x) * Math.PI + Math.PI;
+  if(z == 0){
+    if(x < 0){
+      return Math.PI * 0.5;
+    }else{
+      return Math.PI * -0.5;
+    }
   }
-  return Math.atan(z/x) * Math.PI;
+  return Math.atan2(x,z);
 }

@@ -102,12 +102,16 @@
 			<controlpoint xx="4" yy="3" zz="5" />
 			<controlpoint xx="0" yy="0" zz="0" />
 		</animation>
-		<animation id="ani3" span="2" type="linear">
-			<controlpoint xx="0" yy="0" zz="0" />
-			<controlpoint xx="-3" yy="0" zz="5" />
+		<animation id="ani3" span="0.5" type="linear">
+			<controlpoint xx="2" yy="0" zz="0" />
+			<controlpoint xx="2" yy="1" zz="3" />
 		</animation>
-		<animation id="ani2" span="3.0" type="circular" center="-2 0 0" radius="4" startang="0" rotang="360" />
-		<animation id="ani4" span="6.0" type="circular" center="-2 5 0" radius="3" startang="90" rotang="180" />
+		<animation id="ani2" span="5.0" type="circular" center="-2 0 0" radius="4" startang="0" rotang="720" />
+		<animation id="ani2.5" span="3.0" type="circular" center="-2 0 0" radius="4" startang="0" rotang="360" />
+		<animation id="ani6" span="1.5" type="circular" center="-2 1 3" radius="4" startang="0" rotang="180" />
+		<animation id="ani7" span="1.2" type="circular" center="-2 1 3" radius="4" startang="0" rotang="180" />
+		<animation id="ani5" span="1.0" type="circular" center="-2 1 3" radius="4" startang="0" rotang="180" />
+		<animation id="ani4" span="4.0" type="circular" center="-2 5 0" radius="3" startang="90" rotang="200" />
 	</animations>
 
 
@@ -257,8 +261,9 @@
 
 
 				<NODE id="tieFighter1">
-					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani2.5"/>
 					<ANIMATION id="ani3"/>
+					<ANIMATION id="ani5"/>
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
 					<TRANSLATION x="4" y="4" z="5" />
@@ -268,8 +273,9 @@
         </NODE>
 
 				<NODE id="tieFighter2">
-					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani2.5"/>
 					<ANIMATION id="ani3"/>
+					<ANIMATION id="ani7"/>
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
 					<TRANSLATION x="5" y="3" z="6" />
@@ -279,8 +285,9 @@
         </NODE>
 
 				<NODE id="tieFighter3">
-					<ANIMATION id="ani2"/>
+					<ANIMATION id="ani2.5"/>
 					<ANIMATION id="ani3"/>
+					<ANIMATION id="ani6"/>
         	<MATERIAL id="null" />
 	        <TEXTURE id="null" />
 					<TRANSLATION x="3" y="4" z="6" />

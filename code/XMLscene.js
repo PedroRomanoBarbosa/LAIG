@@ -9,6 +9,19 @@ function XMLscene(app, myInterface) {
 
     this.app=app;
     this.myInterface=myInterface;
+
+
+  /*this.bug = new Patch(this, "lelo", 1, 1, 20, 20,[
+						[
+							 [-2.0, 0.0, -2.0, 1 ],
+							 [-2.0, 0.0, 2.0, 1 ]
+							
+						],
+						[
+							 [ 2.0, 0.0, -2.0, 1 ],
+							 [ 2.0, 0.0, 2.0, 1 ]							 
+						]
+					]);*/
 }
 
 
@@ -21,6 +34,7 @@ XMLscene.prototype.constructor = XMLscene;
 */
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
+	this.test = new Plane(this, "plane", 1, 1);
 
     this.initCameras();
     this.initLights();
@@ -154,22 +168,6 @@ XMLscene.prototype.updateNodes = function(obj){
       this.updateNodes(this.objects[obj.descendants[u]]);
     }
 	}
-  //---------------------------------------
-
-  this.test = new Plane(this, "plane", 1, 1);
-
-  this.bug = new Patch(this, "lelo", 1, 1, 20, 20,[	// U = 0
-						[ // V = 0..1;
-							 [-2.0, 0.0, -2.0, 1 ],
-							 [-2.0, 0.0, 2.0, 1 ]
-							
-						],
-						// U = 1
-						[ // V = 0..1
-							 [ 2.0, 0.0, -2.0, 1 ],
-							 [ 2.0, 0.0, 2.0, 1 ]							 
-						]
-					]);
 };
 
 /**

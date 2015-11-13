@@ -103,6 +103,23 @@ XMLscene.prototype.onGraphLoaded = function () {
   console.log(this);
 
   this.app.setInterface(this.myInterface);
+
+  //---------------------------------------
+
+  this.test = new Plane(this, "plane", 1, 1);
+
+  this.bug = new Patch(this, "lelo", 1, 1, 20, 20,[	// U = 0
+						[ // V = 0..1;
+							 [-2.0, 0.0, -2.0, 1 ],
+							 [-2.0, 0.0, 2.0, 1 ]
+							
+						],
+						// U = 1
+						[ // V = 0..1
+							 [ 2.0, 0.0, -2.0, 1 ],
+							 [ 2.0, 0.0, 2.0, 1 ]							 
+						]
+					]);
 };
 
 /**
@@ -142,8 +159,10 @@ XMLscene.prototype.display = function () {
 			this.lights[i].update();
 		}
 
-		this.nodesDisplay();
+		//this.bug.display();
+		this.test.display();
 
+		this.nodesDisplay();
 	}
 };
 

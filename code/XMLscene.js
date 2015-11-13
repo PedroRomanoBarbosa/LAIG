@@ -99,7 +99,6 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.setUpdatePeriod(1000/60);
 
   this.app.setInterface(this.myInterface);
-
 };
 
 /**
@@ -155,6 +154,22 @@ XMLscene.prototype.updateNodes = function(obj){
       this.updateNodes(this.objects[obj.descendants[u]]);
     }
 	}
+  //---------------------------------------
+
+  this.test = new Plane(this, "plane", 1, 1);
+
+  this.bug = new Patch(this, "lelo", 1, 1, 20, 20,[	// U = 0
+						[ // V = 0..1;
+							 [-2.0, 0.0, -2.0, 1 ],
+							 [-2.0, 0.0, 2.0, 1 ]
+							
+						],
+						// U = 1
+						[ // V = 0..1
+							 [ 2.0, 0.0, -2.0, 1 ],
+							 [ 2.0, 0.0, 2.0, 1 ]							 
+						]
+					]);
 };
 
 /**
@@ -194,8 +209,10 @@ XMLscene.prototype.display = function () {
 			this.lights[i].update();
 		}
 
-		this.nodesDisplay();
+		//this.bug.display();
+		this.test.display();
 
+		this.nodesDisplay();
 	}
 };
 

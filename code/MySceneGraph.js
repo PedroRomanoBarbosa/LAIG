@@ -432,24 +432,33 @@ MySceneGraph.prototype.parseLeaf = function(parent){
 	var leaf = { tagId:parent.id };
 
 	//Parse type
-	leaf.typeOf = this.reader.getItem(parent, 'type', ['rectangle', 'cylinder', 'sphere', 'triangle'], true);
-	var coordString = this.reader.getString(parent, 'args', true);
+	leaf.typeOf = this.reader.getItem(parent, 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'plane', 'patch', 'vehicle', 'terrain'], true);
 	switch(leaf.typeOf){
 		case 'rectangle':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseRectangleCoord(coordString, parent);
 			break;
 		case 'cylinder':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseCylinderCoord(coordString, parent);
 			break;
 		case 'sphere':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseSphereCoord(coordString, parent);
 			break;
 		case 'triangle':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseTriangleCoord(coordString, parent);
 			break;
-		default:
-			this.onXMLError("type of leaf not recognized.");
-
+		case 'plane':
+			leaf.primitive = this.parsePlane(parent);
+			break;
+		case 'patch':
+			leaf.primitive = this.parsePatch(parent);
+			break;
+		case 'terrain':
+			leaf.primitive = this.parseTerrain(parent);
+			break;
 	}
 
 	//Add to array
@@ -1077,6 +1086,37 @@ MySceneGraph.prototype.parseTriangleCoord = function(s){
 		}
 	}
 	return triangle;
+}
+
+/**
+*
+*/
+MySceneGraph.prototype.parsePlane = function(parent){
+	var patch = {};
+	n = this.reader.getFloat(parent, 'parts', true);
+	if(!this.isInteger(n)){
+		this.onXMLError("The attribute 'parts' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
+	}else {
+		patch.parts = n;
+	}
+	return patch;
+}
+
+/**
+*
+*/
+MySceneGraph.prototype.parsePatch = function(parent){
+
+}
+
+/**
+*
+*/
+MySceneGraph.prototype.parseTerrain = function(parent){
+	var terrain = {};
+	terrain.texture = this.reader.getString(parent, 'texture', true);
+	terrain.heightmap = this.reader.getString(parent, 'heightmap', true);
+	return terrain;
 }
 
 /**

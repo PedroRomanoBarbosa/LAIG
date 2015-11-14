@@ -126,6 +126,9 @@
 		<LEAF id="testTriangle" type="triangle" args="-0.5 0 0  0 0 2  0.5 0 0" />
 		<LEAF id="c" type="cylinder" args="1 1 1 1 20" />
 		<LEAF id="coneSection" type="cylinder" args="1 0.5 1 1 20" />
+		<LEAF id="plane" type="plane" parts="5" />
+		<LEAF id="v" type="vehicle"/>
+		<LEAF id="ter" type="terrain" texture="texture" heightmap="file" />
 	</LEAVES>
 
 
@@ -148,7 +151,6 @@
 
 				<NODE id="test">
 					<ANIMATION id="ani2"/>
-					<ANIMATION id="ani1"/>
         	<MATERIAL id="deathStar" />
 	        <TEXTURE id="deathStarTexture" />
 	        <DESCENDANTS>

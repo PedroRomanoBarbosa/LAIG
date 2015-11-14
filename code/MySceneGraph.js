@@ -1137,6 +1137,11 @@ MySceneGraph.prototype.parsePatch = function(parent){
 	}
 	patch.controlPoints = [];
 	var controlPoints = this.getOnlyChildsWithName(parent, "controlpoint");
+	/* Check if the number of control points is correct */
+	var correct = (patch.partsU + 1) * (patch.partsV + 1);
+	if(correct != controlPoints.length){
+		this.onXMLError("In tag: '" + parent.tagName + "' with the id of '" + parent.id + "' the number of controlPoints are not correct");
+	}
 	for (var i = 0; i < controlPoints.length; i++) {
 		var cp = this.parseXYZ(controlPoints[i],parent);
 		patch.controlPoints.push(cp);

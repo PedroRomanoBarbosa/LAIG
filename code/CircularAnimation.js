@@ -19,6 +19,9 @@ Animation.prototype.updateMatrix = function(timePassed){
   var transformation = {};
   transformation.translation = [x + this.center[0], this.center[1], z + this.center[2]];
   transformation.angle = -1*this.angle;
+  if(this.rotAng < 0){
+    transformation.angle += Math.PI;
+  }
   return transformation;
 };
 

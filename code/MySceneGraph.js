@@ -432,24 +432,33 @@ MySceneGraph.prototype.parseLeaf = function(parent){
 	var leaf = { tagId:parent.id };
 
 	//Parse type
-	leaf.typeOf = this.reader.getItem(parent, 'type', ['rectangle', 'cylinder', 'sphere', 'triangle'], true);
-	var coordString = this.reader.getString(parent, 'args', true);
+	leaf.typeOf = this.reader.getItem(parent, 'type', ['rectangle', 'cylinder', 'sphere', 'triangle', 'plane', 'patch', 'vehicle', 'terrain'], true);
 	switch(leaf.typeOf){
 		case 'rectangle':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseRectangleCoord(coordString, parent);
 			break;
 		case 'cylinder':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseCylinderCoord(coordString, parent);
 			break;
 		case 'sphere':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseSphereCoord(coordString, parent);
 			break;
 		case 'triangle':
+			var coordString = this.reader.getString(parent, 'args', true);
 			leaf.primitive = this.parseTriangleCoord(coordString, parent);
 			break;
-		default:
-			this.onXMLError("type of leaf not recognized.");
-
+		case 'plane':
+			leaf.primitive = this.parsePlane(parent);
+			break;
+		case 'patch':
+			leaf.primitive = this.parsePatch(parent);
+			break;
+		case 'terrain':
+			leaf.primitive = this.parseTerrain(parent);
+			break;
 	}
 
 	//Add to array
@@ -805,16 +814,25 @@ MySceneGraph.prototype.parseXYZW = function(xyzwElement, parent){
 */
 MySceneGraph.prototype.parseXYZ = function(xyzElement, parent){
 	var x = this.reader.getFloat(xyzElement,'xx',true);
+	if(x == null){
+		this.onXMLError("'xx' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id '" + parent.id + "' does not exist");
+	}
 	if(isNaN(x)){
-		this.onXMLError("'xx' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+		this.onXMLError("'xx' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id '" + parent.id + "' is not a float.");
 	}
 	var y = this.reader.getFloat(xyzElement,'yy',true);
+	if(y == null){
+		this.onXMLError("'xx' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id '" + parent.id + "' does not exist");
+	}
 	if(isNaN(y)){
-		this.onXMLError("'yy' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+		this.onXMLError("'yy' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id '" + parent.id + "' is not a float.");
 	}
 	var z = this.reader.getFloat(xyzElement,'zz',true);
+	if(z == null){
+		this.onXMLError("'xx' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id '" + parent.id + "' does not exist");
+	}
 	if(isNaN(z)){
-		this.onXMLError("'zz' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id " + parent.id + " is not a float.");
+		this.onXMLError("'zz' attribute on tag <'" + xyzElement.tagName + "'> inside <'" + parent.tagName + "'> with id '" + parent.id + "' is not a float.");
 	}
 	return [x,y,z];
 }
@@ -1077,6 +1095,69 @@ MySceneGraph.prototype.parseTriangleCoord = function(s){
 		}
 	}
 	return triangle;
+}
+
+/**
+*
+*/
+MySceneGraph.prototype.parsePlane = function(parent){
+	var plane = {};
+	var n = this.reader.getFloat(parent, 'parts', true);
+	if(!this.isInteger(n)){
+		this.onXMLError("The attribute 'parts' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
+	}else {
+		plane.parts = n;
+	}
+	return plane;
+}
+
+/**
+*
+*/
+MySceneGraph.prototype.parsePatch = function(parent){
+	var patch = {};
+
+	var n = this.reader.getFloat(parent, 'order', true);
+	if(!this.isInteger(n)){
+		this.onXMLError("The attribute 'order' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
+	}else {
+		patch.order = n;
+	}
+	n = this.reader.getFloat(parent, 'partsU', true);
+	if(!this.isInteger(n)){
+		this.onXMLError("The attribute 'partsU' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
+	}else {
+		patch.partsU = n;
+	}
+	n = this.reader.getFloat(parent, 'partsV', true);
+	if(!this.isInteger(n)){
+		this.onXMLError("The attribute 'partsV' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
+	}else {
+		patch.partsV = n;
+	}
+	patch.controlPoints = [];
+	var controlPoints = this.getOnlyChildsWithName(parent, "controlpoint");
+	/* Check if the number of control points is correct */
+	var correct = (patch.partsU + 1) * (patch.partsV + 1);
+	if(correct != controlPoints.length){
+		this.onXMLError("In tag: '" + parent.tagName + "' with the id of '" + parent.id + "' the number of controlPoints are not correct");
+	}
+	for (var i = 0; i < controlPoints.length; i++) {
+		var cp = this.parseXYZ(controlPoints[i],parent);
+		patch.controlPoints.push(cp);
+	}
+	return patch;
+
+}
+
+/**
+*
+*/
+MySceneGraph.prototype.parseTerrain = function(parent){
+	var terrain = {};
+	terrain.texture = this.reader.getString(parent, 'texture', true);
+	terrain.heightmap = this.reader.getString(parent, 'heightmap', true);
+	return terrain;
 }
 
 /**

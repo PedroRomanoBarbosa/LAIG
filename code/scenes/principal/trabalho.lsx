@@ -129,6 +129,10 @@
 		<LEAF id="plane" type="plane" parts="5" />
 		<LEAF id="v" type="vehicle"/>
 		<LEAF id="ter" type="terrain" texture="texture" heightmap="file" />
+		<LEAF id="p" type="patch" order="1" partsU="2" partsV="3">
+			<controlpoint xx="1" yy="2" zz="3"/>
+			<controlpoint xx="1" yy="2" zz="3"/>
+		</LEAF>
 	</LEAVES>
 
 

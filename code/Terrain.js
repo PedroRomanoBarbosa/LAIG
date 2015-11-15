@@ -3,25 +3,27 @@ function Terrain(scene, id, divU, divV, colTex, heiTex, vertexShader, fragmentSh
 
 	this.scene = scene;
 
-	this.colTex = colTex;
+	this.colTex = heiTex;
 	this.heiTex = heiTex;
 
 	this.usedShader = new CGFshader(this.scene.gl, vertexShader, fragmentShader);
 
-	this.usedShader.setUniformsValues({heightScale: 0.5});
-	this.usedShader.setUniformsValues({uSampler: this.colTex});
-	this.usedShader.setUniformsValues({uSampler2: this.heiTex});
+	this.usedShader.setUniformsValues({heightScale: 0.1});
+	this.usedShader.setUniformsValues({uSampler: 0});
+	this.usedShader.setUniformsValues({uSampler2: 1});
 
-	this.plane = new Plane(scene, id, 1, 1, divU, divV);
+	this.plane = new Plane(scene, id, divU, divV);
 };
 
 Terrain.prototype = Object.create(Plane.prototype);
 Terrain.prototype.constructor=Terrain;
 
 Terrain.prototype.display = function() {
+
 	this.scene.setActiveShader(this.usedShader);
 
-	this.colTex.bind();
+	this.colTex.bind(0);
+	this.heiTex.bind(1);
 	this.plane.display();
 
 	this.scene.setActiveShader(this.scene.defaultShader);

@@ -61,7 +61,7 @@
         	<file path="images/tex.jpg" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
-		<TEXTURE id="height">
+		<TEXTURE id="map">
         	<file path="images/map.jpg" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>

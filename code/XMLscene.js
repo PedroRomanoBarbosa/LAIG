@@ -100,7 +100,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 
   this.app.setInterface(this.myInterface);
 
-  this.test = new Terrain(this, "lelo", 10, 10, this.textures["tex"], this.textures["map"], "shaders/terrain.vert", "shaders/terrain.frag");
+  this.test = new Terrain(this, "lelo", 50, 50, this.textures["tex"], this.textures["map"], "shaders/terrain.vert", "shaders/terrain.frag");
 };
 
 /**

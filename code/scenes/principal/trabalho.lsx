@@ -69,6 +69,14 @@
         	<file path="images/map.jpg" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
+    	<TEXTURE id="flames">
+        	<file path="images/flame.jpg" />
+        	<amplif_factor s="1" t="1" />
+    </TEXTURE>
+    	<TEXTURE id="stripes">
+        	<file path="images/stripes.jpg" />
+        	<amplif_factor s="1" t="1" />
+    </TEXTURE>
 	</TEXTURES>
 
 
@@ -183,6 +191,20 @@
 	            <DESCENDANT id="tp2patch" />
 	            <DESCENDANT id="tp2terrain" />
 	            <DESCENDANT id="tp2terrain2" />
+	            <DESCENDANT id="tp2vehicle" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="tp2vehicle">
+        			<MATERIAL id="null" />
+	        		<TEXTURE id="clear" />
+
+	        		<TRANSLATION x="0" y="0" z="0" />
+	        		<ROTATION axis="x" angle="0" />
+	        		<SCALE sx="1" sy="1" sz="1" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="v" />
 	        </DESCENDANTS>
         </NODE>
 

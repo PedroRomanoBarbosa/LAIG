@@ -25,6 +25,7 @@ serialInclude(['../lib/CGF.js',
 				 'Patch.js',
 				 'Plane.js',
 				 'Terrain.js',
+				 'Vehicle.js',
 
 main=function()
 {

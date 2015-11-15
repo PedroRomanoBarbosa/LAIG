@@ -414,6 +414,11 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 				this.vertexShader,
 				this.fragmentShader);
 				break;
+			case 'vehicle':
+				this.primitives[this.graph.leaves[i].tagId] = new Vehicle(this, this.graph.leaves[i].tagId,
+				this.textures["stripes"],
+				this.textures["flames"]);
+				break;
 		}
 	}
 };

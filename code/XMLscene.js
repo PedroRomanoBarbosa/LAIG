@@ -9,6 +9,9 @@ function XMLscene(app, myInterface) {
 
     this.app=app;
     this.myInterface=myInterface;
+
+    this.vertexShader = "shaders/terrain.vert";
+    this.fragmentShader = "shaders/terrain.frag";
 }
 
 
@@ -403,6 +406,13 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 					this.graph.leaves[i].primitive.partsU,
 					this.graph.leaves[i].primitive.partsV,
 					this.graph.leaves[i].primitive.controlPoints);
+				break;
+			case 'terrain':
+				this.primitives[this.graph.leaves[i].tagId] = new Terrain(this, this.graph.leaves[i].tagId,
+				this.textures[this.graph.leaves[i].primitive.texture],
+				this.textures[this.graph.leaves[i].primitive.heightmap],
+				this.vertexShader,
+				this.fragmentShader);
 				break;
 		}
 	}

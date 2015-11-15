@@ -136,7 +136,8 @@
 		<LEAF id="coneSection" type="cylinder" args="1 0.5 1 1 20" />
 		<LEAF id="plane" type="plane" parts="5" />
 		<LEAF id="v" type="vehicle"/>
-		<LEAF id="ter" type="terrain" texture="texture" heightmap="file" />
+		<LEAF id="ter" type="terrain" texture="height" heightmap="height" />
+		<LEAF id="ter2" type="terrain" texture="gridColored" heightmap="height" />
 		<LEAF id="p" type="patch" order="2" partsU="10" partsV="10">
 			<!-- u = 0 -->
 			<controlpoint xx="0" yy="0" zz="0"/>
@@ -180,6 +181,34 @@
 	        <DESCENDANTS>
 	            <DESCENDANT id="tp2plane" />
 	            <DESCENDANT id="tp2patch" />
+	            <DESCENDANT id="tp2terrain" />
+	            <DESCENDANT id="tp2terrain2" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="tp2terrain">
+        			<MATERIAL id="null" />
+	        		<TEXTURE id="clear" />
+
+	        		<TRANSLATION x="7" y="2" z="-5" />
+	        		<ROTATION axis="x" angle="90" />
+	        		<SCALE sx="3" sy="3" sz="3" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="ter" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="tp2terrain2">
+        			<MATERIAL id="null" />
+	        		<TEXTURE id="clear" />
+
+	        		<TRANSLATION x="10" y="2" z="-5" />
+	        		<ROTATION axis="x" angle="90" />
+	        		<SCALE sx="3" sy="3" sz="3" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="ter2" />
 	        </DESCENDANTS>
         </NODE>
 

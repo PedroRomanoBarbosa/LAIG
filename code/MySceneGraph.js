@@ -1121,7 +1121,11 @@ MySceneGraph.prototype.parsePatch = function(parent){
 	if(!this.isInteger(n)){
 		this.onXMLError("The attribute 'order' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not an integer.");
 	}else {
-		patch.order = n;
+		if(n == 1 || n == 2 || n == 3){
+			patch.order = n;
+		}else{
+			this.onXMLError("The attribute 'order' in tag: '" + parent.tagName + "' with the id of '" + parent.id + "' is not one of the next values (1, 2 or 3).");
+		}
 	}
 	n = this.reader.getFloat(parent, 'partsU', true);
 	if(!this.isInteger(n)){
@@ -1138,13 +1142,33 @@ MySceneGraph.prototype.parsePatch = function(parent){
 	patch.controlPoints = [];
 	var controlPoints = this.getOnlyChildsWithName(parent, "controlpoint");
 	/* Check if the number of control points is correct */
-	var correct = (patch.partsU + 1) * (patch.partsV + 1);
+	var correct = (patch.order + 1) * (patch.order + 1);
 	if(correct != controlPoints.length){
 		this.onXMLError("In tag: '" + parent.tagName + "' with the id of '" + parent.id + "' the number of controlPoints are not correct");
 	}
 	for (var i = 0; i < controlPoints.length; i++) {
 		var cp = this.parseXYZ(controlPoints[i],parent);
 		patch.controlPoints.push(cp);
+	}
+	var holder = patch.controlPoints;
+	patch.controlPoints = [];
+	var index = 0;
+
+	for(var i=0; i<=patch.order; i++){
+		var uArr = [];
+
+		for(var u=0; u<=patch.order; u++){
+			var vArr = [];
+
+			var temp=holder[index];
+			index++;
+
+			vArr.push(temp[0], temp[1], temp[2], 1.0);
+
+			uArr.push(vArr);
+		}
+
+		patch.controlPoints.push(uArr);
 	}
 	return patch;
 

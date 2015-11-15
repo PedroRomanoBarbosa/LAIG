@@ -391,6 +391,19 @@ XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
 					this.graph.leaves[i].primitive.partsAlongRadius,
 					this.graph.leaves[i].primitive.partsPerSection);
 				break;
+			case 'plane':
+				this.primitives[this.graph.leaves[i].tagId] = new Plane(this, this.graph.leaves[i].tagId,
+					this.graph.leaves[i].primitive.parts,
+					this.graph.leaves[i].primitive.parts);
+				break;
+			case 'patch':
+				this.primitives[this.graph.leaves[i].tagId] = new Patch(this, this.graph.leaves[i].tagId,
+					this.graph.leaves[i].primitive.order,
+					this.graph.leaves[i].primitive.order,
+					this.graph.leaves[i].primitive.partsU,
+					this.graph.leaves[i].primitive.partsV,
+					this.graph.leaves[i].primitive.controlPoints);
+				break;
 		}
 	}
 };

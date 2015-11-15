@@ -61,6 +61,14 @@
         	<file path="images/teste.jpg" />
         	<amplif_factor s="1" t="1" />
     </TEXTURE>
+    	<TEXTURE id="gridColored">
+        	<file path="images/tex.jpg" />
+        	<amplif_factor s="1" t="1" />
+    </TEXTURE>
+    	<TEXTURE id="height">
+        	<file path="images/map.jpg" />
+        	<amplif_factor s="1" t="1" />
+    </TEXTURE>
 	</TEXTURES>
 
 
@@ -129,11 +137,21 @@
 		<LEAF id="plane" type="plane" parts="5" />
 		<LEAF id="v" type="vehicle"/>
 		<LEAF id="ter" type="terrain" texture="texture" heightmap="file" />
-		<LEAF id="p" type="patch" order="1" partsU="1" partsV="1">
-			<controlpoint xx="1" yy="2" zz="3"/>
-			<controlpoint xx="1" yy="2" zz="3"/>
-			<controlpoint xx="1" yy="2" zz="3"/>
-			<controlpoint xx="1" yy="2" zz="3"/>
+		<LEAF id="p" type="patch" order="2" partsU="10" partsV="10">
+			<!-- u = 0 -->
+			<controlpoint xx="0" yy="0" zz="0"/>
+			<controlpoint xx="0" yy="0.5" zz="1"/>
+			<controlpoint xx="0" yy="1" zz="0"/>
+
+			<!-- u = 1 -->
+			<controlpoint xx="0.5" yy="0" zz="0"/>
+			<controlpoint xx="0.5" yy="0.5" zz="-2"/>
+			<controlpoint xx="0.5" yy="1" zz="0"/>
+
+			<!-- u = 2 -->
+			<controlpoint xx="1" yy="0" zz="0"/>
+			<controlpoint xx="1" yy="0.5" zz="1"/>
+			<controlpoint xx="1" yy="1" zz="0"/>
 		</LEAF>
 	</LEAVES>
 
@@ -151,16 +169,40 @@
 							<DESCENDANT id="tieFighter1" />
 							<DESCENDANT id="tieFighter2" />
 							<DESCENDANT id="tieFighter3" />
-							<!--<DESCENDANT id="test" />-->
+							<DESCENDANT id="tp2" />
 					</DESCENDANTS>
 				</NODE>
 
-				<NODE id="test">
-					<ANIMATION id="ani2"/>
-        	<MATERIAL id="deathStar" />
-	        <TEXTURE id="deathStarTexture" />
+				<NODE id="tp2">
+        			<MATERIAL id="null" />
+	        		<TEXTURE id="clear" />
+
 	        <DESCENDANTS>
-	            <DESCENDANT id="testTriangle" />
+	            <DESCENDANT id="tp2plane" />
+	            <DESCENDANT id="tp2patch" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="tp2patch">
+        			<MATERIAL id="null" />
+	        		<TEXTURE id="gridColored" />
+
+	        		<TRANSLATION x="2" y="0" z="-5" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="p" />
+	        </DESCENDANTS>
+        </NODE>
+
+        <NODE id="tp2plane">
+        			<MATERIAL id="null" />
+	        		<TEXTURE id="gridColored" />
+
+					<TRANSLATION x="0.5" y="0.5" z="-5" />
+	        		<ROTATION axis="x" angle="90" />
+
+	        <DESCENDANTS>
+	            <DESCENDANT id="plane" />
 	        </DESCENDANTS>
         </NODE>
 

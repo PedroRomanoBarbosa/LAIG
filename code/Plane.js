@@ -1,5 +1,6 @@
 
 function Plane(scene, id, divU, divV) {
+	
 	var controlvertexes = 
 	[
 		[

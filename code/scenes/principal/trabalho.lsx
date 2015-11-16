@@ -199,9 +199,7 @@
         			<MATERIAL id="null" />
 	        		<TEXTURE id="clear" />
 
-	        		<TRANSLATION x="0" y="0" z="0" />
-	        		<ROTATION axis="x" angle="0" />
-	        		<SCALE sx="1" sy="1" sz="1" />
+	        		<TRANSLATION x="-2" y="2" z="-5" />
 
 	        <DESCENDANTS>
 	            <DESCENDANT id="v" />

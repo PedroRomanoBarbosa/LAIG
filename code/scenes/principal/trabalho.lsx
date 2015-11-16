@@ -216,7 +216,7 @@
         			<MATERIAL id="null" />
 	        		<TEXTURE id="clear" />
 
-	        		<TRANSLATION x="1" y="-10" z="1" />
+	        		<TRANSLATION x="1" y="-12" z="1" />
 	        		<SCALE sx="50" sy="60" sz="50" />
 
 	        <DESCENDANTS>

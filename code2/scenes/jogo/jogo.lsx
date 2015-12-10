@@ -1,0 +1,1238 @@
+<SCENE>
+
+	<INITIALS>
+		<frustum  near="0.1" far="500"/>
+		<translation x="0" y="0" z="0"/>
+		<rotation axis="x" angle="0"/>
+		<rotation axis="y" angle="0"/>
+		<rotation axis="z" angle="0"/>
+		<scale sx="1" sy="1" sz="1" />
+    <reference length="1"/>
+	</INITIALS>
+
+
+	<ILLUMINATION>
+		<ambient r="0.1" g="0.1" b="0.1" a="1" />
+		<background r="0" g="0" b="0" a="1" />
+	</ILLUMINATION>
+
+
+	<LIGHTS>
+		<LIGHT id="light0">
+	        <enable value="1" />
+	        <position  x="0" y="3" z="0" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+    	<LIGHT id="light1">
+	        <enable value="1" />
+	        <position  x="-4.5" y="3" z="-4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+    	<LIGHT id="light2">
+	        <enable value="1" />
+	        <position  x="4.5" y="3" z="-4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+    	<LIGHT id="light3">
+	        <enable value="1" />
+	        <position  x="-4.5" y="3" z="4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+    	<LIGHT id="light4">
+	        <enable value="1" />
+	        <position  x="4.5" y="3" z="4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+	</LIGHTS>
+
+
+	<TEXTURES>
+		<TEXTURE id="free">
+        	<file path="images/free.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="sunTile">
+        	<file path="images/sunTile.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="moonTile">
+        	<file path="images/moonTile.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+	</TEXTURES>
+
+
+	<MATERIALS>
+    	<MATERIAL id="m">
+	        <shininess value="100" />
+	        <specular r="0.5" g="0.5" b="0.5" a="1" />
+	        <diffuse r="0.7" g="0.7" b="0.7" a="1" />
+	        <ambient r="0.7" g="0.7" b="0.7" a="1" />
+	        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    	</MATERIAL>
+	</MATERIALS>
+
+
+	<animations>
+	</animations>
+
+
+	<LEAVES>
+		<LEAF id="r" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
+	</LEAVES>
+
+
+	<NODES>
+		<ROOT id="scene"/>
+
+		<NODE id="scene">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+					<DESCENDANT id="board" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="board">
+			<MATERIAL id="m" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+					<DESCENDANT id="line1" />
+					<DESCENDANT id="line2" />
+					<DESCENDANT id="line3" />
+					<DESCENDANT id="line4" />
+					<DESCENDANT id="line5" />
+					<DESCENDANT id="line6" />
+					<DESCENDANT id="line7" />
+					<DESCENDANT id="line8" />
+					<DESCENDANT id="line9" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line1">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile11" />
+				<DESCENDANT id="tile12" />
+				<DESCENDANT id="tile13" />
+				<DESCENDANT id="tile14" />
+				<DESCENDANT id="tile15" />
+				<DESCENDANT id="tile16" />
+				<DESCENDANT id="tile17" />
+				<DESCENDANT id="tile18" />
+				<DESCENDANT id="tile19" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile11">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="-4" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile12">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-3" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile13">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-2" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile14">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile15">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="0" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile16">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile17">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="2" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile18">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="3" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile19">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="4" y="0" z="-4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line2">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile21" />
+				<DESCENDANT id="tile22" />
+				<DESCENDANT id="tile23" />
+				<DESCENDANT id="tile24" />
+				<DESCENDANT id="tile25" />
+				<DESCENDANT id="tile26" />
+				<DESCENDANT id="tile27" />
+				<DESCENDANT id="tile28" />
+				<DESCENDANT id="tile29" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile21">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-4" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile22">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="-3" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile23">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-2" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile24">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile25">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="0" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile26">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile27">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="2" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile28">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="3" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile29">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="4" y="0" z="-3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line3">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile31" />
+				<DESCENDANT id="tile32" />
+				<DESCENDANT id="tile33" />
+				<DESCENDANT id="tile34" />
+				<DESCENDANT id="tile35" />
+				<DESCENDANT id="tile36" />
+				<DESCENDANT id="tile37" />
+				<DESCENDANT id="tile38" />
+				<DESCENDANT id="tile39" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile31">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-4" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile32">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-3" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile33">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="-2" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile34">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile35">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="0" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile36">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile37">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="2" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile38">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="3" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile39">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="4" y="0" z="-2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line4">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile41" />
+				<DESCENDANT id="tile42" />
+				<DESCENDANT id="tile43" />
+				<DESCENDANT id="tile44" />
+				<DESCENDANT id="tile45" />
+				<DESCENDANT id="tile46" />
+				<DESCENDANT id="tile47" />
+				<DESCENDANT id="tile48" />
+				<DESCENDANT id="tile49" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile41">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-4" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile42">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-3" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile43">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-2" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile44">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile45">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="0" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile46">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile47">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="2" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile48">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="3" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile49">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="4" y="0" z="-1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line5">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile51" />
+				<DESCENDANT id="tile52" />
+				<DESCENDANT id="tile53" />
+				<DESCENDANT id="tile54" />
+				<DESCENDANT id="tile55" />
+				<DESCENDANT id="tile56" />
+				<DESCENDANT id="tile57" />
+				<DESCENDANT id="tile58" />
+				<DESCENDANT id="tile59" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile51">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="-4" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile52">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-3" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile53">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-2" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile54">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile55">
+			<MATERIAL id="null" />
+			<TEXTURE id="moonTile" />
+
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile56">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile57">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="2" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile58">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="3" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile59">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="4" y="0" z="0" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line6">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile61" />
+				<DESCENDANT id="tile62" />
+				<DESCENDANT id="tile63" />
+				<DESCENDANT id="tile64" />
+				<DESCENDANT id="tile65" />
+				<DESCENDANT id="tile66" />
+				<DESCENDANT id="tile67" />
+				<DESCENDANT id="tile68" />
+				<DESCENDANT id="tile69" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile61">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-4" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile62">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-3" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile63">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-2" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile64">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile65">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="0" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile66">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile67">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="2" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile68">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="3" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile69">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="4" y="0" z="1" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line7">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile71" />
+				<DESCENDANT id="tile72" />
+				<DESCENDANT id="tile73" />
+				<DESCENDANT id="tile74" />
+				<DESCENDANT id="tile75" />
+				<DESCENDANT id="tile76" />
+				<DESCENDANT id="tile77" />
+				<DESCENDANT id="tile78" />
+				<DESCENDANT id="tile79" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile71">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-4" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile72">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-3" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile73">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="-2" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile74">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile75">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="0" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile76">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile77">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="2" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile78">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="3" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile79">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="4" y="0" z="2" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line8">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile81" />
+				<DESCENDANT id="tile82" />
+				<DESCENDANT id="tile83" />
+				<DESCENDANT id="tile84" />
+				<DESCENDANT id="tile85" />
+				<DESCENDANT id="tile86" />
+				<DESCENDANT id="tile87" />
+				<DESCENDANT id="tile88" />
+				<DESCENDANT id="tile89" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile81">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-4" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile82">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="-3" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile83">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-2" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile84">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile85">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="0" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile86">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile87">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="2" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile88">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="3" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile89">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="4" y="0" z="3" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="line9">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+				<DESCENDANT id="tile91" />
+				<DESCENDANT id="tile92" />
+				<DESCENDANT id="tile93" />
+				<DESCENDANT id="tile94" />
+				<DESCENDANT id="tile95" />
+				<DESCENDANT id="tile96" />
+				<DESCENDANT id="tile97" />
+				<DESCENDANT id="tile98" />
+				<DESCENDANT id="tile99" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile91">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="-4" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile92">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-3" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile93">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-2" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile94">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="-1" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile95">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="0" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile96">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="1" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile97">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="2" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile98">
+			<MATERIAL id="null" />
+			<TEXTURE id="free" />
+
+			<TRANSLATION x="3" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="tile99">
+			<MATERIAL id="null" />
+			<TEXTURE id="sunTile" />
+
+			<TRANSLATION x="4" y="0" z="4" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+	</NODES>
+
+</SCENE>

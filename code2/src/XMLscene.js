@@ -159,10 +159,30 @@ XMLscene.prototype.updateNodes = function(obj){
 	}
 };
 
+XMLscene.prototype.logPicking = function (){
+
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if (obj)
+				{
+					var customId = this.pickResults[i][1];				
+					console.log("Picked object: " + obj + ", with pick id " + customId);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}		
+	}
+}
+
 /**
 * @function Displays the scene
 */
 XMLscene.prototype.display = function () {
+
+	this.logPicking();
+	this.clearPickRegistration();
 
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -185,8 +205,8 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-	if (this.graph.loadedOk)
-	{
+	if (this.graph.loadedOk){
+
 		this.multMatrix(this.m);
 
 		// Draw axis
@@ -200,9 +220,6 @@ XMLscene.prototype.display = function () {
 	}
 };
 
-/**
-*
-*/
 XMLscene.prototype.initMatrixOnGraphLoaded = function () {
 
 	this.m=mat4.create();
@@ -509,7 +526,7 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 * @function Displays the scene's nodes
 */
 XMLscene.prototype.nodesDisplay = function () {
-			this.processNodeDisplay(this.root);
+	this.processNodeDisplay(this.root);
 };
 
 /**
@@ -517,6 +534,10 @@ XMLscene.prototype.nodesDisplay = function () {
 * @param id The identification of the node to process
 */
 XMLscene.prototype.processNodeDisplay = function (obj) {
+
+	if(obj.ID.substring(0, 4) == 'tile'){
+		this.registerForPick(parseInt(obj.ID.substring(4)), obj);
+	}
 
 	this.pushMatrix();
 

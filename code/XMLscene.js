@@ -198,6 +198,7 @@ XMLscene.prototype.display = function () {
 
 		this.nodesDisplay();
 	}
+
 };
 
 /**

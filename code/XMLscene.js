@@ -97,9 +97,6 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.loadNodesOnGraphLoaded();
   this.root = this.objects[this.rootId];
 
-  this.pieces = [];
-  this.piece = new Piece(this, 1, this.textures["blueBird"], this.textures["whiteSquare"], this.materials["m2"]);
-
   console.log(this);
   /* Update scene */
   this.setUpdatePeriod(1000/60);
@@ -200,9 +197,6 @@ XMLscene.prototype.display = function () {
 		}
 
 		this.nodesDisplay();
-
-    //Display Pieces
-    this.piece.display();
 	}
 
 };

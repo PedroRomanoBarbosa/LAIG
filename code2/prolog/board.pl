@@ -8,7 +8,7 @@
 %board of the game
 
 %stateOfTheGame(board of the game - list, player to make a move - int)				
-stateOfTheGame([[free, free, free, free, sunTile, free, free, free, sunTile],
+stateOfTheGame([[sunTile, free, free, free, sunTile, free, free, free, sunTile],
 				[free, sunTile, free, free, free, free, free, sunTile, free],
 				[free, free, sunTile, free, free, free, sunTile, free, free],
 				[free, free, free, free, free, free, free, free, free],

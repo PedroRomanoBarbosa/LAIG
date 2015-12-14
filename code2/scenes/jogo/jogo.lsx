@@ -69,6 +69,11 @@
         	<file path="images/moonTile.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
+
+    	<TEXTURE id="bird-cyan">
+        	<file path="images/bird-cyan.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
 	</TEXTURES>
 
 
@@ -132,7 +137,7 @@
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 					<DESCENDANT id="board" />
-					<DESCENDANT id="piece" />
+					<!--<DESCENDANT id="piece" />-->
 			</DESCENDANTS>
 		</NODE>
 
@@ -154,7 +159,7 @@
 		<NODE id="bottom">
 			<ROTATION axis="x" angle="180" />
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />
+			<TEXTURE id="clear" />
 			<DESCENDANTS>
 					<DESCENDANT id="top" />
 			</DESCENDANTS>
@@ -186,7 +191,7 @@
 		<NODE id="quarter4">
 			<ROTATION axis="y" angle="270" />
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />
+			<TEXTURE id="clear" />
 			<DESCENDANTS>
 				<DESCENDANT id="quarter1" />
 			</DESCENDANTS>
@@ -195,7 +200,7 @@
 		<NODE id="quarter3">
 			<ROTATION axis="y" angle="180" />
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />
+			<TEXTURE id="clear" />
 			<DESCENDANTS>
 				<DESCENDANT id="quarter1" />
 			</DESCENDANTS>
@@ -204,7 +209,7 @@
 		<NODE id="quarter2">
 			<ROTATION axis="y" angle="90" />
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />
+			<TEXTURE id="clear" />
 			<DESCENDANTS>
 				<DESCENDANT id="quarter1" />
 			</DESCENDANTS>
@@ -213,7 +218,7 @@
 
 		<NODE id="quarter1">
 			<MATERIAL id="null" />
-			<TEXTURE id="null" />
+			<TEXTURE id="clear" />
 			<DESCENDANTS>
 					<DESCENDANT id="corner" />
 					<DESCENDANT id="side1" />

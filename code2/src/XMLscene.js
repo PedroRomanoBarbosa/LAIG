@@ -100,6 +100,9 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.loadNodesOnGraphLoaded();
   this.root = this.objects[this.rootId];
 
+  this.piecePrimitive = this.objects['piece'];
+  this.root.descendants.push('piece');
+
   console.log(this);
   /* Update scene */
   this.setUpdatePeriod(1000/60);
@@ -546,6 +549,10 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 
 	if(obj.ID.substring(0, 4) == 'tile'){
 		this.registerForPick(parseInt(obj.ID.substring(4)), obj);
+	}
+
+	if(obj.ID == 'piece'){
+		obj.textureID = "bird-cyan";
 	}
 
 	this.pushMatrix();

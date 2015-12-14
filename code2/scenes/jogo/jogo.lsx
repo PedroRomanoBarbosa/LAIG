@@ -138,12 +138,11 @@
 
 
 
-
-
-
+		<!-- PIECE -->
 
 		<NODE id="piece">
-			<SCALE sx="0.125" sy="0.1" sz="0.125" />
+			<TRANSLATION x="0" y="0.15" z="0" />
+			<SCALE sx="0.1" sy="0.08" sz="0.1" />
 			<MATERIAL id="m" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
@@ -288,12 +287,8 @@
 
 
 
-
-
-
-
-
-
+		
+		<!-- BOARD -->
 
 		<NODE id="board">
 			<MATERIAL id="m" />

@@ -3,7 +3,6 @@
 %----------------------------
 %including libraries used
 :- use_module(library(random)).
-:- use_module(library(lists)).
 
 %----------------------------
 %dynamic predicates
@@ -31,7 +30,7 @@ player1HalfStones(0).
 player2HalfStones(0).
 
 player1SunStones(0).
-player2SunStones(3).
+player2SunStones(0).
 
 player1Moves(1).
 player2Moves(1).

@@ -37,6 +37,9 @@ XMLscene.prototype.init = function (application) {
 
     /* Set time flag */
     this.timeFlag = true;
+
+    this.server = new Server(8081);
+    this.server.makeRequest("startGame");
 };
 
 /**
@@ -52,7 +55,7 @@ XMLscene.prototype.initLights = function () {
 * @function Initializes scene's cameras
 */
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(25, 25, 25), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 0));
 };
 
 /**
@@ -169,6 +172,7 @@ XMLscene.prototype.logPicking = function (){
 				{
 					var customId = this.pickResults[i][1];
 					console.log("Picked object: " + obj + ", with pick id " + customId);
+					this.server.makeRequest("ola");
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -183,6 +187,11 @@ XMLscene.prototype.display = function () {
 
 	this.logPicking();
 	this.clearPickRegistration();
+
+	if(this.server.replyReady){
+		this.state = new GameState(this.server.answer);
+		this.server.replyReady = false;
+	}
 
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

@@ -7,45 +7,61 @@
 		<rotation axis="y" angle="0"/>
 		<rotation axis="z" angle="0"/>
 		<scale sx="1" sy="1" sz="1" />
-    <reference length="5"/>
+    <reference length="1"/>
 	</INITIALS>
 
 
 	<ILLUMINATION>
 		<ambient r="0.1" g="0.1" b="0.1" a="1" />
-		<background r="1" g="1" b="1" a="1" />
+		<background r="0" g="0" b="0" a="1" />
 	</ILLUMINATION>
 
 
 	<LIGHTS>
 		<LIGHT id="light0">
 	        <enable value="1" />
-	        <position  x="1" y="10" z="4" w="1" />
-	        <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+	        <position  x="0" y="3" z="0" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
 	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
 	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
     	</LIGHT>
-
-			<LIGHT id="light1">
-		        <enable value="1" />
-		        <position  x="6" y="0" z="3" w="1" />
-		        <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
-		        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-		        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-	    	</LIGHT>
+    	<LIGHT id="light1">
+	        <enable value="1" />
+	        <position  x="-4.5" y="3" z="-4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+    	<LIGHT id="light2">
+	        <enable value="1" />
+	        <position  x="4.5" y="3" z="-4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+    	<LIGHT id="light3">
+	        <enable value="1" />
+	        <position  x="-4.5" y="3" z="4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
+    	<LIGHT id="light4">
+	        <enable value="1" />
+	        <position  x="4.5" y="3" z="4.5" w="1" />
+	        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+	        <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+	        <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+    	</LIGHT>
 	</LIGHTS>
 
 
 	<TEXTURES>
-		<TEXTURE id="space">
-        	<file path="images/spaceText.jpg" />
-        	<amplif_factor s="1" t="1" />
-    </TEXTURE>
 	</TEXTURES>
 
 
 	<MATERIALS>
-    	<MATERIAL id="m1">
+    	<MATERIAL id="m">
 	        <shininess value="100" />
 	        <specular r="0.5" g="0.5" b="0.5" a="1" />
 	        <diffuse r="0.7" g="0.7" b="0.7" a="1" />
@@ -56,29 +72,32 @@
 
 
 	<animations>
-		<animation id="ani1" span="3" type="linear">
-	  	<controlpoint xx="0" yy="0" zz="0" />
-			<controlpoint xx="4" yy="3" zz="5" />
-			<controlpoint xx="0" yy="0" zz="0" />
-		</animation>
 	</animations>
 
 
 	<LEAVES>
-		<LEAF id="r" type="rectangle" args="0 1 1 0" />
+		<LEAF id="r" type="rectangle" args="-0.5 0.5 0.5 -0.5" />
 	</LEAVES>
 
 
 	<NODES>
-				<ROOT id="scene"/>
+		<ROOT id="scene"/>
 
-				<NODE id="scene">
-					<MATERIAL id="null" />
-					<TEXTURE id="null" />
-					<DESCENDANTS>
-							<DESCENDANT id="r" />
-					</DESCENDANTS>
-				</NODE>
+		<NODE id="scene">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+					<DESCENDANT id="menu1" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="menu1">
+			<MATERIAL id="null" />
+			<TEXTURE id="null" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
 	</NODES>
 
 </SCENE>

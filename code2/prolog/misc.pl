@@ -251,7 +251,7 @@ reloadData :-
 	assert(player1Moves(1)),
 	assert(player2Moves(1)),
 	assert(numberOfWindPiecesDiscarded(0)),
-	assert(stateOfTheGame([	[free, free, free, free, sunTile, free, free, free, sunTile],
+	assert(stateOfTheGame([	[sunTile, free, free, free, sunTile, free, free, free, sunTile],
 							[free, sunTile, free, free, free, free, free, sunTile, free],
 							[free, free, sunTile, free, free, free, sunTile, free, free],
 							[free, free, free, free, free, free, free, free, free],

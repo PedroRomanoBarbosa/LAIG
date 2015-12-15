@@ -220,8 +220,8 @@
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
 
-    	<TEXTURE id="wind-tile">
-        	<file path="images/wind-tile.jpg" />
+    	<TEXTURE id="wind-piece">
+        	<file path="images/wind-piece.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
 	</TEXTURES>

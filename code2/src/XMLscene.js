@@ -40,6 +40,9 @@ XMLscene.prototype.init = function (application) {
 
     this.server = new Server(8081);
     this.server.makeRequest("startGame");
+
+    this.loopState = 0;
+    this.gameStatesStack = [];
 };
 
 /**
@@ -55,8 +58,8 @@ XMLscene.prototype.initLights = function () {
 * @function Initializes scene's cameras
 */
 XMLscene.prototype.initCameras = function () {
-    //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 3));
-    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -3));
+    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 3));
+    //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -3));
 };
 
 /**
@@ -102,42 +105,19 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.loadNodesOnGraphLoaded();
   this.root = this.objects[this.rootId];
 
-  new PiecePrimitive(this, this.objects['piece'], 'bird-cyan', 1, 3);
-  new PiecePrimitive(this, this.objects['piece'], 'turtle-red', 2, 5);
-  new PiecePrimitive(this, this.objects['piece'], 'wind-tile', 7, 9);
-  new PiecePrimitive(this, this.objects['piece'], 'dolphin-blue', 8, 7);
+  this.originalRootDescendants = [];
+  for(var i=0; i<this.root.descendants.length; i++){
+  	this.originalRootDescendants.push(this.root.descendants[i]);
+  }
+
+  //new PiecePrimitive(this, this.objects['piece'], 'bird-cyan', 1, 3);
 
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
 
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-blue');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-red');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-green');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-purple');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-red');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'flower-red');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'lizard-yellow');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'wind-tile');
-  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-yellow');
+  //new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-blue');
 
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-blue');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-green');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-purple');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'flower-red');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'lizard-yellow');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'wind-tile');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-yellow');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-blue');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-green');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-purple');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'flower-red');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'lizard-yellow');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'wind-tile');
-  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-yellow');
+  //new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-blue');
 
   console.log(this);
   /* Update scene */
@@ -203,6 +183,15 @@ XMLscene.prototype.updateNodes = function(obj){
 	}
 };
 
+//------------------------------------------------------------------------------------------------------------
+
+/*
+ STATES OF THE GAME
+
+ 0 - initial game, receiving first data from server and storing it in js
+
+*/
+
 XMLscene.prototype.logPicking = function (){
 
 	if (this.pickMode == false) {
@@ -221,18 +210,66 @@ XMLscene.prototype.logPicking = function (){
 	}
 }
 
+XMLscene.prototype.gameLoop = function () {
+
+	this.logPicking();
+
+	switch(this.loopState){
+		case 0:
+			if(this.server.replyReady){
+				this.state = new GameState(this.server.answer);
+
+				this.gameStatesStack.push(this.state);
+				
+				this.loopState++;
+				this.reloadEntities();
+				this.server.replyReady = false;
+			}
+		break;
+		case 1:
+		break;
+	}
+};
+
+XMLscene.prototype.objectsToRegister = function (obj) {
+
+	this.clearPickRegistration();
+
+	switch(this.loopState){
+		case 0:
+		break;
+		case 1:
+			if(obj.ID.substring(0, 4) == 'tile'){
+				this.registerForPick(parseInt(obj.ID.substring(4)), obj);
+			}
+		break;
+	}
+};
+
+XMLscene.prototype.reloadEntities = function () {
+	this.root.descendants = this.originalRootDescendants;
+	this.numHandPiecesP1 = 1;
+  	this.numHandPiecesP2 = 1;
+
+  	var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+
+  	for(var i=0; i<nowState.player1HandPieces.length; i++){
+  		new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], nowState.player1HandPieces[i]);
+  	}
+
+  	for(var i=0; i<nowState.player2HandPieces.length; i++){
+  		new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], nowState.player2HandPieces[i]);
+  	}
+};
+
+//------------------------------------------------------------------------------------------------------------
+
 /**
 * @function Displays the scene
 */
 XMLscene.prototype.display = function () {
 
-	this.logPicking();
-	this.clearPickRegistration();
-
-	if(this.server.replyReady){
-		this.state = new GameState(this.server.answer);
-		this.server.replyReady = false;
-	}
+	this.gameLoop();
 
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -580,9 +617,7 @@ XMLscene.prototype.nodesDisplay = function () {
 */
 XMLscene.prototype.processNodeDisplay = function (obj) {
 
-	if(obj.ID.substring(0, 4) == 'tile'){
-		this.registerForPick(parseInt(obj.ID.substring(4)), obj);
-	}
+	this.objectsToRegister(obj);
 
 	this.pushMatrix();
 

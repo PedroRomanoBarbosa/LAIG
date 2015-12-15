@@ -32,8 +32,6 @@ function HandPiecePrimitiveP1(scene, piecePrimitive, pieceFormat) {
 	positionTransformation2.xyz = [ 0, 0, Math.floor((scene.numHandPiecesP1 - 1) / 7)];
 	this.transformations.push(positionTransformation2);
 
-	console.log(this.transformations);
-
 	mat4.identity(this.matx);
 	for(var j=0; j<this.transformations.length; j++){
 		switch(this.transformations[j].typeOf){

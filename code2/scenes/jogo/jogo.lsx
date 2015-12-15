@@ -70,8 +70,158 @@
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
 
+    	<TEXTURE id="bird-blue">
+        	<file path="images/bird-blue.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
     	<TEXTURE id="bird-cyan">
         	<file path="images/bird-cyan.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="bird-green">
+        	<file path="images/bird-green.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="bird-purple">
+        	<file path="images/bird-purple.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="bird-red">
+        	<file path="images/bird-red.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="bird-yellow">
+        	<file path="images/bird-yellow.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="dolphin-blue">
+        	<file path="images/dolphin-blue.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="dolphin-cyan">
+        	<file path="images/dolphin-cyan.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="dolphin-green">
+        	<file path="images/dolphin-green.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="dolphin-purple">
+        	<file path="images/dolphin-purple.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="dolphin-red">
+        	<file path="images/dolphin-red.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="dolphin-yellow">
+        	<file path="images/dolphin-yellow.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="feather-blue">
+        	<file path="images/feather-blue.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="feather-cyan">
+        	<file path="images/feather-cyan.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="feather-green">
+        	<file path="images/feather-green.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="feather-purple">
+        	<file path="images/feather-purple.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="feather-red">
+        	<file path="images/feather-red.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="feather-yellow">
+        	<file path="images/feather-yellow.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="flower-blue">
+        	<file path="images/flower-blue.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="flower-cyan">
+        	<file path="images/flower-cyan.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="flower-green">
+        	<file path="images/flower-green.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="flower-purple">
+        	<file path="images/flower-purple.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="flower-red">
+        	<file path="images/flower-red.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="flower-yellow">
+        	<file path="images/flower-yellow.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="lizard-blue">
+        	<file path="images/lizard-blue.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="lizard-cyan">
+        	<file path="images/lizard-cyan.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="lizard-green">
+        	<file path="images/lizard-green.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="lizard-purple">
+        	<file path="images/lizard-purple.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="lizard-red">
+        	<file path="images/lizard-red.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="lizard-yellow">
+        	<file path="images/lizard-yellow.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="turtle-blue">
+        	<file path="images/turtle-blue.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="turtle-cyan">
+        	<file path="images/turtle-cyan.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="turtle-green">
+        	<file path="images/turtle-green.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="turtle-purple">
+        	<file path="images/turtle-purple.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="turtle-red">
+        	<file path="images/turtle-red.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="turtle-yellow">
+        	<file path="images/turtle-yellow.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="wind-tile">
+        	<file path="images/wind-tile.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
 	</TEXTURES>

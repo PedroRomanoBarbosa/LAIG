@@ -100,8 +100,10 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.loadNodesOnGraphLoaded();
   this.root = this.objects[this.rootId];
 
-  this.piecePrimitive = this.objects['piece'];
-  this.root.descendants.push('piece');
+  new PiecePrimitive(this, this.objects['piece'], 'bird-cyan', 1, 3);
+  new PiecePrimitive(this, this.objects['piece'], 'turtle-red', 2, 5);
+  new PiecePrimitive(this, this.objects['piece'], 'wind-tile', 7, 9);
+  new PiecePrimitive(this, this.objects['piece'], 'dolphin-blue', 8, 7);
 
   console.log(this);
   /* Update scene */
@@ -461,24 +463,24 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 
 	for(var i=0; i<this.graph.nodes.length; i++){
 		var nodeN = {};
-    nodeN.aniIter = 0;
-    nodeN.spanSum = 0;
+		nodeN.aniIter = 0;
+		nodeN.spanSum = 0;
 		nodeN.ID=this.graph.nodes[i].tagId;
 		nodeN.materialID=this.graph.nodes[i].materialID;
 		nodeN.textureID=this.graph.nodes[i].TextureID;
 
-    nodeN.animations = [];
-    nodeN.lastTransformation = {};
-    nodeN.animated = true;
-    for (var j = 0; j < this.graph.nodes[i].animations.length; j++) {
-      nodeN.animations.push(this.graph.nodes[i].animations[j]);
-    }
+		nodeN.animations = [];
+		nodeN.lastTransformation = {};
+		nodeN.animated = true;
+		for (var j = 0; j < this.graph.nodes[i].animations.length; j++) {
+		  nodeN.animations.push(this.graph.nodes[i].animations[j]);
+		}
 
 		nodeN.matx = mat4.create();
 		mat4.identity(nodeN.matx);
 
-    nodeN.matxAni = mat4.create();
-    mat4.identity(nodeN.matxAni);
+		nodeN.matxAni = mat4.create();
+		mat4.identity(nodeN.matxAni);
 
 		nodeN.transformations = [];
 		for(var j=0; j<this.graph.nodes[i].transformations.length; j++){
@@ -551,10 +553,6 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		this.registerForPick(parseInt(obj.ID.substring(4)), obj);
 	}
 
-	if(obj.ID == 'piece'){
-		obj.textureID = "bird-cyan";
-	}
-
 	this.pushMatrix();
 
 	var mat, matAnt;
@@ -586,11 +584,11 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){
-      this.processPrimitiveDisplay(this.primitives[ obj.descendants[u] ], mat, tex);
-    }
+		  this.processPrimitiveDisplay(this.primitives[ obj.descendants[u] ], mat, tex);
+		}
 		else{
-      this.processNodeDisplay(this.objects[ obj.descendants[u] ] );
-    }
+		  this.processNodeDisplay(this.objects[ obj.descendants[u] ] );
+		}
 	}
 
 	this.parentMaterial = matAnt;

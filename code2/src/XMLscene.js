@@ -55,7 +55,8 @@ XMLscene.prototype.initLights = function () {
 * @function Initializes scene's cameras
 */
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 0));
+    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 4));
+    //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -4));
 };
 
 /**
@@ -77,6 +78,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.initMatrixOnGraphLoaded();
 
 	this.initCamerasOnGraphLoaded();
+
 	this.initIlluminationOnGraphLoaded();
   this.initLightsOnGraphLoaded();
 
@@ -109,7 +111,9 @@ XMLscene.prototype.onGraphLoaded = function () {
   /* Update scene */
   this.setUpdatePeriod(1000/60);
 
-  this.app.setInterface(this.myInterface);
+	this.lightsVisible = true;
+	this.showAxis = true;
+	this.app.setInterface(this.myInterface);
 };
 
 /**
@@ -209,8 +213,10 @@ XMLscene.prototype.display = function () {
 	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 
-	for (i = 0; i < this.lights.length; i++)
+	for (i = 0; i < this.lights.length; i++){
+		this.lights[i].setVisible(this.lightsVisible);
 		this.lights[i].update();
+	}
 
 	this.setDefaultAppearance();
 
@@ -224,11 +230,7 @@ XMLscene.prototype.display = function () {
 		this.multMatrix(this.m);
 
 		// Draw axis
-		if(this.graph.referenceLength != 0) this.axis.display();
-
-		for(var i=0; i<8; i++){
-			this.lights[i].update();
-		}
+		if(this.graph.referenceLength != 0 && this.showAxis) this.axis.display();
 
 		this.nodesDisplay();
 	}
@@ -307,10 +309,8 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
         light = this.graph.lights[i];
 
 		if(light.enable){
-			this.lights[i].lightBool = true;
       		this.lights[i].enable();
 		}else{
-			this.lights[i].lightBool = false;
       		this.lights[i].disable();
 		}
 
@@ -319,7 +319,6 @@ XMLscene.prototype.initLightsOnGraphLoaded = function () {
 		this.lights[i].setAmbient(light.ambient[0], light.ambient[1], light.ambient[2], light.ambient[3]);
 		this.lights[i].setDiffuse(light.diffuse[0], light.diffuse[1], light.diffuse[2], light.diffuse[3]);
 		this.lights[i].setSpecular(light.specular[0], light.specular[1], light.specular[2], light.specular[3]);
-		this.lights[i].setVisible(true);
 
 		this.lights[i].update();
 	 }

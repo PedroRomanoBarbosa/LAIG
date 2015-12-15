@@ -21,15 +21,11 @@ MyInterface.prototype.init = function(application) {
 	// Creates GUI on the window
     this.gui = new dat.GUI();
 
-    var lightChecksGroup=this.gui.addFolder("Lights");
-	lightChecksGroup.open();
+    var checksGroup=this.gui.addFolder("Options");
+	checksGroup.open();
 
-	for(var i = 0; i<this.scene.lights.length; i++){
-		if(this.scene.lights[i].ID != null){
-			lightChecksGroup.add(this.scene.lights[i], 'enabled').name(""+this.scene.lights[i].ID);
-		}else
-			break;
-	}
+	checksGroup.add(this.scene, 'lightsVisible').name("Visible Lights");
+	checksGroup.add(this.scene, 'showAxis').name("Visible Axis");
 
     return true;
 };

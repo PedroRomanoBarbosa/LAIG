@@ -287,9 +287,55 @@
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 					<DESCENDANT id="board" />
+					<!--<DESCENDANT id="handPieceP1" />-->
+					<!--<DESCENDANT id="handPieceP2" />-->
 					<!--<DESCENDANT id="piece" />-->
 			</DESCENDANTS>
 		</NODE>
+
+
+
+
+		<!-- HAND PIECE -->
+
+		<NODE id="handPieceP1">
+			<MATERIAL id="m" />
+			<TEXTURE id="null" />
+
+			<TRANSLATION x="-3" y="0" z="5.7" />
+			<ROTATION axis="x" angle="45" />
+			<TRANSLATION x="0" y="0" z="0.4" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="handPiece" />
+			</DESCENDANTS>
+		</NODE>	
+
+		<NODE id="handPieceP2">
+			<MATERIAL id="m" />
+			<TEXTURE id="null" />
+
+			<TRANSLATION x="3" y="0" z="-5.7" />
+			<ROTATION axis="x" angle="-45" />
+			<TRANSLATION x="0" y="0" z="-0.4" />
+			<ROTATION axis="y" angle="180" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="handPiece" />
+			</DESCENDANTS>
+		</NODE>	
+
+		<NODE id="handPiece">
+			<MATERIAL id="m" />
+			<TEXTURE id="null" />
+
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<ROTATION axis="x" angle="-90" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>		
 
 
 
@@ -449,6 +495,8 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
+					<DESCENDANT id="rack1" />
+					<DESCENDANT id="rack2" />
 					<DESCENDANT id="line1" />
 					<DESCENDANT id="line2" />
 					<DESCENDANT id="line3" />
@@ -460,6 +508,52 @@
 					<DESCENDANT id="line9" />
 			</DESCENDANTS>
 		</NODE>
+
+
+
+		<!-- PLAYER RACKS -->
+
+		<NODE id="rack1">
+			<MATERIAL id="m" />
+			<TEXTURE id="clear" />
+
+			<TRANSLATION x="0" y="0" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<TRANSLATION x="0" y="0" z="1.5" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="rack" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="rack2">
+			<MATERIAL id="m" />
+			<TEXTURE id="clear" />
+
+			<TRANSLATION x="0" y="0" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<TRANSLATION x="0" y="0" z="-1.5" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="rack" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="rack">
+			<MATERIAL id="m" />
+			<TEXTURE id="sunTile" />
+
+			<ROTATION axis="x" angle="-90" />
+			<SCALE sx="7" sy="3" sz="1" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+
+
+		<!-- BOARD BUILDING -->
 
 		<NODE id="line1">
 			<MATERIAL id="null" />

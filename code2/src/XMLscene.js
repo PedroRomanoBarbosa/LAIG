@@ -55,8 +55,8 @@ XMLscene.prototype.initLights = function () {
 * @function Initializes scene's cameras
 */
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 4));
-    //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -4));
+    //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 3));
+    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -3));
 };
 
 /**
@@ -106,6 +106,38 @@ XMLscene.prototype.onGraphLoaded = function () {
   new PiecePrimitive(this, this.objects['piece'], 'turtle-red', 2, 5);
   new PiecePrimitive(this, this.objects['piece'], 'wind-tile', 7, 9);
   new PiecePrimitive(this, this.objects['piece'], 'dolphin-blue', 8, 7);
+
+  this.numHandPiecesP1 = 1;
+  this.numHandPiecesP2 = 1;
+
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-blue');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-red');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-green');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-purple');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-red');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'flower-red');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'lizard-yellow');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'wind-tile');
+  new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-yellow');
+
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-blue');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-green');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-purple');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'flower-red');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'lizard-yellow');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'wind-tile');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-yellow');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-blue');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-green');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-purple');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-red');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'flower-red');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'lizard-yellow');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'wind-tile');
+  new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-yellow');
 
   console.log(this);
   /* Update scene */

@@ -28,6 +28,8 @@ serialInclude(['../lib/CGF.js',
 				 'src/Server.js',
 				 'src/GameState.js',
 				 'src/PiecePrimitive.js',
+				 'src/HandPiecePrimitiveP1.js',
+				 'src/HandPiecePrimitiveP2.js',
 
 main=function()
 {

@@ -212,6 +212,7 @@ XMLscene.prototype.logPicking = function (){
 
 XMLscene.prototype.gameLoop = function () {
 
+	this.clearPickRegistration();
 	this.logPicking();
 
 	switch(this.loopState){
@@ -233,12 +234,21 @@ XMLscene.prototype.gameLoop = function () {
 
 XMLscene.prototype.objectsToRegister = function (obj) {
 
-	this.clearPickRegistration();
-
 	switch(this.loopState){
 		case 0:
 		break;
 		case 1:
+			if(this.state.playerTurn == 1){
+				if(obj.ID.substring(0, 11) == 'handPieceP1'){
+					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				}
+			}else{
+				if(obj.ID.substring(0, 11) == 'handPieceP2'){
+					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				}
+			}
+		break;
+		case 2:
 			if(obj.ID.substring(0, 4) == 'tile'){
 				this.registerForPick(parseInt(obj.ID.substring(4)), obj);
 			}
@@ -254,12 +264,27 @@ XMLscene.prototype.reloadEntities = function () {
   	var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
   	for(var i=0; i<nowState.player1HandPieces.length; i++){
-  		new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], nowState.player1HandPieces[i]);
+  		var handPieceHolder = new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], nowState.player1HandPieces[i]);
+  		var handPieceObject = handPieceHolder.getObject();
+  		this.addToRootNode(handPieceObject);
   	}
 
   	for(var i=0; i<nowState.player2HandPieces.length; i++){
-  		new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], nowState.player2HandPieces[i]);
+  		var handPieceHolder = new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], nowState.player2HandPieces[i]);
+  		var handPieceObject = handPieceHolder.getObject();
+  		this.addToRootNode(handPieceObject);
   	}
+};
+
+XMLscene.prototype.addToRootNode = function (obj) {
+	this.objects[obj.ID] = obj;
+	this.root.descendants.push(obj.ID);
+
+	if(obj.ID.substring(9, 11) == 'P1'){
+		this.numHandPiecesP1++;
+	}else{
+		this.numHandPiecesP2++;
+	}
 };
 
 //------------------------------------------------------------------------------------------------------------

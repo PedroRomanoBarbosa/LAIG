@@ -56,9 +56,30 @@ function HandPiecePrimitiveP1(scene, piecePrimitive, pieceFormat) {
 				break;
 		}
 	}
+};
 
-	scene.objects[this.ID] = this;
-	scene.root.descendants.push(this.ID);
+HandPiecePrimitiveP1.prototype.getObject = function() {
 
-	scene.numHandPiecesP1++;
+	var obj = {};
+
+	obj.ID = this.ID;
+
+	obj.aniIter = this.aniIter;
+	obj.animated = this.animated;
+	obj.animations = this.animations;
+	obj.descendants = this.descendants;
+	obj.lastTransformation = this.lastTransformation;
+
+	obj.materialID = this.materialID;
+
+	obj.matx = this.matx;
+
+	obj.matxAni = this.matxAni;
+	obj.spanSum = this.spanSum;
+
+	obj.textureID = this.textureID;
+
+	obj.transformations = this.transformations;
+
+	return obj;
 };

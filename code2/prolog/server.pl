@@ -112,4 +112,5 @@ parse_input(startGame, Reply) :-
 	reloadData,
 	initGame,
 	getGameState(Reply).
-	
+parse_input(List, ok) :-
+	write(List).

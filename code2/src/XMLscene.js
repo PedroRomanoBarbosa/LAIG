@@ -202,7 +202,16 @@ XMLscene.prototype.logPicking = function (){
 				{
 					var customId = this.pickResults[i][1];
 					console.log("Picked object: " + obj + ", with pick id " + customId);
-					this.server.makeRequest("ola");
+
+					switch(this.loopState){
+						case 0:
+						break;
+						case 1:
+							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+							console.log(nowState.getRequestString(0));
+							this.server.makeRequest("[1,2,3]");
+						break;
+					}
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);

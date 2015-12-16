@@ -205,3 +205,47 @@ GameState.prototype.parseString = function(str){
 
 	this.numberOfWindPiecesDiscarded = parseInt(holder);
 };
+
+GameState.prototype.getRequestString = function(mode){
+
+	var str = "[" + mode + ",";
+
+	//--------- board ------------------
+
+	var holder = "[";
+	var line = "";
+	for(var i=0; i<this.board.length; i++){
+
+		if(line == ""){
+			holder += line;
+		}else{
+			holder += line + ",";	
+		}
+
+		line = "";
+
+		line = "[";
+		line += this.board[i];
+		line += "]";
+	}
+
+	holder += line + "]";
+	str += holder + ",";
+
+	//--------- player turn ------------------
+
+	str += this.playerTurn + ",";
+
+	//--------- player moves ------------------
+
+	str += this.player1NumOfMoves + ",";
+	str += this.player2NumOfMoves + ",";
+
+	//--------- player moves ------------------
+
+	"................."
+
+	str += "]";
+
+	return str;
+};

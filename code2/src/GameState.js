@@ -206,9 +206,9 @@ GameState.prototype.parseString = function(str){
 	this.numberOfWindPiecesDiscarded = parseInt(holder);
 };
 
-GameState.prototype.getRequestString = function(mode){
+GameState.prototype.getRequestString = function(mode, player, handPieceIndex, line, col, dir){
 
-	var str = "[" + mode + ",";
+	var str = "[" + mode + "," + player + "," + handPieceIndex + "," + line + "/" + col + "," + dir + ",";
 
 	//--------- board ------------------
 
@@ -241,9 +241,77 @@ GameState.prototype.getRequestString = function(mode){
 	str += this.player1NumOfMoves + ",";
 	str += this.player2NumOfMoves + ",";
 
-	//--------- player moves ------------------
+	//--------- player 1 pieces ---------------
 
-	"................."
+	str += "[";
+	var holder = "";
+	for(var i=0; i<this.player1Pieces.length; i++){
+
+		if(holder != ""){
+			str += ",";
+		}
+
+		holder = this.player1Pieces[i];
+		str += holder;
+	}
+	str += "],";
+
+	//--------- player 1 hand pieces ---------------
+
+	str += "[";
+	var holder = "";
+	for(var i=0; i<this.player1HandPieces.length; i++){
+
+		if(holder != ""){
+			str += ",";
+		}
+
+		holder = this.player1HandPieces[i];
+		str += holder;
+	}
+	str += "],";
+
+	//--------- player 1 stones ---------------
+
+	str += this.player1HalfStones + "," + this.player1SunStones + ",";
+
+	//--------- player 2 pieces ---------------
+
+	str += "[";
+	var holder = "";
+	for(var i=0; i<this.player2Pieces.length; i++){
+
+		if(holder != ""){
+			str += ",";
+		}
+
+		holder = this.player2Pieces[i];
+		str += holder;
+	}
+	str += "],";
+
+	//--------- player 2 hand pieces ---------------
+
+	str += "[";
+	var holder = "";
+	for(var i=0; i<this.player2HandPieces.length; i++){
+
+		if(holder != ""){
+			str += ",";
+		}
+
+		holder = this.player2HandPieces[i];
+		str += holder;
+	}
+	str += "],";
+
+	//--------- player 2 stones ---------------
+
+	str += this.player2HalfStones + "," + this.player2SunStones + ",";
+
+	//-------- number of winds discarded -------
+
+	str += this.numberOfWindPiecesDiscarded;
 
 	str += "]";
 

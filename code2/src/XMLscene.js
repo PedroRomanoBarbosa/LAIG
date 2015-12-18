@@ -208,8 +208,7 @@ XMLscene.prototype.logPicking = function (){
 						break;
 						case 1:
 							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-							console.log(nowState.getRequestString(0));
-							this.server.makeRequest("[1,2,3]");
+							this.server.makeRequest(nowState.getRequestString(0, 1, 2, 3, 4, 5));
 						break;
 					}
 				}

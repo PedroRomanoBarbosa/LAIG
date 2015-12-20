@@ -97,9 +97,6 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.parentMaterial;
   this.initMaterialsOnGraphLoaded();
 
-  this.animations = {};
-  this.initAnimationsOnGraphLoaded();
-
 	this.primitives = {};
 	this.parentTexture=null;
   this.loadPrimitivesOnGraphLoaded();
@@ -147,38 +144,6 @@ XMLscene.prototype.update = function (){
 */
 XMLscene.prototype.updateNodes = function(obj){
 
-  if(obj.aniIter < obj.animations.length && obj.animated == true){
-      /* reset matrix */
-      mat4.identity(obj.matxAni);
-      /* while the seconds passed are greater than the sum of the spans */
-      while(this.secondsPassed > this.animations[obj.animations[obj.aniIter]].span + obj.spanSum){
-        obj.spanSum = obj.spanSum + this.animations[obj.animations[obj.aniIter]].span;
-        obj.aniIter++;
-        if(obj.aniIter == obj.animations.length){
-          obj.animated = false;
-          obj.aniIter--;
-          break;
-        }
-      }
-      if(obj.animated){
-        obj.lastTransformation = this.animations[obj.animations[obj.aniIter]].updateMatrix(this.secondsPassed - obj.spanSum);
-        /* Apply transformations */
-        mat4.translate(obj.matxAni, obj.matxAni, obj.lastTransformation.translation);
-        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, 1, 0]);
-      }else {
-        /* Apply transformations */
-        obj.lastTransformation = this.animations[obj.animations[obj.aniIter]].lastTransformation();
-        mat4.translate(obj.matxAni, obj.matxAni, obj.lastTransformation.translation);
-        mat4.rotate(obj.matxAni, obj.matxAni, obj.lastTransformation.angle, [0, 1, 0]);
-      }
-  }
-
-  /* tree search */
-  for(var u = 0; u < obj.descendants.length; u++){
-		if(!(obj.descendants[u] in this.primitives) ){
-      this.updateNodes(this.objects[obj.descendants[u]]);
-    }
-	}
 };
 
 //------------------------------------------------------------------------------------------------------------
@@ -533,25 +498,6 @@ XMLscene.prototype.initMaterialsOnGraphLoaded = function () {
 };
 
 /**
-*
-*/
-XMLscene.prototype.initAnimationsOnGraphLoaded = function (){
-  for(var key in this.graph.animations){
-    if (this.graph.animations.hasOwnProperty(key)) {
-      var animation = this.graph.animations[key];
-      switch(animation.typeOf){
-        case "linear":
-          this.animations[key] = new LinearAnimation(key, animation.span, animation.controlPoints);
-          break;
-        case "circular":
-          this.animations[key] = new CircularAnimation(animation.span, animation.center, animation.radius, animation.startang, animation.rotang);
-          break;
-      }
-    }
-	}
-};
-
-/**
 * @function Loads the scene's primitives after the scene's graph is loaded
 */
 XMLscene.prototype.loadPrimitivesOnGraphLoaded = function () {
@@ -637,9 +583,6 @@ XMLscene.prototype.loadNodesOnGraphLoaded = function () {
 
 		nodeN.matx = mat4.create();
 		mat4.identity(nodeN.matx);
-
-		nodeN.matxAni = mat4.create();
-		mat4.identity(nodeN.matxAni);
 
 		nodeN.transformations = [];
 		for(var j=0; j<this.graph.nodes[i].transformations.length; j++){
@@ -737,7 +680,6 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 
   //Multiply transformations matrix
 	this.multMatrix(obj.matx);
-  this.multMatrix(obj.matxAni);
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){

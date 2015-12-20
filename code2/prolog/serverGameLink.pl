@@ -4,6 +4,7 @@
 %----------------------------
 %init the game pieces
 initGame :-
+	reloadData,
 	dividePieces,
 	fillPlayerHand(1),
 	fillPlayerHand(2).
@@ -12,7 +13,7 @@ initGame :-
 % |boardx9|playerTurn|player1moves|player2moves|player1pieces|player1handpieces|player1halfstones|player1sunstones|numberOfWindPiecesDiscarded|
 getGameState(Result) :-
 	stateOfTheGame(BoardLists, Player),
-	listOfListsToAtom(BoardLists, BoardAtom),	
+	listOfListsToAtom(BoardLists, BoardAtom),
 	numberToAtom(Player, PlayerAtom),
 	player1Moves(P1M),
 	numberToAtom(P1M, P1MA),
@@ -49,6 +50,86 @@ getGameState(Result) :-
 	atom_concat(A10, P2HSA, A11),
 	atom_concat(A11, P2SunSA, A12),
 	atom_concat(A12, WindNumA, Result).
+	
+%impose new game state
+%structure of parameter list
+% mode,pieceindex,pos,dir,board,playerturn,player1nmoves,player2nmoves,player1pieces,player1handpieces,player1hfs,player1ss,numwindiscarded
+imposeGameState(List, Mode, IndexOfPiece, Position, Direction) :-
+	nth1(1, List, Mode),
+	nth1(2, List, IndexOfPiece),
+	nth1(3, List, Position),
+	nth1(4, List, Direction),
+	nth1(5, List, Board),
+	nth1(6, List, PlayerTurn),
+	nth1(7, List, Player1NumOfMoves),
+	nth1(8, List, Player2NumOfMoves),
+	nth1(9, List, Player1Pieces),
+	nth1(10, List, Player1HandPieces),
+	nth1(11, List, Player1NumHalfStones),
+	nth1(12, List, Player1NumSunStones),
+	nth1(13, List, Player2Pieces),
+	nth1(14, List, Player2HandPieces),
+	nth1(15, List, Player2NumHalfStones),
+	nth1(16, List, Player2NumSunStones),
+	nth1(17, List, WindPiecesDiscarded),
+	retract(player1Pieces(_)),
+	retract(player2Pieces(_)),
+	retract(player1HandPieces(_)),
+	retract(player2HandPieces(_)),
+	retract(player1HalfStones(_)),
+	retract(player2HalfStones(_)),
+	retract(player1SunStones(_)),
+	retract(player2SunStones(_)),
+	retract(player1Moves(_)),
+	retract(player2Moves(_)),
+	retract(numberOfWindPiecesDiscarded(_)),
+	retract(stateOfTheGame(_, _)),
+	assert(player1Pieces(Player1Pieces)),
+	assert(player2Pieces(Player2Pieces)),
+	assert(player1HandPieces(Player1HandPieces)),
+	assert(player2HandPieces(Player2HandPieces)),
+	assert(player1HalfStones(Player1NumHalfStones)),
+	assert(player2HalfStones(Player2NumHalfStones)),
+	assert(player1SunStones(Player1NumSunStones)),
+	assert(player2SunStones(Player2NumSunStones)),
+	assert(player1Moves(Player1NumOfMoves)),
+	assert(player2Moves(Player2NumOfMoves)),
+	assert(numberOfWindPiecesDiscarded(WindPiecesDiscarded)),
+	assert(stateOfTheGame(Board, PlayerTurn)).
+	
+%game predicate
+playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
+	
+	Mode =:= 0 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		(
+			isFirstPositionEmpty(Board) ->
+			(
+				pickPieceFromHand(PlayerTurn, IndexOfPiece, Piece),
+				(
+					isWindPiece(Piece) ->
+					(
+						Result = 'bad'
+					);
+					(
+						replacePiece(Piece, 5/5, Board, NewBoard),
+						deletePieceFromHand(PlayerTurn, IndexOfPiece),
+						addPieceToHand(PlayerTurn),
+						changePlayer(PlayerTurn, NewPlayerTurn),
+						assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+						Result = 'good'
+					)
+				)
+			);
+			(
+				Result = 'bad'
+			)
+		)
+	);
+	(
+		true
+	).
 
 %----------------------------
 %main of the game

@@ -157,22 +157,48 @@ finalState(N) :-
 	
 %create atomic list to send server
 listToAtom([], ' |').
-listToAtom([FirstA/FirstB|[]], Atom) :-
-	atom_concat(FirstA, '-', TempAtom),
-	atom_concat(TempAtom, FirstB, TempAtomFin),
-	atom_concat(TempAtomFin, '|', Atom).
-listToAtom([FirstA/FirstB|Rest], Atom) :-
-	listToAtom(Rest, TempAtom),
-	atom_concat(',', TempAtom, TempAtomFin),
-	atom_concat(FirstB, TempAtomFin, TempAtomFin2),
-	atom_concat('-', TempAtomFin2, TempAtomFin3),
-	atom_concat(FirstA, TempAtomFin3, Atom).
 listToAtom([First|[]], Atom) :-
-	atom_concat(First, '|', Atom).
+	First = FirstA-FirstB ->
+	(
+		atom_concat(FirstA, '-', TempAtom),
+		atom_concat(TempAtom, FirstB, TempAtomFin),
+		atom_concat(TempAtomFin, '|', Atom)
+	);
+	(
+		First = FirstA/FirstB ->
+		(
+			atom_concat(FirstA, '-', TempAtom),
+			atom_concat(TempAtom, FirstB, TempAtomFin),
+			atom_concat(TempAtomFin, '|', Atom)
+		);
+		(
+			atom_concat(First, '|', Atom)
+		)
+	).
 listToAtom([First|Rest], Atom) :-
 	listToAtom(Rest, TempAtom),
-	atom_concat(',', TempAtom, TempAtomFin),
-	atom_concat(First, TempAtomFin, Atom).
+	(
+		First = FirstA-FirstB ->
+		(
+			atom_concat(',', TempAtom, TempAtomFin),
+			atom_concat(FirstB, TempAtomFin, TempAtomFin2),
+			atom_concat('-', TempAtomFin2, TempAtomFin3),
+			atom_concat(FirstA, TempAtomFin3, Atom)
+		);
+		(
+			First = FirstA/FirstB ->
+			(
+				atom_concat(',', TempAtom, TempAtomFin),
+				atom_concat(FirstB, TempAtomFin, TempAtomFin2),
+				atom_concat('-', TempAtomFin2, TempAtomFin3),
+				atom_concat(FirstA, TempAtomFin3, Atom)
+			);
+			(
+				atom_concat(',', TempAtom, TempAtomFin),
+				atom_concat(First, TempAtomFin, Atom)
+			)
+		)
+	).
 
 listOfListsToAtom([], '').
 listOfListsToAtom([First|Rest], Atom) :-

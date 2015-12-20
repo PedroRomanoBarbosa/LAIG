@@ -103,14 +103,17 @@ print_header_line(_).
 
 :- ['serverGameLink.pl'].
 
-% Require your Prolog Files here
-
 parse_input(handshake, handshake).
-parse_input(ola, xau).
 parse_input(quit, goodbye).
 parse_input(startGame, Reply) :-
-	reloadData,
 	initGame,
 	getGameState(Reply).
-parse_input(List, ok) :-
-	write(List).
+parse_input(List, Reply) :-
+	imposeGameState(List, Mode, IndexOfPiece, Position, Direction),
+	playMode(Mode, IndexOfPiece, Position, Direction, Result),
+	(
+		Result == 'bad' -> Reply = bad;
+		
+		Result == 'good' -> getGameState(Reply)
+	).
+	

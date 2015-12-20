@@ -39,6 +39,10 @@ XMLscene.prototype.init = function (application) {
     this.timeFlag = true;
 
     this.server = new Server(8081);
+    this.isFirstPlay = true;
+    this.newIndexOfPieceToPlay = -1;
+    this.newLinePositionToPlay = -1;
+    this.newColPositionToPlay = -1;
     this.server.makeRequest("startGame");
 
     this.loopState = 0;
@@ -207,8 +211,13 @@ XMLscene.prototype.logPicking = function (){
 						case 0:
 						break;
 						case 1:
+							this.newIndexOfPieceToPlay = customId;
 							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-							this.server.makeRequest(nowState.getRequestString(0, 1, 2, 3, 4, 5));
+							this.server.makeRequest(nowState.getRequestString(0, this.newIndexOfPieceToPlay, 0, 0, 0));
+						break;
+						case 2:
+							this.newLinePositionToPlay = Math.floor(customId / 10);
+    						this.newColPositionToPlay = customId % 10;
 						break;
 					}
 				}
@@ -236,6 +245,26 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 1:
+			if(this.server.replyReady){
+				this.state = new GameState(this.server.answer);
+
+				this.gameStatesStack.push(this.state);
+				
+				this.loopState++;
+				this.reloadEntities();
+				this.server.replyReady = false;
+			}
+		break;
+		case 2:
+			/*if(this.newIndexOfPieceToPlay != -1){
+				this.loopState++;
+			}*/
+			if(this.newLinePositionToPlay != -1 && this.newColPositionToPlay != -1){
+				this.loopState++;
+			}
+		break;
+		case 3:
+			
 		break;
 	}
 };
@@ -281,6 +310,14 @@ XMLscene.prototype.reloadEntities = function () {
   		var handPieceHolder = new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], nowState.player2HandPieces[i]);
   		var handPieceObject = handPieceHolder.getObject();
   		this.addToRootNode(handPieceObject);
+  	}
+
+  	for(var line=0; line<nowState.board.length; line++){
+  		for(var col=0; col<nowState.board[line].length; col++){
+  			if(nowState.board[line][col] != "sunTile" && nowState.board[line][col] != "free" && nowState.board[line][col] != "moonTile"){
+  				new PiecePrimitive(this, this.objects['piece'], nowState.board[line][col], line + 1, col + 1);
+  			}
+  		}
   	}
 };
 

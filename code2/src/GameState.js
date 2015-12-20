@@ -206,9 +206,9 @@ GameState.prototype.parseString = function(str){
 	this.numberOfWindPiecesDiscarded = parseInt(holder);
 };
 
-GameState.prototype.getRequestString = function(mode, player, handPieceIndex, line, col, dir){
+GameState.prototype.getRequestString = function(mode, handPieceIndex, line, col, dir){
 
-	var str = "[" + mode + "," + player + "," + handPieceIndex + "," + line + "/" + col + "," + dir + ",";
+	var str = "[" + mode + "," + handPieceIndex + "," + line + "/" + col + "," + dir + ",";
 
 	//--------- board ------------------
 

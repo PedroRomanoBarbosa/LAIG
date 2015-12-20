@@ -27,7 +27,7 @@ piece(X/Y) :-
 %comparing pieces functions
 
 %compares if two pieces have the same colour
-sameColour(X1/C, X2/C) :-
+sameColour(X1-C, X2-C) :-
 	piece(X1/C),
 	piece(X2/C),
 	form(X1),
@@ -35,7 +35,7 @@ sameColour(X1/C, X2/C) :-
 	colour(C).
 	
 %compares if two pieces have the same form
-sameForm(F/X1, F/X2) :-
+sameForm(F-X1, F-X2) :-
 	piece(F/X1),
 	piece(F/X2),
 	colour(X1),

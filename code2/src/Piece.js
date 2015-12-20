@@ -76,12 +76,12 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 
 			var positionTransformation = {};
 			positionTransformation.typeOf = "translation";
-			positionTransformation.xyz = [((scene.numHandPiecesP2 - 1) % 7), 0, 0];
+			positionTransformation.xyz = [(-(scene.numHandPiecesP2 - 1) % 7), 0, 0];
 			this.transformations.push(positionTransformation);
 
 			var positionTransformation1 = {};
 			positionTransformation1.typeOf = "translation";
-			positionTransformation1.xyz = [-1, 0, -5.7];
+			positionTransformation1.xyz = [3, 0, -5.7];
 			this.transformations.push(positionTransformation1);
 
 			var positionTransformation2 = {};

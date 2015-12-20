@@ -132,9 +132,13 @@ XMLscene.prototype.update = function (){
     if(this.timeFlag){
       this.startTime = this.lastUpdate;
       this.timeFlag = false;
+      this.lastDate = Date.now();
     }else{
+      this.currentDate = Date.now();
+      this.timeInterval = this.currentDate - this.lastDate;
+      this.lastDate = this.currentDate;
       this.secondsPassed = (this.lastUpdate - this.startTime) / 1000;
-      this.updateNodes(this.root);
+      this.updateObjects();
     }
   }
 };
@@ -142,8 +146,15 @@ XMLscene.prototype.update = function (){
 /**
 *
 */
-XMLscene.prototype.updateNodes = function(obj){
-
+XMLscene.prototype.updateObjects = function(){
+  for (var key in this.objects) {
+    if (this.objects.hasOwnProperty(key)) {
+      var obj = this.objects[key];
+      if(obj instanceof Piece){
+        obj.animate(this.timeInterval/1000);
+      }
+    }
+}
 };
 
 //------------------------------------------------------------------------------------------------------------
@@ -165,6 +176,10 @@ XMLscene.prototype.logPicking = function (){
 				{
 					var customId = this.pickResults[i][1];
 					console.log("Picked object: " + obj + ", with pick id " + customId);
+          if(obj instanceof Piece){
+            console.log(obj);
+            obj.changeAnimation("chosen");
+          }
 
 					switch(this.loopState){
 						case 0:
@@ -685,6 +700,9 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 
   //Multiply transformations matrix
 	this.multMatrix(obj.matx);
+  if(obj instanceof Piece ){
+    this.multMatrix(obj.matxAni);
+  }
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){

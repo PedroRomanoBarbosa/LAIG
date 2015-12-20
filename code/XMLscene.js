@@ -545,8 +545,8 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 	}
 
   //Multiply transformations matrix
+  //this.multMatrix(obj.matxAni);
 	this.multMatrix(obj.matx);
-  this.multMatrix(obj.matxAni);
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){

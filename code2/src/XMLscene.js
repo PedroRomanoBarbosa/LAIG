@@ -114,14 +114,8 @@ XMLscene.prototype.onGraphLoaded = function () {
   	this.originalRootDescendants.push(this.root.descendants[i]);
   }
 
-  //new PiecePrimitive(this, this.objects['piece'], 'bird-cyan', 1, 3);
-
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
-
-  //new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], 'dolphin-blue');
-
-  //new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], 'dolphin-blue');
 
   console.log(this);
   /* Update scene */
@@ -305,23 +299,23 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 		break;
 		case 1:
 			if(this.state.playerTurn == 1){
-				if(obj.ID.substring(0, 11) == 'handPieceP1'){
-					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				if(obj.ID.substring(0, 9) == 'piece-p1-'){
+					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
 				}
 			}else{
-				if(obj.ID.substring(0, 11) == 'handPieceP2'){
-					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				if(obj.ID.substring(0, 9) == 'piece-p2-'){
+					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
 				}
 			}
 		break;
 		case 2:
 			if(this.state.playerTurn == 1){
-				if(obj.ID.substring(0, 11) == 'handPieceP1'){
-					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				if(obj.ID.substring(0, 9) == 'piece-p1-'){
+					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
 				}
 			}else{
-				if(obj.ID.substring(0, 11) == 'handPieceP2'){
-					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				if(obj.ID.substring(0, 9) == 'piece-p2-'){
+					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
 				}
 			}
 		break;
@@ -343,35 +337,20 @@ XMLscene.prototype.reloadEntities = function () {
   	var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
   	for(var i=0; i<nowState.player1HandPieces.length; i++){
-  		var handPieceHolder = new HandPiecePrimitiveP1(this, this.objects['handPieceP1'], nowState.player1HandPieces[i]);
-  		var handPieceObject = handPieceHolder.getObject();
-  		this.addToRootNode(handPieceObject);
+  		new Piece(this, "p1", this.objects['piece'], nowState.player1HandPieces[i]);
   	}
 
   	for(var i=0; i<nowState.player2HandPieces.length; i++){
-  		var handPieceHolder = new HandPiecePrimitiveP2(this, this.objects['handPieceP2'], nowState.player2HandPieces[i]);
-  		var handPieceObject = handPieceHolder.getObject();
-  		this.addToRootNode(handPieceObject);
+  		new Piece(this, "p2", this.objects['piece'], nowState.player1HandPieces[i]);
   	}
 
   	for(var line=0; line<nowState.board.length; line++){
   		for(var col=0; col<nowState.board[line].length; col++){
   			if(nowState.board[line][col] != "sunTile" && nowState.board[line][col] != "free" && nowState.board[line][col] != "moonTile"){
-  				new PiecePrimitive(this, this.objects['piece'], nowState.board[line][col], line + 1, col + 1);
+  				new Piece(this, "board", this.objects['piece'], nowState.board[line][col], line + 1, col + 1);
   			}
   		}
   	}
-};
-
-XMLscene.prototype.addToRootNode = function (obj) {
-	this.objects[obj.ID] = obj;
-	this.root.descendants.push(obj.ID);
-
-	if(obj.ID.substring(9, 11) == 'P1'){
-		this.numHandPiecesP1++;
-	}else{
-		this.numHandPiecesP2++;
-	}
 };
 
 //------------------------------------------------------------------------------------------------------------

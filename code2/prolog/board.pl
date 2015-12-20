@@ -230,6 +230,7 @@ validPlayPosition(PIECE, L/C, BL) :-
 	isEmptyTile(L/C, BL);
 	(
 		checkPosition(L/C, BL, N),
+		nl,nl,write('---'),write(PIECE),nl,write(N),nl,nl,
 		validPieces(PIECE, N)
 	).
 	

@@ -182,7 +182,9 @@ XMLscene.prototype.logPicking = function (){
     						this.newColPositionToPlay = customId % 10;
 
     						var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-							this.server.makeRequest(nowState.getRequestString(1, this.newIndexOfPieceToPlay, this.newLinePositionToPlay, this.newColPositionToPlay, 0));
+							this.server.makeRequest(nowState.getRequestString(1, this.newIndexOfPieceToPlay, 
+																				 this.newLinePositionToPlay, this.newColPositionToPlay,
+																				 0));
 						break;
 						case 4:
 						break;
@@ -243,9 +245,12 @@ XMLscene.prototype.gameLoop = function () {
 				if(this.state.validState){
 					this.gameStatesStack.push(this.state);
 
-					this.loopState++;
+					this.newIndexOfPieceToPlay = -1;
+					this.loopState = 2;
 					this.reloadEntities();
 				}else{
+					this.newIndexOfPieceToPlay = -1;
+					this.loopState = 2;
 					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
 				}
 
@@ -306,7 +311,7 @@ XMLscene.prototype.reloadEntities = function () {
   	}
 
   	for(var i=0; i<nowState.player2HandPieces.length; i++){
-  		new Piece(this, "p2", this.objects['piece'], nowState.player1HandPieces[i]);
+  		new Piece(this, "p2", this.objects['piece'], nowState.player2HandPieces[i]);
   	}
 
   	for(var line=0; line<nowState.board.length; line++){

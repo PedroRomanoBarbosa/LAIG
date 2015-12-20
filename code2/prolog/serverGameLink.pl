@@ -129,6 +129,38 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 			)
 		)
 	);
+	
+	Mode =:= 1 ->
+	(
+		pickPieceFromHand(PlayerTurn, IndexOfPiece, Piece),
+		(
+			( isAValidPlay(Piece, Position, Board), isEmptyTile(Position, Board) ) ->
+			(
+				gainStones(Position, Board, PlayerTurn),
+				tileToSunStone(Position, Board, PlayerTurn),
+				replacePiece(Piece, Position, Board, NewBoard),
+				deletePieceFromHand(PlayerTurn, IndexOfPiece),
+				decMove(IndexOfPiece)
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		),
+		(
+			hasFinishedTurn(PlayerTurn) ->
+			(
+				changePlayer(PlayerTurn, NewPlayerTurn),
+				addMove(PlayerTurn)
+			);
+			(
+				notChangePlayer(PlayerTurn, NewPlayerTurn)
+			)
+		),
+		addPieceToHand(PlayerTurn),
+		assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+		Result = 'good'
+	);
 	(
 		true
 	).

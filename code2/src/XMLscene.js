@@ -216,8 +216,16 @@ XMLscene.prototype.logPicking = function (){
 							this.server.makeRequest(nowState.getRequestString(0, this.newIndexOfPieceToPlay, 0, 0, 0));
 						break;
 						case 2:
+							this.newIndexOfPieceToPlay = customId;
+						break;
+						case 3:
 							this.newLinePositionToPlay = Math.floor(customId / 10);
     						this.newColPositionToPlay = customId % 10;
+
+    						var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+							this.server.makeRequest(nowState.getRequestString(1, this.newIndexOfPieceToPlay, this.newLinePositionToPlay, this.newColPositionToPlay, 0));
+						break;
+						case 4:
 						break;
 					}
 				}
@@ -229,8 +237,8 @@ XMLscene.prototype.logPicking = function (){
 
 XMLscene.prototype.gameLoop = function () {
 
-	this.clearPickRegistration();
 	this.logPicking();
+	this.clearPickRegistration();
 
 	switch(this.loopState){
 		case 0:
@@ -254,6 +262,7 @@ XMLscene.prototype.gameLoop = function () {
 				if(this.state.validState){
 					this.gameStatesStack.push(this.state);
 
+					this.newIndexOfPieceToPlay = -1;
 					this.loopState++;
 					this.reloadEntities();
 				}else{
@@ -264,15 +273,27 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 2:
-			/*if(this.newIndexOfPieceToPlay != -1){
-				this.loopState++;
-			}*/
-			if(this.newLinePositionToPlay != -1 && this.newColPositionToPlay != -1){
+			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 			}
 		break;
 		case 3:
-			
+			if(this.server.replyReady){
+				this.state = new GameState(this.server.answer);
+
+				if(this.state.validState){
+					this.gameStatesStack.push(this.state);
+
+					this.loopState++;
+					this.reloadEntities();
+				}else{
+					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+				}
+
+				this.server.replyReady = false;
+			}
+		break;
+		case 4:
 		break;
 	}
 };
@@ -294,9 +315,22 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			}
 		break;
 		case 2:
+			if(this.state.playerTurn == 1){
+				if(obj.ID.substring(0, 11) == 'handPieceP1'){
+					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				}
+			}else{
+				if(obj.ID.substring(0, 11) == 'handPieceP2'){
+					this.registerForPick(parseInt(obj.ID.substring(12)), obj);
+				}
+			}
+		break;
+		case 3:
 			if(obj.ID.substring(0, 4) == 'tile'){
 				this.registerForPick(parseInt(obj.ID.substring(4)), obj);
 			}
+		break;
+		case 4:
 		break;
 	}
 };

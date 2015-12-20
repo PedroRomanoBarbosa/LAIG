@@ -4,9 +4,6 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 	line = typeof line !== 'undefined' ? line : 0;
 	col = typeof col !== 'undefined' ? col : 0;
 
-	this.aniIter = piecePrimitive.aniIter;
-	this.animated = piecePrimitive.animated;
-	this.animations = piecePrimitive.animations;
 	this.descendants = piecePrimitive.descendants;
 	this.lastTransformation = piecePrimitive.lastTransformation;
 

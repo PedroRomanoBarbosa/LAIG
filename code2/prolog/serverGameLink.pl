@@ -110,6 +110,7 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 				(
 					isWindPiece(Piece) ->
 					(
+						assert(stateOfTheGame(Board, PlayerTurn)),
 						Result = 'bad'
 					);
 					(
@@ -123,6 +124,7 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 				)
 			);
 			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
 				Result = 'bad'
 			)
 		)

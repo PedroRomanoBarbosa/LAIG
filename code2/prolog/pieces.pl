@@ -44,7 +44,8 @@ sameForm(F/X1, F/X2) :-
 	
 %checks if a piece is a special piece ( wind piece )
 isWindPiece(PIECE) :-
-	PIECE == wind/piece.
+	PIECE == wind/piece;
+	PIECE == wind-piece.
 	
 %checks if two pieces have the same colour or the same form
 validPieces(X, Y) :-

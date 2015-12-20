@@ -21,8 +21,14 @@ function GameState(str) {
 
 	this.numberOfWindPiecesDiscarded;
 
+	this.validState = true;
+
 	if(this.parseString(str) == false){
-		console.error("Server reply error - server reply did not have the correct format")
+		if(str == "bad"){
+			this.validState = false;
+			console.log("Invalid play try again!");
+		}else
+			console.error("Server reply error - server reply did not have the correct format");
 	}
 };
 

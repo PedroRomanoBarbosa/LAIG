@@ -237,10 +237,13 @@ XMLscene.prototype.gameLoop = function () {
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
-				this.gameStatesStack.push(this.state);
-				
-				this.loopState++;
-				this.reloadEntities();
+				if(this.state.validState){
+					this.gameStatesStack.push(this.state);
+
+					this.loopState++;
+					this.reloadEntities();
+				}
+
 				this.server.replyReady = false;
 			}
 		break;
@@ -248,10 +251,15 @@ XMLscene.prototype.gameLoop = function () {
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
-				this.gameStatesStack.push(this.state);
-				
-				this.loopState++;
-				this.reloadEntities();
+				if(this.state.validState){
+					this.gameStatesStack.push(this.state);
+
+					this.loopState++;
+					this.reloadEntities();
+				}else{
+					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+				}
+
 				this.server.replyReady = false;
 			}
 		break;

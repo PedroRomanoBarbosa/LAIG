@@ -232,6 +232,11 @@
         	<file path="images/wind-piece.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
+
+    	<TEXTURE id="pass">
+        	<file path="images/pass.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
 	</TEXTURES>
 
 
@@ -301,10 +306,46 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-					<DESCENDANT id="board" />
+				<DESCENDANT id="board" />
+				<DESCENDANT id="option-pass1" />
+				<DESCENDANT id="option-pass2" />
 			</DESCENDANTS>
 		</NODE>
 
+
+
+		<!-- OPTIONS -->
+
+		<NODE id="option-pass1">
+			<TRANSLATION x="7" y="0" z="8" />
+			<ROTATION axis="x" angle="45" />
+			<MATERIAL id="m" />
+			<TEXTURE id="clear" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-pass" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pass2">
+			<TRANSLATION x="-7" y="0" z="-8" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<MATERIAL id="m" />
+			<TEXTURE id="clear" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-pass" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pass">
+			<SCALE sx="3" sy="1" sz="1.5" />
+			<ROTATION axis="x" angle="-90" />
+			<MATERIAL id="m" />
+			<TEXTURE id="pass" />
+			<DESCENDANTS>
+				<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
 
 
 

@@ -273,7 +273,6 @@ XMLscene.prototype.logPicking = function (){
 XMLscene.prototype.gameLoop = function () {
 
 	this.logPicking();
-	this.clearPickRegistration();
 
 	switch(this.loopState){
 		case 0:
@@ -372,37 +371,59 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			if(this.state.playerTurn == 1){
 				if(obj.ID.substring(0, 9) == 'piece-p1-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
+				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p2-'){
+					this.clearPickRegistration();
 				}
-			}else{
+			}else if(this.state.playerTurn == 2){
 				if(obj.ID.substring(0, 9) == 'piece-p2-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
+				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p1-'){
+					this.clearPickRegistration();
 				}
+			}else{
+				this.clearPickRegistration();
 			}
 		break;
 		case 2:
 			if(this.state.playerTurn == 1){
 				if(obj.ID.substring(0, 9) == 'piece-p1-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
+				}else if(obj.ID == 'option-pass'){
+					this.registerForPick(70, obj);
+				}else if(obj.ID.substring(0, 9) == 'piece-p2-'){
+					this.clearPickRegistration();
 				}
-			}else{
+			}else if(this.state.playerTurn == 2){
 				if(obj.ID.substring(0, 9) == 'piece-p2-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
+				}else if(obj.ID == 'option-pass'){
+					this.registerForPick(70, obj);
+				}else if(obj.ID.substring(0, 9) == 'piece-p1-'){
+					this.clearPickRegistration();
 				}
+			}else{
+				this.clearPickRegistration();
 			}
 		break;
 		case 3:
 			if(obj.ID.substring(0, 4) == 'tile'){
 				this.registerForPick(parseInt(obj.ID.substring(4)), obj);
+			}else{
+				this.clearPickRegistration();
 			}
 		break;
 		case 4:
 			if(obj.ID.substring(0, 8) == 'piece-b-'){
 				this.registerForPick(parseInt(obj.ID.substring(8)), obj);
+			}else if(obj.ID.substring(0, 7) == 'piece-p' || obj.ID.substring(0, 7) == 'option-' || obj.ID == "board"){
+				this.clearPickRegistration();
 			}
 		break;
 		case 5:
 			if(obj.ID.substring(0, 4) == 'tile'){
 				this.registerForPick(parseInt(obj.ID.substring(4)), obj);
+			}else{
+				this.clearPickRegistration();
 			}
 		break;
 	}

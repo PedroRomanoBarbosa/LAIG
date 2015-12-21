@@ -135,31 +135,24 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 		retract(stateOfTheGame(Board, PlayerTurn)),
 		pickPieceFromHand(PlayerTurn, IndexOfPiece, Piece),
 		(
-			(isAValidPlay(Piece, Position, Board), isFreeTile(Position, Board)) ->
+			(isAValidPlay(Piece, Position, Board), isEmptyTile(Position, Board)) ->
 			(
-				nl,nl,write('22222'),
 				gainStones(Position, Board, PlayerTurn),
 				tileToSunStone(Position, Board, PlayerTurn),
-				nl,nl,write('333333'),
 				replacePiece(Piece, Position, Board, NewBoard),
 				deletePieceFromHand(PlayerTurn, IndexOfPiece),
-				nl,nl,write('5555'),
 				decMove(PlayerTurn),
 				(
 					hasFinishedTurn(PlayerTurn) ->
 					(
 						changePlayer(PlayerTurn, NewPlayerTurn),
-						nl,nl,write('6666'),
 						addMove(PlayerTurn)
 					);
 					(
-						notChangePlayer(PlayerTurn, NewPlayerTurn),
-						nl,nl,write('77777')
+						notChangePlayer(PlayerTurn, NewPlayerTurn)
 					)
 				),
-				nl,nl,write('8888'),
 				addPieceToHand(PlayerTurn),
-				nl,nl,write('9999'),
 				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
 				Result = 'good'
 			);
@@ -169,8 +162,48 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 			)
 		)
 	);
+	
+	Mode =:= 2 ->
 	(
-		true
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		pickPieceFromHand(PlayerTurn, IndexOfPiece, Piece),
+		(
+			hasPiece(Position, Board) ->
+			(
+				validDir(Position, Direction, Board) ->
+				(
+					movePieceWithWind(Position, Direction, Board, NewBoard),
+					deletePieceFromHand(PlayerTurn, IndexOfPiece),
+					decMove(PlayerTurn),
+					useWindPiece,
+					(
+						hasFinishedTurn(PlayerTurn) ->
+						(
+							changePlayer(PlayerTurn, NewPlayerTurn),
+							addMove(PlayerTurn)
+						);
+						(
+							notChangePlayer(PlayerTurn, NewPlayerTurn)
+						)
+					),
+					addPieceToHand(PlayerTurn),
+					assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+					Result = 'good'
+				);
+				(
+					assert(stateOfTheGame(Board, PlayerTurn)),
+					Result = 'bad'
+				)
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		)
+
+	);
+	(
+		Result = 'bad'
 	).
 
 %----------------------------

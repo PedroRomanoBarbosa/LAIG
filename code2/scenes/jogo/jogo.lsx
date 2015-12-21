@@ -307,49 +307,6 @@
 
 
 
-		<!-- HAND PIECE -->
-
-		<NODE id="handPieceP1">
-			<MATERIAL id="m" />
-			<TEXTURE id="null" />
-
-			<TRANSLATION x="-3" y="0" z="5.7" />
-			<ROTATION axis="x" angle="45" />
-			<TRANSLATION x="0" y="0" z="0.4" />
-
-			<DESCENDANTS>
-					<DESCENDANT id="handPiece" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="handPieceP2">
-			<MATERIAL id="m" />
-			<TEXTURE id="null" />
-
-			<TRANSLATION x="3" y="0" z="-5.7" />
-			<ROTATION axis="x" angle="-45" />
-			<TRANSLATION x="0" y="0" z="-0.4" />
-			<ROTATION axis="y" angle="180" />
-
-			<DESCENDANTS>
-					<DESCENDANT id="handPiece" />
-			</DESCENDANTS>
-		</NODE>
-
-		<NODE id="handPiece">
-			<MATERIAL id="m" />
-			<TEXTURE id="null" />
-
-			<SCALE sx="0.8" sy="1" sz="0.8" />
-			<ROTATION axis="x" angle="-90" />
-
-			<DESCENDANTS>
-					<DESCENDANT id="r" />
-			</DESCENDANTS>
-		</NODE>
-
-
-
 
 		<!-- PIECE -->
 

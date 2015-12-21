@@ -22,7 +22,7 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 
 	switch(destination){
 		case "board":
-			this.ID = piecePrimitive.ID + "-" + line + "" + col;
+			this.ID = piecePrimitive.ID + "-b-" + line + "" + col;
 
 			this.transformations = [];
 

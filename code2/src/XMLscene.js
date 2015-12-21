@@ -43,6 +43,8 @@ XMLscene.prototype.init = function (application) {
     this.newIndexOfPieceToPlay = -1;
     this.newLinePositionToPlay = -1;
     this.newColPositionToPlay = -1;
+    this.changeLinePositionToPlay = -1;
+    this.changeColPositionToPlay = -1;
     this.server.makeRequest("startGame");
 
     this.loopState = 0;
@@ -106,9 +108,11 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.loadNodesOnGraphLoaded();
   this.root = this.objects[this.rootId];
 
-  this.originalRootDescendants = [];
-  for(var i=0; i<this.root.descendants.length; i++){
-  	this.originalRootDescendants.push(this.root.descendants[i]);
+  this.rootCleanup=[];
+  for(var i=0; i<this.graph.nodes.length; i++){
+  	if(this.graph.nodes[i].tagId == this.graph.root.tagId){
+  		this.rootCleanup = this.graph.nodes[i].children;
+  	}
   }
 
   this.numHandPiecesP1 = 1;
@@ -177,7 +181,6 @@ XMLscene.prototype.logPicking = function (){
 					var customId = this.pickResults[i][1];
 					console.log("Picked object: " + obj + ", with pick id " + customId);
           if(obj instanceof Piece){
-            console.log(obj);
             obj.changeAnimation("chosen");
           }
 
@@ -191,17 +194,73 @@ XMLscene.prototype.logPicking = function (){
 						break;
 						case 2:
 							this.newIndexOfPieceToPlay = customId;
+
+							if(obj.textureID == "wind-piece"){
+								this.loopState = 4;
+							}
 						break;
 						case 3:
 							this.newLinePositionToPlay = Math.floor(customId / 10);
     						this.newColPositionToPlay = customId % 10;
 
     						var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-							this.server.makeRequest(nowState.getRequestString(1, this.newIndexOfPieceToPlay, 
-																				 this.newLinePositionToPlay, this.newColPositionToPlay,
-																				 0));
+
+							this.server.makeRequest(
+								nowState.getRequestString(
+									1, this.newIndexOfPieceToPlay, 
+									this.newLinePositionToPlay, this.newColPositionToPlay,
+									0
+								)
+							);
 						break;
 						case 4:
+							this.changeLinePositionToPlay = Math.floor(customId / 10);
+    						this.changeColPositionToPlay = customId % 10;
+						break;
+						case 5:
+							var lineDir = Math.floor(customId / 10);
+							var colDir = customId % 10;
+
+							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+
+							if(lineDir != this.changeLinePositionToPlay && colDir != this.changeColPositionToPlay){
+								this.newIndexOfPieceToPlay = -1;
+								this.changeLinePositionToPlay = -1;
+								this.changeColPositionToPlay = -1;
+								this.loopState = 2;
+							}else if(lineDir<this.changeLinePositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay, 
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										1
+									)
+								);
+							}else if(lineDir>this.changeLinePositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay, 
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										3
+									)
+								);
+							}else if(colDir<this.changeColPositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay, 
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										4
+									)
+								);
+							}else if(colDir>this.changeColPositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay, 
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										2
+									)
+								);
+							}
 						break;
 					}
 				}
@@ -226,6 +285,7 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.loopState++;
 					this.reloadEntities();
+					this.clearPickRegistration();
 				}
 
 				this.server.replyReady = false;
@@ -241,6 +301,7 @@ XMLscene.prototype.gameLoop = function () {
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState++;
 					this.reloadEntities();
+					this.clearPickRegistration();
 				}else{
 					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
 				}
@@ -251,6 +312,7 @@ XMLscene.prototype.gameLoop = function () {
 		case 2:
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
+				this.clearPickRegistration();
 			}
 		break;
 		case 3:
@@ -273,6 +335,30 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 4:
+			if(this.changeLinePositionToPlay != -1 && this.changeColPositionToPlay != -1){
+				this.loopState++;
+			}
+		break;
+		case 5:
+			if(this.server.replyReady){
+				this.state = new GameState(this.server.answer);
+
+				if(this.state.validState){
+					this.gameStatesStack.push(this.state);
+
+					this.newIndexOfPieceToPlay = -1;
+					this.loopState = 2;
+					this.reloadEntities();
+				}else{
+					this.newIndexOfPieceToPlay = -1;
+					this.changeLinePositionToPlay = -1;
+					this.changeColPositionToPlay = -1;
+					this.loopState = 2;
+					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+				}
+
+				this.server.replyReady = false;
+			}
 		break;
 	}
 };
@@ -310,14 +396,29 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			}
 		break;
 		case 4:
+			if(obj.ID.substring(0, 8) == 'piece-b-'){
+				this.registerForPick(parseInt(obj.ID.substring(8)), obj);
+			}
+		break;
+		case 5:
+			if(obj.ID.substring(0, 4) == 'tile'){
+				this.registerForPick(parseInt(obj.ID.substring(4)), obj);
+			}
 		break;
 	}
 };
 
 XMLscene.prototype.reloadEntities = function () {
-	this.root.descendants = this.originalRootDescendants;
+
+	this.root.descendants = [];
+	for(var i=0; i<this.rootCleanup.length; i++){
+		this.root.descendants.push(this.rootCleanup[i]);
+	}
+
 	this.numHandPiecesP1 = 1;
   	this.numHandPiecesP2 = 1;
+  	this.changeLinePositionToPlay = -1;
+    this.changeColPositionToPlay = -1;
 
   	var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 

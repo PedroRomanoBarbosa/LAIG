@@ -202,6 +202,26 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 		)
 
 	);
+	
+	Mode =:= 3 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		dontReplace(Board, NewBoard),
+		decMove(PlayerTurn),
+		(
+			hasFinishedTurn(PlayerTurn) ->
+			(
+				changePlayer(PlayerTurn, NewPlayerTurn),
+				addMove(PlayerTurn)
+			);
+			(
+				notChangePlayer(PlayerTurn, NewPlayerTurn)
+			)
+		),
+		addPieceToHand(PlayerTurn),
+		assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+		Result = 'good'
+	);
 	(
 		Result = 'bad'
 	).

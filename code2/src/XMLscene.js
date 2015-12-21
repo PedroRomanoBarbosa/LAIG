@@ -198,6 +198,12 @@ XMLscene.prototype.logPicking = function (){
 							if(obj.textureID == "wind-piece"){
 								this.loopState = 4;
 							}
+							if(customId == "70"){
+								this.newIndexOfPieceToPlay = -1;
+
+								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+								this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
+							}
 						break;
 						case 3:
 							this.newLinePositionToPlay = Math.floor(customId / 10);
@@ -312,6 +318,18 @@ XMLscene.prototype.gameLoop = function () {
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
+			}else{
+				if(this.server.replyReady){
+					this.state = new GameState(this.server.answer);
+
+					this.gameStatesStack.push(this.state);
+
+					this.newIndexOfPieceToPlay = -1;
+					this.loopState = 2;
+					this.reloadEntities();
+
+					this.server.replyReady = false;
+				}
 			}
 		break;
 		case 3:

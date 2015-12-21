@@ -57,6 +57,14 @@
 
 
 	<TEXTURES>
+		<TEXTURE id="bagSide">
+				<file path="images/bagSide.png" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+		<TEXTURE id="bagFront">
+				<file path="images/bagFront.png" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
 		<TEXTURE id="free">
         	<file path="images/free.jpg" />
         	<amplif_factor s="1" t="1" />
@@ -235,6 +243,13 @@
 	        <ambient r="0.7" g="0.7" b="0.7" a="1" />
 	        <emission r="0.0" g="0.0" b="0.0" a="1" />
     	</MATERIAL>
+			<MATERIAL id="b">
+	        <shininess value="100" />
+	        <specular r="0" g="0" b="0" a="1" />
+	        <diffuse r="0.03" g="0.03" b="0.03" a="1" />
+	        <ambient r="0" g="0" b="0" a="1" />
+	        <emission r="0.0" g="0.0" b="0.0" a="1" />
+    	</MATERIAL>
 	</MATERIALS>
 
 
@@ -287,9 +302,6 @@
 			<TEXTURE id="null" />
 			<DESCENDANTS>
 					<DESCENDANT id="board" />
-					<!--<DESCENDANT id="handPieceP1" />-->
-					<!--<DESCENDANT id="handPieceP2" />-->
-					<!--<DESCENDANT id="piece" />-->
 			</DESCENDANTS>
 		</NODE>
 
@@ -309,7 +321,7 @@
 			<DESCENDANTS>
 					<DESCENDANT id="handPiece" />
 			</DESCENDANTS>
-		</NODE>	
+		</NODE>
 
 		<NODE id="handPieceP2">
 			<MATERIAL id="m" />
@@ -323,7 +335,7 @@
 			<DESCENDANTS>
 					<DESCENDANT id="handPiece" />
 			</DESCENDANTS>
-		</NODE>	
+		</NODE>
 
 		<NODE id="handPiece">
 			<MATERIAL id="m" />
@@ -335,7 +347,7 @@
 			<DESCENDANTS>
 					<DESCENDANT id="r" />
 			</DESCENDANTS>
-		</NODE>		
+		</NODE>
 
 
 
@@ -488,13 +500,15 @@
 
 
 
-		
+
 		<!-- BOARD -->
 
 		<NODE id="board">
 			<MATERIAL id="m" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
+					<DESCENDANT id="bag1" />
+					<DESCENDANT id="bag2" />
 					<DESCENDANT id="rack1" />
 					<DESCENDANT id="rack2" />
 					<DESCENDANT id="line1" />
@@ -508,6 +522,152 @@
 					<DESCENDANT id="line9" />
 			</DESCENDANTS>
 		</NODE>
+
+
+
+		<!-- PLAYER BAGS -->
+
+		<NODE id="bag1">
+			<TRANSLATION x="-5" y="0.5" z="6.5" />
+			<SCALE sx="1.5" sy="1.5" sz="1.5" />
+			<MATERIAL id="null" />
+			<TEXTURE id="clear" />
+			<DESCENDANTS>
+					<DESCENDANT id="bag" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="bag2">
+			<TRANSLATION x="5" y="0.5" z="-6.5" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="1.5" sy="1.5" sz="1.5" />
+			<MATERIAL id="null" />
+			<TEXTURE id="clear" />
+			<DESCENDANTS>
+					<DESCENDANT id="bag" />
+			</DESCENDANTS>
+		</NODE>
+
+
+		<NODE id="bag">
+			<MATERIAL id="null" />
+			<TEXTURE id="clear" />
+			<DESCENDANTS>
+					<DESCENDANT id="side1Front" />
+					<DESCENDANT id="side2Front" />
+					<DESCENDANT id="side3Front" />
+					<DESCENDANT id="side4Front" />
+					<DESCENDANT id="side5Front" />
+					<DESCENDANT id="side1Back" />
+					<DESCENDANT id="side2Back" />
+					<DESCENDANT id="side3Back" />
+					<DESCENDANT id="side4Back" />
+					<DESCENDANT id="side5Back" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side1Front">
+			<MATERIAL id="null" />
+			<TEXTURE id="bagFront" />
+			<TRANSLATION x="0" y="0" z="0.5" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side2Front">
+			<MATERIAL id="null" />
+			<TEXTURE id="bagSide" />
+			<ROTATION axis="y" angle="90" />
+			<TRANSLATION x="0" y="0" z="0.5" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side3Front">
+			<MATERIAL id="null" />
+			<TEXTURE id="bagSide" />
+			<ROTATION axis="y" angle="-90" />
+			<TRANSLATION x="0" y="0" z="0.5" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side4Front">
+			<MATERIAL id="null" />
+			<TEXTURE id="bagSide" />
+			<ROTATION axis="y" angle="180" />
+			<TRANSLATION x="0" y="0" z="0.5" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side5Front">
+			<MATERIAL id="null" />
+			<TEXTURE id="bagSide" />
+			<ROTATION axis="x" angle="90" />
+			<TRANSLATION x="0" y="0" z="0.5" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side1Back">
+			<MATERIAL id="b" />
+			<TEXTURE id="clear" />
+			<TRANSLATION x="0" y="-0.5" z="0" />
+			<ROTATION axis="x" angle="-90" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side2Back">
+			<MATERIAL id="b" />
+			<TEXTURE id="clear" />
+			<TRANSLATION x="0.5" y="0" z="0" />
+			<ROTATION axis="y" angle="-90" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side3Back">
+			<MATERIAL id="b" />
+			<TEXTURE id="clear" />
+			<ROTATION axis="y" angle="90" />
+			<TRANSLATION x="0.5" y="0" z="0" />
+			<ROTATION axis="y" angle="-90" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side4Back">
+			<MATERIAL id="b" />
+			<TEXTURE id="clear" />
+			<ROTATION axis="y" angle="180" />
+			<TRANSLATION x="0.5" y="0" z="0" />
+			<ROTATION axis="y" angle="-90" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="side5Back">
+			<MATERIAL id="b" />
+			<TEXTURE id="clear" />
+			<ROTATION axis="y" angle="270" />
+			<TRANSLATION x="0.5" y="0" z="0" />
+			<ROTATION axis="y" angle="-90" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
 
 
 

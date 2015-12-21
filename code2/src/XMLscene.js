@@ -122,8 +122,8 @@ XMLscene.prototype.onGraphLoaded = function () {
   /* Update scene */
   this.setUpdatePeriod(1000/60);
 
-	this.lightsVisible = true;
-	this.showAxis = true;
+	this.lightsVisible = false;
+	this.showAxis = false;
 	this.app.setInterface(this.myInterface);
 };
 
@@ -406,17 +406,29 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			if(this.state.playerTurn == 1){
 				if(obj.ID.substring(0, 9) == 'piece-p1-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
-				}else if(obj.ID == 'option-pass'){
+				}else if(obj.ID.substring(0, 10) == 'option-hts'){
+					this.registerForPick(73, obj);
+				}else if(obj.ID.substring(0, 10) == 'option-ste'){
+					this.registerForPick(72, obj);
+				}else if(obj.ID.substring(0, 10) == 'option-stw'){
+					this.registerForPick(71, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-pass'){
 					this.registerForPick(70, obj);
-				}else if(obj.ID.substring(0, 9) == 'piece-p2-'){
+				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
 					this.clearPickRegistration();
 				}
 			}else if(this.state.playerTurn == 2){
 				if(obj.ID.substring(0, 9) == 'piece-p2-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
-				}else if(obj.ID == 'option-pass'){
+				}else if(obj.ID.substring(0, 10) == 'option-hts'){
+					this.registerForPick(73, obj);
+				}else if(obj.ID.substring(0, 10) == 'option-ste'){
+					this.registerForPick(72, obj);
+				}else if(obj.ID.substring(0, 10) == 'option-stw'){
+					this.registerForPick(71, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-pass'){
 					this.registerForPick(70, obj);
-				}else if(obj.ID.substring(0, 9) == 'piece-p1-'){
+				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
 					this.clearPickRegistration();
 				}
 			}else{

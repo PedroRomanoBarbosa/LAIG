@@ -348,7 +348,7 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="halfToSun" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -358,7 +358,7 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="sunToExtra" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -368,7 +368,7 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="sunToWind" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -378,7 +378,7 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="pass" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -400,7 +400,7 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="halfToSun" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -411,7 +411,7 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="sunToExtra" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -422,7 +422,7 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="sunToWind" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -433,11 +433,11 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="pass" />
 			<DESCENDANTS>
-				<DESCENDANT id="option-pass" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="option-pass">
+		<NODE id="option-p">
 			<SCALE sx="3" sy="1" sz="1.5" />
 			<ROTATION axis="x" angle="-90" />
 			<MATERIAL id="m" />

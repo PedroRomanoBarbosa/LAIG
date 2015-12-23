@@ -203,6 +203,21 @@ XMLscene.prototype.logPicking = function (){
 
 								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 								this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
+							}else if(customId == "71"){
+								this.newIndexOfPieceToPlay = -1;
+
+								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+								this.server.makeRequest(nowState.getRequestString(4, 0, 0, 0, 0));
+							}else if(customId == "72"){
+								this.newIndexOfPieceToPlay = -1;
+
+								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+								this.server.makeRequest(nowState.getRequestString(5, 0, 0, 0, 0));
+							}else if(customId == "73"){
+								this.newIndexOfPieceToPlay = -1;
+
+								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+								this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
 							}
 						break;
 						case 3:
@@ -315,6 +330,9 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 2:
+			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+			console.log(nowState.player1HalfStones + " - " + nowState.player1SunStones);
+
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
@@ -322,11 +340,15 @@ XMLscene.prototype.gameLoop = function () {
 				if(this.server.replyReady){
 					this.state = new GameState(this.server.answer);
 
-					this.gameStatesStack.push(this.state);
+					if(this.state.validState){
+						this.gameStatesStack.push(this.state);
 
-					this.newIndexOfPieceToPlay = -1;
-					this.loopState = 2;
-					this.reloadEntities();
+						this.newIndexOfPieceToPlay = -1;
+						this.reloadEntities();
+					}else{
+						this.newIndexOfPieceToPlay = -1;
+						this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+					}
 
 					this.server.replyReady = false;
 				}

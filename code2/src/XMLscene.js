@@ -9,9 +9,6 @@ function XMLscene(app, myInterface) {
 
     this.app=app;
     this.myInterface=myInterface;
-
-    this.vertexShader = "shaders/terrain.vert";
-    this.fragmentShader = "shaders/terrain.frag";
 }
 
 
@@ -45,7 +42,9 @@ XMLscene.prototype.init = function (application) {
     this.newColPositionToPlay = -1;
     this.changeLinePositionToPlay = -1;
     this.changeColPositionToPlay = -1;
-    this.server.makeRequest("startGame");
+
+	this.startGame = true;
+    this.hasInited = false;
 
     this.loopState = 0;
     this.gameStatesStack = [];
@@ -218,6 +217,18 @@ XMLscene.prototype.logPicking = function (){
 
 								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 								this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
+							}else if(customId == "74"){
+								this.newIndexOfPieceToPlay = -1;
+
+								if(this.gameStatesStack.length >= 2){
+									this.gameStatesStack.pop();
+
+									this.reloadEntities();
+								}
+
+								if(this.gameStatesStack.length == 1){
+									this.loopState = 1;
+								}
 							}
 						break;
 						case 3:
@@ -311,7 +322,7 @@ XMLscene.prototype.gameLoop = function () {
 				this.server.replyReady = false;
 			}
 		break;
-		case 1:
+		case 1:			
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
@@ -330,13 +341,12 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 2:
-			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-			console.log(nowState.player1HalfStones + " - " + nowState.player1SunStones);
-
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
 			}else{
+				this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+
 				if(this.server.replyReady){
 					this.state = new GameState(this.server.answer);
 
@@ -408,6 +418,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 		case 0:
 		break;
 		case 1:
+			this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+			
 			if(this.state.playerTurn == 1){
 				if(obj.ID.substring(0, 9) == 'piece-p1-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
@@ -436,6 +448,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(71, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-pass'){
 					this.registerForPick(70, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-undo'){
+					this.registerForPick(74, obj);
 				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
 					this.clearPickRegistration();
 				}
@@ -450,6 +464,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(71, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-pass'){
 					this.registerForPick(70, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-undo'){
+					this.registerForPick(74, obj);
 				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
 					this.clearPickRegistration();
 				}
@@ -519,7 +535,12 @@ XMLscene.prototype.reloadEntities = function () {
 */
 XMLscene.prototype.display = function () {
 
-	this.gameLoop();
+	if(this.startGame == true && this.hasInited == false){
+		this.hasInited = true;
+		this.server.makeRequest("startGame");
+	}else if(this.startGame == true && this.hasInited == true){
+		this.gameLoop();	
+	}
 
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

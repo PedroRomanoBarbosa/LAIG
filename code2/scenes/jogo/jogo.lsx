@@ -252,6 +252,11 @@
         	<file path="images/suntowind.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
+
+    	<TEXTURE id="undo">
+        	<file path="images/undo.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
 	</TEXTURES>
 
 
@@ -335,10 +340,22 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="clear" />
 			<DESCENDANTS>
+				<DESCENDANT id="option-undo1" />
 				<DESCENDANT id="option-hts1" />
 				<DESCENDANT id="option-ste1" />
 				<DESCENDANT id="option-stw1" />
 				<DESCENDANT id="option-pass1" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-undo1">
+			<TRANSLATION x="-8" y="0" z="8" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.7" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="undo" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -386,10 +403,23 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="clear" />
 			<DESCENDANTS>
+				<DESCENDANT id="option-undo2" />
 				<DESCENDANT id="option-hts2" />
 				<DESCENDANT id="option-ste2" />
 				<DESCENDANT id="option-stw2" />
 				<DESCENDANT id="option-pass2" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-undo2">
+			<TRANSLATION x="8" y="0" z="-8" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.7" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="undo" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 

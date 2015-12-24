@@ -121,6 +121,7 @@ XMLscene.prototype.onGraphLoaded = function () {
 	this.lightsVisible = true;
 	this.showAxis = true;
 	this.app.setInterface(this.myInterface);
+
 };
 
 /**
@@ -157,6 +158,19 @@ XMLscene.prototype.updateObjects = function(){
 }
 };
 
+
+XMLscene.prototype.drawInitial = function(){
+  for (var key in this.objects) {
+    if (this.objects.hasOwnProperty(key)) {
+      var obj = this.objects[key];
+      if(obj instanceof Piece){
+        obj.numPiece = i--;
+        obj.changeAnimation("bag");
+      }
+    }
+  }
+};
+
 //------------------------------------------------------------------------------------------------------------
 
 /*
@@ -175,10 +189,8 @@ XMLscene.prototype.logPicking = function (){
 				if (obj)
 				{
 					var customId = this.pickResults[i][1];
-					console.log("Picked object: " + obj + ", with pick id " + customId);
           if(obj instanceof Piece){
-            console.log(obj);
-            obj.changeAnimation("chosen");
+            obj.changeAnimation("bag");
           }
 
 					switch(this.loopState){
@@ -317,11 +329,31 @@ XMLscene.prototype.reloadEntities = function () {
   	var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
   	for(var i=0; i<nowState.player1HandPieces.length; i++){
-  		new Piece(this, "p1", this.objects['piece'], nowState.player1HandPieces[i]);
+  		var p = new Piece(this, "p1", this.objects['piece'], nowState.player1HandPieces[i]);
+      p.numPiece = i;
+      p.line = 1;
+      if(i > 6){
+        p.line = 2;
+      }
+      if(i > 13){
+        p.line = 3;
+      }
+      p.changeAnimation("bag");
+      this.numHandPiecesP1++;
   	}
 
   	for(var i=0; i<nowState.player2HandPieces.length; i++){
-  		new Piece(this, "p2", this.objects['piece'], nowState.player1HandPieces[i]);
+  		var p = new Piece(this, "p2", this.objects['piece'], nowState.player2HandPieces[i]);
+      p.numPiece = i;
+      p.line = 1;
+      if(i > 6){
+        p.line = 2;
+      }
+      if(i > 13){
+        p.line = 3;
+      }
+      p.changeAnimation("bag");
+      this.numHandPiecesP2++;
   	}
 
   	for(var line=0; line<nowState.board.length; line++){
@@ -693,11 +725,14 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		}
 	}
 
+  if(obj instanceof Piece){
+    if(obj.hide){
+      return true;
+    }
+  }
+
   //Multiply transformations matrix
 	this.multMatrix(obj.matx);
-  if(obj instanceof Piece ){
-    this.multMatrix(obj.matxAni);
-  }
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){

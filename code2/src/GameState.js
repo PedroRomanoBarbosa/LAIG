@@ -225,7 +225,7 @@ GameState.prototype.getRequestString = function(mode, handPieceIndex, line, col,
 		if(line == ""){
 			holder += line;
 		}else{
-			holder += line + ",";	
+			holder += line + ",";
 		}
 
 		line = "";

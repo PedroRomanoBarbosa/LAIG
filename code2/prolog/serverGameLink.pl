@@ -132,21 +132,82 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 	
 	Mode =:= 1 ->
 	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
 		pickPieceFromHand(PlayerTurn, IndexOfPiece, Piece),
 		(
-			( isAValidPlay(Piece, Position, Board), isEmptyTile(Position, Board) ) ->
+			(isAValidPlay(Piece, Position, Board), isEmptyTile(Position, Board)) ->
 			(
 				gainStones(Position, Board, PlayerTurn),
 				tileToSunStone(Position, Board, PlayerTurn),
 				replacePiece(Piece, Position, Board, NewBoard),
 				deletePieceFromHand(PlayerTurn, IndexOfPiece),
-				decMove(IndexOfPiece)
+				decMove(PlayerTurn),
+				(
+					hasFinishedTurn(PlayerTurn) ->
+					(
+						changePlayer(PlayerTurn, NewPlayerTurn),
+						addMove(PlayerTurn)
+					);
+					(
+						notChangePlayer(PlayerTurn, NewPlayerTurn)
+					)
+				),
+				addPieceToHand(PlayerTurn),
+				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+				Result = 'good'
 			);
 			(
 				assert(stateOfTheGame(Board, PlayerTurn)),
 				Result = 'bad'
 			)
-		),
+		)
+	);
+	
+	Mode =:= 2 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		pickPieceFromHand(PlayerTurn, IndexOfPiece, Piece),
+		(
+			hasPiece(Position, Board) ->
+			(
+				validDir(Position, Direction, Board) ->
+				(
+					movePieceWithWind(Position, Direction, Board, NewBoard),
+					deletePieceFromHand(PlayerTurn, IndexOfPiece),
+					decMove(PlayerTurn),
+					useWindPiece,
+					(
+						hasFinishedTurn(PlayerTurn) ->
+						(
+							changePlayer(PlayerTurn, NewPlayerTurn),
+							addMove(PlayerTurn)
+						);
+						(
+							notChangePlayer(PlayerTurn, NewPlayerTurn)
+						)
+					),
+					addPieceToHand(PlayerTurn),
+					assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+					Result = 'good'
+				);
+				(
+					assert(stateOfTheGame(Board, PlayerTurn)),
+					Result = 'bad'
+				)
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		)
+
+	);
+	
+	Mode =:= 3 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		dontReplace(Board, NewBoard),
+		decMove(PlayerTurn),
 		(
 			hasFinishedTurn(PlayerTurn) ->
 			(
@@ -161,97 +222,60 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 		assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
 		Result = 'good'
 	);
+	
+	Mode =:= 4 ->
 	(
-		true
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		dontReplace(Board, NewBoard),
+		(
+			sunStonesToWindTile(PlayerTurn) ->
+			(
+				notChangePlayer(PlayerTurn, NewPlayerTurn),
+				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+				Result = 'good'
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		)
+	);
+	
+	Mode =:= 5 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		dontReplace(Board, NewBoard),
+		(
+			sunStonesToMoves(PlayerTurn) ->
+			(
+				notChangePlayer(PlayerTurn, NewPlayerTurn),
+				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+				Result = 'good'
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		)
+	);
+	
+	Mode =:= 6 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		dontReplace(Board, NewBoard),
+		(
+			halfToSunStones(PlayerTurn) ->
+			(
+				notChangePlayer(PlayerTurn, NewPlayerTurn),
+				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+				Result = 'good'
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		)
+	);
+	(
+		Result = 'bad'
 	).
-
-%----------------------------
-%main of the game
-main :-
-	readMode(N),
-	cls,
-	(
-		N =:= 1 -> mainPvsP;
-		
-		N =:= 2 -> mainPvsPCEasy;
-		
-		N =:= 3 -> mainPvsPCHard;
-		
-		N =:= 4 -> mainPCHardvsPCHard;
-		
-		true
-	),
-	reloadData.
-
-%----------------------------
-%main of player vs player
-mainPvsP :-
-	dividePieces,
-	player1Pieces(L),
-	fillPlayerHand(1),
-	fillPlayerHand(2),
-	repeat,
-	cls,
-	retract(stateOfTheGame(L, PN)),
-	playState(L, PN, NL, NPN),
-	assert(stateOfTheGame(NL, NPN)),
-	finished,
-	finalState(PN).
-	
-%main of the player vs easy pc
-mainPvsPCEasy :-
-	dividePieces,
-	fillPlayerHand(1),
-	fillPlayerHand(2),
-	repeat,
-	cls,
-	retract(stateOfTheGame(L, PN)),
-	(
-		PN =:= 1 ->
-		(
-			playState(L, PN, NL, NPN)
-		);
-		
-		PN =:= 2 ->
-		(
-			playStatePCEasy(L, PN, NL, NPN)
-		)
-	),
-	assert(stateOfTheGame(NL, NPN)),
-	finished,
-	finalState(PN).
-	
-%main of the player vs hard pc
-mainPvsPCHard :-
-	dividePieces,
-	fillPlayerHand(1),
-	fillPlayerHand(2),
-	repeat,
-	cls,
-	retract(stateOfTheGame(L, PN)),
-	(
-		PN =:= 1 ->
-		(
-			playState(L, PN, NL, NPN)
-		);
-		
-		PN =:= 2 ->
-		(
-			playStatePCHard(L, PN, NL, NPN)
-		)
-	),
-	assert(stateOfTheGame(NL, NPN)),
-	finished,
-	finalState(PN).
-	
-mainPCHardvsPCHard :-
-	dividePieces,
-	fillPlayerHand(1),
-	fillPlayerHand(2),
-	repeat,
-	cls,
-	retract(stateOfTheGame(L, PN)),
-	playStatePCHard(L, PN, NL, NPN),
-	assert(stateOfTheGame(NL, NPN)),
-	finished,
-	finalState(PN).

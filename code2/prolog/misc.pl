@@ -244,7 +244,7 @@ reloadData :-
 	assert(player2Pieces([])),
 	assert(player1HandPieces([])),
 	assert(player2HandPieces([])),
-	assert(player1HalfStones(0)),
+	assert(player1HalfStones(5)),
 	assert(player2HalfStones(0)),
 	assert(player1SunStones(0)),
 	assert(player2SunStones(0)),

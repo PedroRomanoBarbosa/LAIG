@@ -30,6 +30,9 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 	mat4.identity(this.matx);
 
 	switch(destination){
+		case "board":
+			this.ID = piecePrimitive.ID + "-b-" + line + "" + col;
+			break;
 		case "p1":
 			this.ID = piecePrimitive.ID + "-p1-" + scene.numHandPiecesP1;
 		break;
@@ -76,8 +79,8 @@ Piece.prototype.chosenAnimation = function(time){
 			this.angleY = 0;
 	}
 	/* reset matrix */
-	mat4.identity(this.matxAni);
-	mat4.rotate(this.matxAni, this.matxAni, this.angleY * Math.PI / 180, [0, 1, 0]);
+	mat4.identity(this.matx);
+	mat4.rotate(this.matx, this.matx, this.angleY * Math.PI / 180, [0, 1, 0]);
 	/* Reset animation time */
 	if(this.aniTime > this.chosenTime){
 		this.aniTime = 0;

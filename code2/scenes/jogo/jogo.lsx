@@ -232,6 +232,31 @@
         	<file path="images/wind-piece.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
+
+    	<TEXTURE id="pass">
+        	<file path="images/pass.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="halfToSun">
+        	<file path="images/halftosun.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="sunToExtra">
+        	<file path="images/suntoextra.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="sunToWind">
+        	<file path="images/suntowind.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="undo">
+        	<file path="images/undo.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
 	</TEXTURES>
 
 
@@ -301,51 +326,154 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-					<DESCENDANT id="board" />
+				<DESCENDANT id="board" />
+				<DESCENDANT id="option-1" />
+				<DESCENDANT id="option-2" />
 			</DESCENDANTS>
 		</NODE>
 
 
 
+		<!-- OPTIONS -->
 
-		<!-- HAND PIECE -->
-
-		<NODE id="handPieceP1">
+		<NODE id="option-1">
 			<MATERIAL id="m" />
-			<TEXTURE id="null" />
+			<TEXTURE id="clear" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-undo1" />
+				<DESCENDANT id="option-hts1" />
+				<DESCENDANT id="option-ste1" />
+				<DESCENDANT id="option-stw1" />
+				<DESCENDANT id="option-pass1" />
+			</DESCENDANTS>
+		</NODE>
 
-			<TRANSLATION x="-3" y="0" z="5.7" />
+		<NODE id="option-undo1">
+			<TRANSLATION x="-8" y="0" z="8" />
 			<ROTATION axis="x" angle="45" />
-			<TRANSLATION x="0" y="0" z="0.4" />
-
+			<SCALE sx="0.7" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="undo" />
 			<DESCENDANTS>
-					<DESCENDANT id="handPiece" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="handPieceP2">
+		<NODE id="option-hts1">
+			<TRANSLATION x="7" y="4.5" z="3.5" />
+			<ROTATION axis="x" angle="45" />
 			<MATERIAL id="m" />
-			<TEXTURE id="null" />
+			<TEXTURE id="halfToSun" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
 
-			<TRANSLATION x="3" y="0" z="-5.7" />
+		<NODE id="option-ste1">
+			<TRANSLATION x="7" y="3" z="5" />
+			<ROTATION axis="x" angle="45" />
+			<MATERIAL id="m" />
+			<TEXTURE id="sunToExtra" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-stw1">
+			<TRANSLATION x="7" y="1.5" z="6.5" />
+			<ROTATION axis="x" angle="45" />
+			<MATERIAL id="m" />
+			<TEXTURE id="sunToWind" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pass1">
+			<TRANSLATION x="7" y="0" z="8" />
+			<ROTATION axis="x" angle="45" />
+			<MATERIAL id="m" />
+			<TEXTURE id="pass" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-2">
+			<MATERIAL id="m" />
+			<TEXTURE id="clear" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-undo2" />
+				<DESCENDANT id="option-hts2" />
+				<DESCENDANT id="option-ste2" />
+				<DESCENDANT id="option-stw2" />
+				<DESCENDANT id="option-pass2" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-undo2">
+			<TRANSLATION x="8" y="0" z="-8" />
 			<ROTATION axis="x" angle="-45" />
-			<TRANSLATION x="0" y="0" z="-0.4" />
 			<ROTATION axis="y" angle="180" />
-
+			<SCALE sx="0.7" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="undo" />
 			<DESCENDANTS>
-					<DESCENDANT id="handPiece" />
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="handPiece">
+		<NODE id="option-hts2">
+			<TRANSLATION x="-7" y="4.5" z="-3.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<MATERIAL id="m" />
+			<TEXTURE id="halfToSun" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-ste2">
+			<TRANSLATION x="-7" y="3" z="-5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<MATERIAL id="m" />
+			<TEXTURE id="sunToExtra" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-stw2">
+			<TRANSLATION x="-7" y="1.5" z="-6.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<MATERIAL id="m" />
+			<TEXTURE id="sunToWind" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pass2">
+			<TRANSLATION x="-7" y="0" z="-8" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<MATERIAL id="m" />
+			<TEXTURE id="pass" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-p">
+			<SCALE sx="3" sy="1" sz="1.5" />
+			<ROTATION axis="x" angle="-90" />
 			<MATERIAL id="m" />
 			<TEXTURE id="null" />
-
-			<SCALE sx="0.8" sy="1" sz="0.8" />
-			<ROTATION axis="x" angle="-90" />
-
 			<DESCENDANTS>
-					<DESCENDANT id="r" />
+				<DESCENDANT id="r" />
 			</DESCENDANTS>
 		</NODE>
 

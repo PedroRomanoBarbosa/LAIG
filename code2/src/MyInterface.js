@@ -22,10 +22,11 @@ MyInterface.prototype.init = function(application) {
     this.gui = new dat.GUI();
 
     var checksGroup=this.gui.addFolder("Options");
-	checksGroup.open();
 
 	checksGroup.add(this.scene, 'lightsVisible').name("Visible Lights");
 	checksGroup.add(this.scene, 'showAxis').name("Visible Axis");
+
+	checksGroup.close();
 
     return true;
 };

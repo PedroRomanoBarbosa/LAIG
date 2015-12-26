@@ -48,6 +48,7 @@ XMLscene.prototype.init = function (application) {
 
     this.loopState = 0;
     this.gameStatesStack = [];
+
 };
 
 /**
@@ -193,7 +194,10 @@ XMLscene.prototype.logPicking = function (){
 				{
 					var customId = this.pickResults[i][1];
           if(obj instanceof Piece){
-            obj.changeAnimation("chosen");
+            if(this.loopState == 1){
+                obj.setBoardPosition(0,0,0);
+                obj.changeAnimation("board");
+            }
           }
 
 					switch(this.loopState){
@@ -354,6 +358,7 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 2:
+    console.log("2");
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
@@ -397,6 +402,7 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 4:
+    console.log("4");
 			if(this.changeLinePositionToPlay != -1 && this.changeColPositionToPlay != -1){
 				this.loopState++;
 			}
@@ -534,7 +540,14 @@ XMLscene.prototype.reloadEntities = function () {
       if(i > 13){
         p.line = 3;
       }
-      p.changeAnimation("bag");
+
+      if(this.loopState == 1 || p.numPiece == 0){
+        p.changeAnimation("bag");
+      }else if(this.loopState == 2){
+        p.hide == false;
+        p.handPosition();
+        p.changeAnimation("iddle");
+      }
       this.numHandPiecesP1++;
   	}
 
@@ -548,7 +561,13 @@ XMLscene.prototype.reloadEntities = function () {
       if(i > 13){
         p.line = 3;
       }
-      p.changeAnimation("bag");
+
+      if(this.loopState == 1 ){
+        p.changeAnimation("bag");
+      }else {
+        p.handPosition();
+        p.changeAnimation("iddle");
+      }
       this.numHandPiecesP2++;
   	}
 

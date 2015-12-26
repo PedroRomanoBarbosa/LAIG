@@ -61,10 +61,10 @@ function Marker(scene, markerForm, font) {
 Marker.prototype.setShaderValues = function(){
 	this.scene.setActiveShaderSimple(this.scene.textShader);
 
-	this.scene.textShader.setUniformsValues({'dims': [16, 16]});
+	this.scene.textShader.setUniformsValues({'dims': [16, 16.3]});
 	
 	this.scene.textShader.setUniformsValues({'uSampler': 0});
 	this.scene.textShader.setUniformsValues({'uSampler2': 1});
 
-	//this.scene.textShader.setUniformsValues({'charCoords': [16,16]});
+	this.scene.textShader.setUniformsValues({'charCoords': [7, 3]});
 };

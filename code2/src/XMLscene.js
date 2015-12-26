@@ -114,6 +114,15 @@ XMLscene.prototype.onGraphLoaded = function () {
   	}
   }
 
+  for(var i=0; i<this.graph.nodes.length; i++){
+  	if(this.graph.nodes[i].tagId.substring(0, 7) == "screen-"){
+  		new Marker(this, this.graph.nodes[i], this.textTexture);
+  	}
+  }
+
+	this.textShader=new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
+	this.textTexture = this.textures['font'];
+
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
 
@@ -156,6 +165,14 @@ XMLscene.prototype.updateObjects = function(){
       if(obj instanceof Piece){
         obj.animate(this.timeInterval/1000);
       }
+      if(obj instanceof Marker){
+      	if(this.gameStatesStack.length > 0){
+      		var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+      		obj.valueToShow = nowState.player1Pieces.length + nowState.player1HandPieces.length;
+      	}else{
+      		obj.valueToShow = 0;
+      	}
+      }
     }
 }
 };
@@ -179,9 +196,9 @@ XMLscene.prototype.logPicking = function (){
 				{
 					var customId = this.pickResults[i][1];
 					console.log("Picked object: " + obj + ", with pick id " + customId);
-          if(obj instanceof Piece){
-            obj.changeAnimation("chosen");
-          }
+					  if(obj instanceof Piece){
+						obj.changeAnimation("chosen");
+					  }
 
 					switch(this.loopState){
 						case 0:
@@ -898,6 +915,10 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
   if(obj instanceof Piece ){
     this.multMatrix(obj.matxAni);
   }
+  if(obj instanceof Marker){
+  	obj.setShaderValues();
+  	this.textTexture.bind(1);
+  }
 
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){
@@ -907,6 +928,10 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		  this.processNodeDisplay(this.objects[ obj.descendants[u] ] );
 		}
 	}
+
+	if(obj instanceof Marker){
+  	this.setActiveShaderSimple(this.defaultShader);
+  }
 
 	this.parentMaterial = matAnt;
 	this.parentTexture = texAnt;
@@ -920,12 +945,12 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 * @param m The material of the primitive to process
 * @param t The texture of the primitive to process
 */
-XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t) {
+XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t, b) {
 
 	m.apply();
 	if(t!=null){
 		if(obj.updatableTexCoords) obj.updateTexCoords(t.amplif_factor.s, t.amplif_factor.t);
-		t.bind();
+		t.bind(0);
 	}
 
 	obj.display();

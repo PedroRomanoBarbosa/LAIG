@@ -228,10 +228,17 @@ XMLscene.prototype.logPicking = function (){
 								this.startGame = true;
 								this.path = "jogo/jogo.lsx"
 								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pvp";
 							}else if(customId == "301"){
-								console.log("p vs pc easy");
+								this.startGame = true;
+								this.path = "jogo/jogo.lsx"
+								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pceasy";
 							}else if(customId == "302"){
-								console.log("p vs pc hard");
+								this.startGame = true;
+								this.path = "jogo/jogo.lsx"
+								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pchard";
 							}else if(customId == "303"){
 								console.log("pc vs pc");
 							}
@@ -279,6 +286,9 @@ XMLscene.prototype.logPicking = function (){
 								if(this.gameStatesStack.length == 1){
 									this.loopState = 1;
 								}
+
+								this.turnTimeAcc = this.maxTurnTime;
+								this.turnTimerStamp = this.secondsPassed;
 							}
 						break;
 						case 3:
@@ -344,6 +354,12 @@ XMLscene.prototype.logPicking = function (){
 								);
 							}
 						break;
+						case 6:
+						break;
+						case 7:
+						break;
+						case 8:
+						break;
 					}
 				}
 			}
@@ -394,7 +410,12 @@ XMLscene.prototype.gameLoop = function () {
 					this.gameStatesStack.push(this.state);
 
 					this.newIndexOfPieceToPlay = -1;
-					this.loopState++;
+
+					if(this.playerMode == "pvp")
+						this.loopState++;
+					else
+						this.loopState = 6;
+
 					this.reloadEntities();
 					this.turnTimeAcc = this.maxTurnTime;
 					this.turnTimerStamp = this.secondsPassed;
@@ -407,6 +428,17 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 2:
+			if(this.playerMode != "pvp"){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+
+				if(nowState.playerTurn == 2){
+					if(this.playerMode == "pceasy")
+						this.loopState = 6;
+					else if(this.playerMode == "pchard")
+						this.loopState = 8;
+				}
+			}
+
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
@@ -480,6 +512,33 @@ XMLscene.prototype.gameLoop = function () {
 
 				this.server.replyReady = false;
 			}
+		break;
+		case 6:
+			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+			this.server.makeRequest(nowState.getRequestString(7, 0, 0, 0, 0));
+
+			this.loopState++;
+		break;
+		case 7:
+			if(this.server.replyReady){
+				this.state = new GameState(this.server.answer);
+
+				this.gameStatesStack.push(this.state);
+
+				this.newIndexOfPieceToPlay = -1;
+				this.loopState = 2;
+				this.turnTimeAcc = this.maxTurnTime;
+				this.turnTimerStamp = this.secondsPassed;
+				this.reloadEntities();
+
+				this.server.replyReady = false;
+			}
+		break;
+		case 8:
+			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+			this.server.makeRequest(nowState.getRequestString(8, 0, 0, 0, 0));
+
+			this.loopState--;
 		break;
 	}
 };
@@ -576,6 +635,12 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			}else{
 				this.clearPickRegistration();
 			}
+		break;
+		case 6:
+		break;
+		case 7:
+		break;
+		case 8:
 		break;
 	}
 };

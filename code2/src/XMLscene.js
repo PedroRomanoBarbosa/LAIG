@@ -130,6 +130,8 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.turnTimerStamp = 0;
   this.turnTimeAcc = 0;
 
+  this.timeOutBool = false;
+
   console.log(this);
   /* Update scene */
   this.setUpdatePeriod(1000/60);
@@ -343,6 +345,20 @@ XMLscene.prototype.gameLoop = function () {
 
 	this.logPicking();
 
+	if(this.loopState != 0 && this.loopState != 1 && Math.floor(this.turnTimeAcc) == 0 && this.timeOutBool == false){
+		this.timeOutBool = true;
+		this.loopState = 2;
+
+		this.newIndexOfPieceToPlay = -1;
+		this.newLinePositionToPlay = -1;
+		this.newColPositionToPlay = -1;
+		this.changeLinePositionToPlay = -1;
+    	this.changeColPositionToPlay = -1;
+
+		var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+		this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
+	}
+
 	switch(this.loopState){
 		case 0:
 			if(this.server.replyReady){
@@ -544,6 +560,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 
 XMLscene.prototype.reloadEntities = function () {
 
+	this.timeOutBool = false;
+	
 	this.root.descendants = [];
 	for(var i=0; i<this.rootCleanup.length; i++){
 		this.root.descendants.push(this.rootCleanup[i]);

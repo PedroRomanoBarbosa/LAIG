@@ -53,6 +53,7 @@ XMLscene.prototype.init = function (application) {
 
     this.aniTime = 0;
     this.rotationTime = 1;
+    this.rotationAngle = 180 / this.rotationTime;
     this.rotateScene = false;
 
 };
@@ -175,13 +176,16 @@ XMLscene.prototype.rotateSceneAnimation = function(time){
   /* reset matrix */
   mat4.identity(this.m);
   this.aniTime += time;
+  if(this.state.playerTurn == 1){
+    mat4.rotate(this.m, this.m, 180 * Math.PI / 180, [0, 1, 0]);
+  }
   /* Reset animation time */
 	if(this.aniTime > this.rotationTime){
     mat4.rotate(this.m, this.m, 180 * Math.PI / 180, [0, 1, 0]);
     this.rotateScene = false;
 		this.aniTime = 0;
 	}else {
-	  mat4.rotate(this.m, this.m, this.aniTime * 180 * Math.PI / 180, [0, 1, 0]);
+	  mat4.rotate(this.m, this.m, this.aniTime * this.rotationAngle * Math.PI / 180, [0, 1, 0]);
 	}
 };
 
@@ -232,6 +236,7 @@ XMLscene.prototype.logPicking = function (){
                   this.loopState = 4;
                 }
                 if(customId == "70"){
+                  this.rotateScene = true;
                   this.newIndexOfPieceToPlay = -1;
 
                   var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];

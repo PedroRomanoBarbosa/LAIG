@@ -43,11 +43,17 @@ XMLscene.prototype.init = function (application) {
     this.changeLinePositionToPlay = -1;
     this.changeColPositionToPlay = -1;
 
-	this.startGame = true;
+	this.startGame = false;
     this.hasInited = false;
 
     this.loopState = 0;
     this.gameStatesStack = [];
+
+    this.lightsVisible = false;
+	this.showAxis = false;
+	this.maxTurnTime = 70;
+
+	this.app.setInterface(this.myInterface);
 };
 
 /**
@@ -64,7 +70,6 @@ XMLscene.prototype.initLights = function () {
 */
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 3));
-    //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -3));
 };
 
 /**
@@ -126,7 +131,6 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
 
-  this.maxTurnTime = 70;
   this.turnTimerStamp = 0;
   this.turnTimeAcc = 0;
 
@@ -135,10 +139,6 @@ XMLscene.prototype.onGraphLoaded = function () {
   console.log(this);
   /* Update scene */
   this.setUpdatePeriod(1000/60);
-
-	this.lightsVisible = false;
-	this.showAxis = false;
-	this.app.setInterface(this.myInterface);
 };
 
 /**
@@ -224,6 +224,17 @@ XMLscene.prototype.logPicking = function (){
 
 					switch(this.loopState){
 						case 0:
+							if(customId == "300"){
+								this.startGame = true;
+								this.path = "jogo/jogo.lsx"
+								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+							}else if(customId == "301"){
+								console.log("p vs pc easy");
+							}else if(customId == "302"){
+								console.log("p vs pc hard");
+							}else if(customId == "303"){
+								console.log("pc vs pc");
+							}
 						break;
 						case 1:
 							this.newIndexOfPieceToPlay = customId;
@@ -477,6 +488,17 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 
 	switch(this.loopState){
 		case 0:
+			if(obj.ID == 'option-pvpPlane'){
+				this.registerForPick(300, obj);
+			}else if(obj.ID == 'option-pvpceasyPlane'){
+				this.registerForPick(301, obj);
+			}else if(obj.ID == 'option-pvpchardPlane'){
+				this.registerForPick(302, obj);
+			}else if(obj.ID == 'option-pcvpcPlane'){
+				this.registerForPick(303, obj);
+			}else if(obj.ID.substring(0, 7) != 'option-'){
+				this.clearPickRegistration();
+			}
 		break;
 		case 1:
 			this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -561,7 +583,7 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 XMLscene.prototype.reloadEntities = function () {
 
 	this.timeOutBool = false;
-	
+
 	this.root.descendants = [];
 	for(var i=0; i<this.rootCleanup.length; i++){
 		this.root.descendants.push(this.rootCleanup[i]);
@@ -591,6 +613,12 @@ XMLscene.prototype.reloadEntities = function () {
   	}
 };
 
+XMLscene.prototype.menuLoop = function () {
+
+	this.logPicking();
+
+};
+
 //------------------------------------------------------------------------------------------------------------
 
 /**
@@ -603,6 +631,8 @@ XMLscene.prototype.display = function () {
 		this.server.makeRequest("startGame");
 	}else if(this.startGame == true && this.hasInited == true){
 		this.gameLoop();	
+	}else{
+		this.menuLoop();
 	}
 
 	// Clear image and depth buffer everytime we update the scene

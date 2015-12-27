@@ -31,25 +31,17 @@ main=function()
 {
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);
-    var myInterface = new MyInterface();
-    var myScene = new XMLscene(app, myInterface);
-    //var myInterface = new CGFinterface();
 
     app.init();
 
-    app.setScene(myScene);
-
-    myInterface.setActiveCamera(myScene.camera);
-
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
-	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
-
-	var filename=getUrlVars()['file'];
-	myScene.path=filename;
-
 	// create and load graph, and associate it to scene.
 	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
+	var myInterface = new MyInterface();
+	var myScene = new XMLscene(app, myInterface);
+	var myGraph = new MySceneGraph("menu/menu.lsx", myScene);
+	myScene.path="menu/menu.lsx";
+	myInterface.setActiveCamera(myScene.camera);
+	app.setScene(myScene);
 
 	// start
     app.run();

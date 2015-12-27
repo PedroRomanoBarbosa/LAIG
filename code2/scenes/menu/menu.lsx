@@ -57,6 +57,37 @@
 
 
 	<TEXTURES>
+		<TEXTURE id="bagFront">
+				<file path="images/bagFront.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+		<TEXTURE id="bagSide">
+				<file path="images/bagSide.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+		<TEXTURE id="names">
+				<file path="images/names.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+
+		<TEXTURE id="pvp">
+				<file path="images/pvp.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+
+		<TEXTURE id="pvpceasy">
+				<file path="images/pvpceasy.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+		<TEXTURE id="pvpchard">
+				<file path="images/pvpchard.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+
+		<TEXTURE id="pcvpc">
+				<file path="images/pceasyvpchard.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
 	</TEXTURES>
 
 
@@ -87,13 +118,88 @@
 			<MATERIAL id="null" />
 			<TEXTURE id="null" />
 			<DESCENDANTS>
-					<DESCENDANT id="menu1" />
+					<DESCENDANT id="background" />
+					<DESCENDANT id="backgroundPlane" />
+					<DESCENDANT id="namesPlane" />
+					<DESCENDANT id="option-pvpPlane" />
+					<DESCENDANT id="option-pvpceasyPlane" />
+					<DESCENDANT id="option-pvpchardPlane" />
+					<DESCENDANT id="option-pcvpcPlane" />
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="menu1">
-			<MATERIAL id="null" />
-			<TEXTURE id="null" />
+		<NODE id="background">
+			<MATERIAL id="m" />
+			<TEXTURE id="bagFront" />
+			<TRANSLATION x="0" y="-2.5" z="0" />
+			<ROTATION axis="x" angle="-45" />
+			<SCALE sx="13" sy="8" sz="1" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="backgroundPlane">
+			<MATERIAL id="m" />
+			<TEXTURE id="bagSide" />
+			<TRANSLATION x="0" y="-3" z="0" />
+			<ROTATION axis="x" angle="-45" />
+			<SCALE sx="35" sy="20" sz="1" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="namesPlane">
+			<MATERIAL id="m" />
+			<TEXTURE id="names" />
+			<TRANSLATION x="10" y="-2.5" z="0" />
+			<ROTATION axis="x" angle="-45" />
+			<SCALE sx="5" sy="5" sz="1" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pvpPlane">
+			<MATERIAL id="m" />
+			<TEXTURE id="pvp" />
+			<TRANSLATION x="-11" y="0" z="-2.5" />
+			<ROTATION axis="x" angle="-45" />
+			<SCALE sx="4" sy="2" sz="1" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pvpceasyPlane">
+			<MATERIAL id="m" />
+			<TEXTURE id="pvpceasy" />
+			<TRANSLATION x="-11" y="-1.5" z="-1" />
+			<ROTATION axis="x" angle="-45" />
+			<SCALE sx="4" sy="2" sz="1" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pvpchardPlane">
+			<MATERIAL id="m" />
+			<TEXTURE id="pvpchard" />
+			<TRANSLATION x="-11" y="-3" z="0.5" />
+			<ROTATION axis="x" angle="-45" />
+			<SCALE sx="4" sy="2" sz="1" />
+			<DESCENDANTS>
+					<DESCENDANT id="r" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-pcvpcPlane">
+			<MATERIAL id="m" />
+			<TEXTURE id="pcvpc" />
+			<TRANSLATION x="-11" y="-4.5" z="2" />
+			<ROTATION axis="x" angle="-45" />
+			<SCALE sx="4" sy="2" sz="1" />
 			<DESCENDANTS>
 					<DESCENDANT id="r" />
 			</DESCENDANTS>

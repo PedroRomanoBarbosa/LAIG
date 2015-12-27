@@ -114,14 +114,14 @@ XMLscene.prototype.onGraphLoaded = function () {
   	}
   }
 
+  this.textShader=new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
+  this.textTexture = this.textures['font'];
+
   for(var i=0; i<this.graph.nodes.length; i++){
   	if(this.graph.nodes[i].tagId.substring(0, 7) == "screen-"){
   		new Marker(this, this.graph.nodes[i], this.textTexture);
   	}
   }
-
-	this.textShader=new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
-	this.textTexture = this.textures['font'];
 
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
@@ -165,12 +165,22 @@ XMLscene.prototype.updateObjects = function(){
       if(obj instanceof Piece){
         obj.animate(this.timeInterval/1000);
       }
-      if(obj instanceof Marker){
-      	if(this.gameStatesStack.length > 0){
-      		var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-      		obj.valueToShow = nowState.player1Pieces.length + nowState.player1HandPieces.length;
-      	}else{
-      		obj.valueToShow = 0;
+      if(obj.ID.substring(0, 7) == "screen-"){
+      	if(obj.ID.substring(0, 12) == "screen-board" && obj.ID.substring(13, 14) == "1"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				obj.valueToShow = nowState.player1Pieces.length + nowState.player1HandPieces.length;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-board" && obj.ID.substring(13, 14) == "2"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				obj.valueToShow = nowState.player2Pieces.length + nowState.player2HandPieces.length;
+			}else{
+				obj.valueToShow = 0;
+			}
       	}
       }
     }
@@ -930,8 +940,8 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 	}
 
 	if(obj instanceof Marker){
-  	this.setActiveShaderSimple(this.defaultShader);
-  }
+		this.setActiveShaderSimple(this.defaultShader);
+	}
 
 	this.parentMaterial = matAnt;
 	this.parentTexture = texAnt;

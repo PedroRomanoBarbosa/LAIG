@@ -276,6 +276,15 @@
         	<file path="images/player2marker.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
+
+    	<TEXTURE id="half1">
+        	<file path="images/half1.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="half2">
+        	<file path="images/half2.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
 	</TEXTURES>
 
 
@@ -367,10 +376,10 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="screen-timer1">
-			<TRANSLATION x="-8" y="5.5" z="2.5" />
+		<NODE id="screen-timer110">
+			<TRANSLATION x="-9" y="6" z="2" />
 			<ROTATION axis="x" angle="45" />
-			<SCALE sx="1.2" sy="1" sz="1.2" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
 			<MATERIAL id="m" />
 			<TEXTURE id="timer" />
 			<DESCENDANTS>
@@ -378,9 +387,32 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="screen-board11">
-			<TRANSLATION x="-9.8" y="3.5" z="4.5" />
+		<NODE id="screen-timer111">
+			<TRANSLATION x="-9.6" y="5.1" z="2.9" />
 			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-timer112">
+			<TRANSLATION x="-8.4" y="5.1" z="2.9" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board110">
+			<TRANSLATION x="-10.5" y="3.5" z="4.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
 			<MATERIAL id="m" />
 			<TEXTURE id="player1marker" />
 			<DESCENDANTS>
@@ -388,11 +420,56 @@
 			</DESCENDANTS>
 		</NODE>
 
-		<NODE id="screen-board12">
-			<TRANSLATION x="-6.3" y="3.5" z="4.5" />
+		<NODE id="screen-board111">
+			<TRANSLATION x="-11.05" y="2.7" z="5.5" />
 			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board112">
+			<TRANSLATION x="-9.85" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board120">
+			<TRANSLATION x="-7.5" y="3.5" z="4.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
 			<MATERIAL id="m" />
 			<TEXTURE id="player2marker" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board121">
+			<TRANSLATION x="-8.05" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board122">
+			<TRANSLATION x="-6.85" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
 			<DESCENDANTS>
 				<DESCENDANT id="option-p" />
 			</DESCENDANTS>

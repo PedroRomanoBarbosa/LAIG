@@ -2,6 +2,8 @@
 function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 	line = typeof line !== 'undefined' ? line : 0;
 	col = typeof col !== 'undefined' ? col : 0;
+	this.line = line;
+	this.col = col;
 
 	this.scene = scene;
 	this.dest = destination;
@@ -26,10 +28,11 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 	/* Bag animation */
 	this.bagTime = 0.5;
 	this.numberPiece = 0;
-	this.line = 1;
+	this.handLine = 1;
 	this.hide = true;
 
 	/* Board Animation */
+	this.boardTime = 0.7;
 	this.boardPos = {x:0, y:0, z:0};
 
 	mat4.identity(this.matx);
@@ -90,6 +93,9 @@ Piece.prototype.chosenAnimation = function(time){
 	/* reset matrix */
 	mat4.identity(this.matx);
 	mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
+	if(this.dest == "p2"){
+		mat4.rotate(this.matx, this.matx, 180*Math.PI/180, [0, 1, 0]);
+	}
 	mat4.rotate(this.matx, this.matx, 45*Math.PI/180, [1, 0, 0]);
 	mat4.rotate(this.matx, this.matx, this.angleY * Math.PI / 180, [0, 1, 0]);
 
@@ -104,25 +110,33 @@ Piece.prototype.iddleAnimation = function(){
 
 	/* reset matrix */
 	mat4.identity(this.matx);
-	//this.matx = mat4.clone(this.primMatx);
 
-	if(this.dest == "p2"){
-		mat4.rotate(this.matx, this.matx, 180*Math.PI/180, [0, 1, 0]);
+	if(this.dest == "board"){
+		mat4.translate(this.matx, this.matx, [this.col - 5,0,this.line - 5]);
+	}else {
+		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
+		mat4.rotate(this.matx, this.matx, this.angle.x*Math.PI/180, [1, 0, 0]);
+		if(this.dest == "p2"){
+			mat4.rotate(this.matx, this.matx, 180*Math.PI/180, [0, 1, 0]);
+		}
 	}
-	mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
-	mat4.rotate(this.matx, this.matx, this.angle.x*Math.PI/180, [1, 0, 0]);
-	mat4.rotate(this.matx, this.matx, this.angle.y*Math.PI/180, [0, 1, 0]);
-	mat4.rotate(this.matx, this.matx, this.angle.z*Math.PI/180, [0, 0, 1]);
 
 	mat4.multiply(this.matx,this.matx,this.primMatx);
 	this.hide = false;
 }
 
 Piece.prototype.handPosition = function(){
-	this.pos.x = -5 + 2 + (this.numPiece%7);
-	this.pos.y = - this.line*0.7 + 0.3;
-	this.pos.z = 6.5 + this.line*0.7 - 1.3;
-	this.angle.x = 45;
+	if(this.dest == "p1"){
+		this.pos.x = -3 + (this.numPiece%7);
+		this.pos.y = - this.handLine*0.7 + 0.3;
+		this.pos.z = 6.5 + this.handLine*0.7 - 1.3;
+		this.angle.x = 45;
+	}else if(this.dest == "p2"){
+		this.pos.x = 3 - (this.numPiece%7);
+		this.pos.y = -this.handLine*0.7 + 0.3;
+		this.pos.z = - 6.5 - this.handLine*0.7 + 1.3;
+		this.angle.x = -45;
+	}
 }
 
 Piece.prototype.bagAnimation = function(time){
@@ -134,8 +148,12 @@ Piece.prototype.bagAnimation = function(time){
 		if(this.hide){
 			this.hide = false;
 		}
+
+		var P4 = {x:0, y:0, z:0};
 		/* Final point */
-		var P4 = {x:2 + (this.numPiece%7), y:- this.line*0.7 + 0.3, z:this.line*0.7 - 1.3};
+		P4.x = 2 + (this.numPiece%7);
+		P4.y = - this.handLine*0.7 + 0.3;
+		P4.z = this.handLine*0.7 - 1.3;
 		var d = Math.sqrt((P4.x)*(P4.x) + (P4.z)*(P4.z));
 
 		/* Get angle */
@@ -158,10 +176,17 @@ Piece.prototype.bagAnimation = function(time){
 			mat4.translate(this.matx, this.matx, [P4.x,P4.y,P4.z]);
 			mat4.rotate(this.matx, this.matx, 45*Math.PI/180, [1, 0, 0]);
 			this.changeAnimation("iddle");
-			this.pos.x = P4.x - 5;
-			this.pos.y = P4.y;
-			this.pos.z = P4.z + 6.5;
-			this.angle.x = 45;
+			if(this.dest == "p2"){
+				this.pos.x = -(P4.x - 5);
+				this.pos.y = P4.y;
+				this.pos.z = -(P4.z + 6.5);
+				this.angle.x = -45;
+			}else {
+				this.pos.x = P4.x - 5;
+				this.pos.y = P4.y;
+				this.pos.z = P4.z + 6.5;
+				this.angle.x = 45;
+			}
 		}else {
 			var percentage = ((this.aniTime - iddleTime) /this.bagTime);
 			var P2 = {x: 0, y:5, z:0};
@@ -177,10 +202,10 @@ Piece.prototype.bagAnimation = function(time){
 }
 
 Piece.prototype.boardAnimation = function(time){
-	this.aniTime += time;
+	  this.aniTime += time;
 
 		/* Final point */
-		var P4 = {x: this.boardPos.x, y: this.boardPos.y, z: this.boardPos.z};
+		var P4 = {x: this.boardPos.x-this.pos.x, y: this.boardPos.y-this.pos.y, z: this.boardPos.z-this.pos.z};
 		var d = Math.sqrt((P4.x)*(P4.x) + (P4.z)*(P4.z));
 
 		/* Get angle */
@@ -190,25 +215,22 @@ Piece.prototype.boardAnimation = function(time){
 		mat4.identity(this.matx);
 
 		/* Applies transformations */
-		if(this.dest == "p2"){
-			mat4.rotate(this.matx, this.matx, 180*Math.PI/180, [0, 1, 0]);
-		}
 		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
 
 		/* Reset animation time */
-		if(this.aniTime > this.bagTime){
+		if(this.aniTime > this.boardTime){
 			this.aniTime = 0;
 			var x = d*Math.cos(angle);
 			var z = d*Math.sin(angle);
 			mat4.translate(this.matx, this.matx, [P4.x,P4.y,P4.z]);
-			mat4.rotate(this.matx, this.matx, 45*Math.PI/180, [1, 0, 0]);
+			this.pos.x = this.boardPos.x;
+			this.pos.y = this.boardPos.y;
+			this.pos.z = this.boardPos.z;
+			this.angle.x = 0;
 			this.changeAnimation("iddle");
-			this.pos.x = P4.x - 5;
-			this.pos.y = P4.y;
-			this.pos.z = P4.z + 6.5;
-			this.angle.x = 45;
+			this.scene.stop = false;
 		}else {
-			var percentage = (this.aniTime/this.bagTime);
+			var percentage = (this.aniTime/this.boardTime);
 			var P2 = {x: 0, y:5, z:0};
 			var P3 = {x: 0, y:5, z:0};
 			var P1 = {x: 0, y:0, z:0};
@@ -216,6 +238,19 @@ Piece.prototype.boardAnimation = function(time){
 			var x = pos.z*Math.cos(angle);
 			var z = pos.z*Math.sin(angle);
 			mat4.translate(this.matx, this.matx, [x,pos.y,z]);
+			if(this.dest == "p1"){
+				mat4.rotate(this.matx, this.matx, (45 - 45*percentage)*Math.PI/180, [1, 0, 0]);
+			}else if (this.dest == "p2") {
+				mat4.rotate(this.matx, this.matx, -(45 - 45*percentage)*Math.PI/180, [1, 0, 0]);
+			}
+			if(percentage < 0.5){
+				mat4.scale(this.matx, this.matx, [1 + percentage*2, 1 + percentage*2, 1 + percentage*2]);
+			}else {
+				mat4.scale(this.matx, this.matx, [1 + (1 - percentage)*2, 1 + (1 - percentage)*2, 1 + (1 - percentage)*2]);
+			}
+		}
+		if(this.dest == "p2"){
+			mat4.rotate(this.matx, this.matx, 180*Math.PI/180, [0, 1, 0]);
 		}
 		mat4.multiply(this.matx,this.matx,this.primMatx);
 }

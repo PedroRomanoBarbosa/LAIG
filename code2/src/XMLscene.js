@@ -43,7 +43,8 @@ XMLscene.prototype.init = function (application) {
     this.changeLinePositionToPlay = -1;
     this.changeColPositionToPlay = -1;
 
-	this.startGame = true;
+	  this.startGame = true;
+    this.stop = false;
     this.hasInited = false;
 
     this.loopState = 0;
@@ -162,19 +163,6 @@ XMLscene.prototype.updateObjects = function(){
 }
 };
 
-
-XMLscene.prototype.drawInitial = function(){
-  for (var key in this.objects) {
-    if (this.objects.hasOwnProperty(key)) {
-      var obj = this.objects[key];
-      if(obj instanceof Piece){
-        obj.numPiece = i--;
-        obj.changeAnimation("bag");
-      }
-    }
-  }
-};
-
 //------------------------------------------------------------------------------------------------------------
 
 /*
@@ -195,123 +183,130 @@ XMLscene.prototype.logPicking = function (){
 					var customId = this.pickResults[i][1];
           if(obj instanceof Piece){
             if(this.loopState == 1){
-                obj.setBoardPosition(0,0,0);
-                obj.changeAnimation("board");
+                if(obj.textureID != "wind-piece"){
+                  obj.setBoardPosition(0,0,0);
+                  obj.changeAnimation("board");
+                  this.stop = true;
+                }
+            }else if (this.loopState == 2 ) {
+                this.objSelected = obj;
+                obj.setBoardPosition(1,0,1);
+                obj.changeAnimation("chosen");
             }
           }
 
-					switch(this.loopState){
-						case 0:
-						break;
-						case 1:
-							this.newIndexOfPieceToPlay = customId;
-							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-							this.server.makeRequest(nowState.getRequestString(0, this.newIndexOfPieceToPlay, 0, 0, 0));
-						break;
-						case 2:
-							this.newIndexOfPieceToPlay = customId;
+            switch(this.loopState){
+              case 0:
+              break;
+              case 1:
+                this.newIndexOfPieceToPlay = customId;
+                var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+                this.server.makeRequest(nowState.getRequestString(0, this.newIndexOfPieceToPlay, 0, 0, 0));
+              break;
+              case 2:
+                this.newIndexOfPieceToPlay = customId;
 
-							if(obj.textureID == "wind-piece"){
-								this.loopState = 4;
-							}
-							if(customId == "70"){
-								this.newIndexOfPieceToPlay = -1;
+                if(obj.textureID == "wind-piece"){
+                  this.loopState = 4;
+                }
+                if(customId == "70"){
+                  this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-								this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
-							}else if(customId == "71"){
-								this.newIndexOfPieceToPlay = -1;
+                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+                  this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
+                }else if(customId == "71"){
+                  this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-								this.server.makeRequest(nowState.getRequestString(4, 0, 0, 0, 0));
-							}else if(customId == "72"){
-								this.newIndexOfPieceToPlay = -1;
+                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+                  this.server.makeRequest(nowState.getRequestString(4, 0, 0, 0, 0));
+                }else if(customId == "72"){
+                  this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-								this.server.makeRequest(nowState.getRequestString(5, 0, 0, 0, 0));
-							}else if(customId == "73"){
-								this.newIndexOfPieceToPlay = -1;
+                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+                  this.server.makeRequest(nowState.getRequestString(5, 0, 0, 0, 0));
+                }else if(customId == "73"){
+                  this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-								this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
-							}else if(customId == "74"){
-								this.newIndexOfPieceToPlay = -1;
+                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+                  this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
+                }else if(customId == "74"){
+                  this.newIndexOfPieceToPlay = -1;
 
-								if(this.gameStatesStack.length >= 2){
-									this.gameStatesStack.pop();
+                  if(this.gameStatesStack.length >= 2){
+                    this.gameStatesStack.pop();
 
-									this.reloadEntities();
-								}
+                    this.reloadEntities();
+                  }
 
-								if(this.gameStatesStack.length == 1){
-									this.loopState = 1;
-								}
-							}
-						break;
-						case 3:
-							this.newLinePositionToPlay = Math.floor(customId / 10);
-    						this.newColPositionToPlay = customId % 10;
+                  if(this.gameStatesStack.length == 1){
+                    this.loopState = 1;
+                  }
+                }
+              break;
+              case 3:
+                this.newLinePositionToPlay = Math.floor(customId / 10);
+                this.newColPositionToPlay = customId % 10;
 
-    						var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+                var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
-							this.server.makeRequest(
-								nowState.getRequestString(
-									1, this.newIndexOfPieceToPlay,
-									this.newLinePositionToPlay, this.newColPositionToPlay,
-									0
-								)
-							);
-						break;
-						case 4:
-							this.changeLinePositionToPlay = Math.floor(customId / 10);
-    						this.changeColPositionToPlay = customId % 10;
-						break;
-						case 5:
-							var lineDir = Math.floor(customId / 10);
-							var colDir = customId % 10;
+                this.server.makeRequest(
+                  nowState.getRequestString(
+                    1, this.newIndexOfPieceToPlay,
+                    this.newLinePositionToPlay, this.newColPositionToPlay,
+                    0
+                  )
+                );
+              break;
+              case 4:
+                this.changeLinePositionToPlay = Math.floor(customId / 10);
+                  this.changeColPositionToPlay = customId % 10;
+              break;
+              case 5:
+                var lineDir = Math.floor(customId / 10);
+                var colDir = customId % 10;
 
-							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+                var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
-							if(lineDir != this.changeLinePositionToPlay && colDir != this.changeColPositionToPlay){
-								this.newIndexOfPieceToPlay = -1;
-								this.changeLinePositionToPlay = -1;
-								this.changeColPositionToPlay = -1;
-								this.loopState = 2;
-							}else if(lineDir<this.changeLinePositionToPlay){
-								this.server.makeRequest(
-									nowState.getRequestString(
-										2, this.newIndexOfPieceToPlay,
-										this.changeLinePositionToPlay, this.changeColPositionToPlay,
-										1
-									)
-								);
-							}else if(lineDir>this.changeLinePositionToPlay){
-								this.server.makeRequest(
-									nowState.getRequestString(
-										2, this.newIndexOfPieceToPlay,
-										this.changeLinePositionToPlay, this.changeColPositionToPlay,
-										3
-									)
-								);
-							}else if(colDir<this.changeColPositionToPlay){
-								this.server.makeRequest(
-									nowState.getRequestString(
-										2, this.newIndexOfPieceToPlay,
-										this.changeLinePositionToPlay, this.changeColPositionToPlay,
-										4
-									)
-								);
-							}else if(colDir>this.changeColPositionToPlay){
-								this.server.makeRequest(
-									nowState.getRequestString(
-										2, this.newIndexOfPieceToPlay,
-										this.changeLinePositionToPlay, this.changeColPositionToPlay,
-										2
-									)
-								);
-							}
-						break;
-					}
+                if(lineDir != this.changeLinePositionToPlay && colDir != this.changeColPositionToPlay){
+                  this.newIndexOfPieceToPlay = -1;
+                  this.changeLinePositionToPlay = -1;
+                  this.changeColPositionToPlay = -1;
+                  this.loopState = 2;
+                }else if(lineDir<this.changeLinePositionToPlay){
+                  this.server.makeRequest(
+                    nowState.getRequestString(
+                      2, this.newIndexOfPieceToPlay,
+                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
+                      1
+                    )
+                  );
+                }else if(lineDir>this.changeLinePositionToPlay){
+                  this.server.makeRequest(
+                    nowState.getRequestString(
+                      2, this.newIndexOfPieceToPlay,
+                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
+                      3
+                    )
+                  );
+                }else if(colDir<this.changeColPositionToPlay){
+                  this.server.makeRequest(
+                    nowState.getRequestString(
+                      2, this.newIndexOfPieceToPlay,
+                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
+                      4
+                    )
+                  );
+                }else if(colDir>this.changeColPositionToPlay){
+                  this.server.makeRequest(
+                    nowState.getRequestString(
+                      2, this.newIndexOfPieceToPlay,
+                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
+                      2
+                    )
+                  );
+                }
+              break;
+            }
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -321,9 +316,15 @@ XMLscene.prototype.logPicking = function (){
 
 XMLscene.prototype.gameLoop = function () {
 
+  if(this.stop){
+    return true;
+  }
+
 	this.logPicking();
 
 	switch(this.loopState){
+
+    /* Initial */
 		case 0:
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
@@ -339,6 +340,8 @@ XMLscene.prototype.gameLoop = function () {
 				this.server.replyReady = false;
 			}
 		break;
+
+    /* First move */
 		case 1:
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
@@ -357,8 +360,10 @@ XMLscene.prototype.gameLoop = function () {
 				this.server.replyReady = false;
 			}
 		break;
+
+    /* player moves */
 		case 2:
-    console.log("2");
+    console.log("state: 2");
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
@@ -382,7 +387,10 @@ XMLscene.prototype.gameLoop = function () {
 				}
 			}
 		break;
+
+    /* Choose board position */
 		case 3:
+    console.log("3");
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
@@ -391,8 +399,11 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
-					this.reloadEntities();
+          this.objSelected.setBoardPosition(this.newColPositionToPlay - 5, 0, this.newLinePositionToPlay - 5);
+          this.objSelected.changeAnimation("board");
+          //this.reloadEntities();
 				}else{
+          this.objSelected.changeAnimation("iddle");
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
 					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -408,6 +419,7 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 5:
+    console.log("5");
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
@@ -562,9 +574,10 @@ XMLscene.prototype.reloadEntities = function () {
         p.line = 3;
       }
 
-      if(this.loopState == 1 ){
+      if(this.loopState == 1){
         p.changeAnimation("bag");
-      }else {
+      }else if(this.loopState == 2){
+        p.hide == false;
         p.handPosition();
         p.changeAnimation("iddle");
       }
@@ -574,7 +587,7 @@ XMLscene.prototype.reloadEntities = function () {
   	for(var line=0; line<nowState.board.length; line++){
   		for(var col=0; col<nowState.board[line].length; col++){
   			if(nowState.board[line][col] != "sunTile" && nowState.board[line][col] != "free" && nowState.board[line][col] != "moonTile"){
-  				new Piece(this, "board", this.objects['piece'], nowState.board[line][col], line + 1, col + 1);
+  				var p = new Piece(this, "board", this.objects['piece'], nowState.board[line][col], line + 1, col + 1);
   			}
   		}
   	}

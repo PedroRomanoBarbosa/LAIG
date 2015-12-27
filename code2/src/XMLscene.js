@@ -506,13 +506,13 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			if(this.state.playerTurn == 1){
 				if(obj.ID.substring(0, 9) == 'piece-p1-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
-				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p2-'){
+				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else if(this.state.playerTurn == 2){
 				if(obj.ID.substring(0, 9) == 'piece-p2-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
-				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p1-'){
+				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else{
@@ -533,7 +533,7 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(70, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-undo'){
 					this.registerForPick(74, obj);
-				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
+				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else if(this.state.playerTurn == 2){
@@ -549,7 +549,7 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(70, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-undo'){
 					this.registerForPick(74, obj);
-				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
+				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else{
@@ -566,7 +566,7 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 		case 4:
 			if(obj.ID.substring(0, 8) == 'piece-b-'){
 				this.registerForPick(parseInt(obj.ID.substring(8)), obj);
-			}else if(obj.ID.substring(0, 7) == 'piece-p' || obj.ID.substring(0, 7) == 'option-' || obj.ID == "board"){
+			}else if(obj.ID.substring(0, 7) == 'piece-p' || obj.ID.substring(0, 7) == 'option-' || obj.ID == "board" || obj.ID.substring(0, 7) == 'screen-'){
 				this.clearPickRegistration();
 			}
 		break;

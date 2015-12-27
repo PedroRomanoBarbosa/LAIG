@@ -126,6 +126,10 @@ XMLscene.prototype.onGraphLoaded = function () {
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
 
+  this.maxTurnTime = 70;
+  this.turnTimerStamp = 0;
+  this.turnTimeAcc = 0;
+
   console.log(this);
   /* Update scene */
   this.setUpdatePeriod(1000/60);
@@ -165,9 +169,12 @@ XMLscene.prototype.updateObjects = function(){
       if(obj instanceof Piece){
         obj.animate(this.timeInterval/1000);
       }
+      if(this.turnTimeAcc > 0)
+      	this.turnTimeAcc = this.maxTurnTime - (this.secondsPassed - this.turnTimerStamp);
+
       if(obj.ID.substring(0, 7) == "screen-"){
       	if(obj.ID.substring(0, 12) == "screen-timer"){
-			obj.valueToShow = 70;
+			obj.valueToShow = Math.floor(this.turnTimeAcc);
       	}
       	if(obj.ID.substring(0, 12) == "screen-board" && obj.ID.substring(13, 14) == "1"){
 			if(this.gameStatesStack.length > 0){
@@ -362,6 +369,8 @@ XMLscene.prototype.gameLoop = function () {
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState++;
 					this.reloadEntities();
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
 					this.clearPickRegistration();
 				}else{
 					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -385,6 +394,8 @@ XMLscene.prototype.gameLoop = function () {
 
 						this.newIndexOfPieceToPlay = -1;
 						this.reloadEntities();
+						this.turnTimeAcc = this.maxTurnTime;
+						this.turnTimerStamp = this.secondsPassed;
 					}else{
 						this.newIndexOfPieceToPlay = -1;
 						this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -403,6 +414,8 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
 					this.reloadEntities();
 				}else{
 					this.newIndexOfPieceToPlay = -1;
@@ -427,6 +440,8 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
 					this.reloadEntities();
 				}else{
 					this.newIndexOfPieceToPlay = -1;

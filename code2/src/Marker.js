@@ -72,7 +72,7 @@ Marker.prototype.setShaderValues = function(){
 		this.scene.textShader.setUniformsValues({'charCoords': [Math.floor(this.valueToShow / 10) - 0.2, 3]});
   	}
   	if(this.ID.substring(0, 12) == "screen-board" && this.ID.substring(14, 15) == "2" ||
-  	   this.ID.substring(0, 12) == "screen-timer" && this.ID.substring(14, 15) == "2" ){
+  	   this.ID.substring(0, 12) == "screen-timer" && this.ID.substring(14, 15) == "2"){
 		this.scene.setActiveShaderSimple(this.scene.textShader);
 
 		this.scene.textShader.setUniformsValues({'dims': [16, 16.3]});
@@ -81,5 +81,19 @@ Marker.prototype.setShaderValues = function(){
 		this.scene.textShader.setUniformsValues({'uSampler2': 1});
 
 		this.scene.textShader.setUniformsValues({'charCoords': [this.valueToShow % 10 - 0.1, 3]});
+  	}
+  	if(this.ID.substring(0, 12) == "screen-infor" && this.ID.substring(12, 13) == "1"){
+		this.scene.setActiveShaderSimple(this.scene.textShader);
+
+		this.scene.textShader.setUniformsValues({'dims': [16, 16.3]});
+
+		this.scene.textShader.setUniformsValues({'uSampler': 0});
+		this.scene.textShader.setUniformsValues({'uSampler2': 1});
+
+		if(this.valueToShow == 1){
+			this.scene.textShader.setUniformsValues({'charCoords': [1, 0]});
+		}else{
+			this.scene.textShader.setUniformsValues({'charCoords': [0, 0]});
+		}
   	}
 };

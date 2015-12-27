@@ -365,7 +365,7 @@
 		<!-- SCREEN -->
 
 		<NODE id="screen-timer110">
-			<TRANSLATION x="-9" y="6" z="2" />
+			<TRANSLATION x="-10.5" y="6" z="2" />
 			<ROTATION axis="x" angle="45" />
 			<SCALE sx="0.8" sy="1" sz="0.8" />
 			<MATERIAL id="m" />
@@ -376,7 +376,7 @@
 		</NODE>
 
 		<NODE id="screen-timer111">
-			<TRANSLATION x="-9.6" y="5.1" z="2.9" />
+			<TRANSLATION x="-11.1" y="5.1" z="2.9" />
 			<ROTATION axis="x" angle="45" />
 			<SCALE sx="0.4" sy="1" sz="0.7" />
 			<MATERIAL id="m" />
@@ -387,7 +387,7 @@
 		</NODE>
 
 		<NODE id="screen-timer112">
-			<TRANSLATION x="-8.4" y="5.1" z="2.9" />
+			<TRANSLATION x="-9.9" y="5.1" z="2.9" />
 			<ROTATION axis="x" angle="45" />
 			<SCALE sx="0.4" sy="1" sz="0.7" />
 			<MATERIAL id="m" />
@@ -463,8 +463,23 @@
 			</DESCENDANTS>
 		</NODE>
 
+		<NODE id="screen-infor111">
+			<TRANSLATION x="-10.5" y="1.5" z="6.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="free" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+
+
+
+
 		<NODE id="screen-timer210">
-			<TRANSLATION x="9" y="6" z="-2" />
+			<TRANSLATION x="10.5" y="6" z="-2" />
 			<ROTATION axis="x" angle="-45" />
 			<ROTATION axis="y" angle="180" />
 			<SCALE sx="0.8" sy="1" sz="0.8" />
@@ -476,7 +491,7 @@
 		</NODE>
 
 		<NODE id="screen-timer211">
-			<TRANSLATION x="9.6" y="5.1" z="-2.9" />
+			<TRANSLATION x="11.1" y="5.1" z="-2.9" />
 			<ROTATION axis="x" angle="-45" />
 			<ROTATION axis="y" angle="180" />
 			<SCALE sx="0.4" sy="1" sz="0.7" />
@@ -488,7 +503,7 @@
 		</NODE>
 
 		<NODE id="screen-timer212">
-			<TRANSLATION x="8.4" y="5.1" z="-2.9" />
+			<TRANSLATION x="9.9" y="5.1" z="-2.9" />
 			<ROTATION axis="x" angle="-45" />
 			<ROTATION axis="y" angle="180" />
 			<SCALE sx="0.4" sy="1" sz="0.7" />

@@ -51,7 +51,7 @@ XMLscene.prototype.init = function (application) {
 
     this.lightsVisible = false;
 	this.showAxis = false;
-	this.maxTurnTime = 70;
+	this.maxTurnTime = 30;
 
 	this.app.setInterface(this.myInterface);
 };
@@ -177,6 +177,14 @@ XMLscene.prototype.updateObjects = function(){
       if(obj.ID.substring(0, 7) == "screen-"){
       	if(obj.ID.substring(0, 12) == "screen-timer"){
 			obj.valueToShow = Math.floor(this.turnTimeAcc);
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-infor"){
+      		if(this.gameStatesStack.length > 0){
+      			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+      			obj.valueToShow = nowState.playerTurn;
+      		}else{
+      			obj.valueToShow = 0;
+      		}
       	}
       	if(obj.ID.substring(0, 12) == "screen-board" && obj.ID.substring(13, 14) == "1"){
 			if(this.gameStatesStack.length > 0){
@@ -523,13 +531,21 @@ XMLscene.prototype.gameLoop = function () {
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
-				this.gameStatesStack.push(this.state);
+				if(this.state.validState){
+					this.gameStatesStack.push(this.state);
 
-				this.newIndexOfPieceToPlay = -1;
-				this.loopState = 2;
-				this.turnTimeAcc = this.maxTurnTime;
-				this.turnTimerStamp = this.secondsPassed;
-				this.reloadEntities();
+					this.newIndexOfPieceToPlay = -1;
+					this.loopState = 2;
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
+					this.reloadEntities();
+				}else{
+					this.newIndexOfPieceToPlay = -1;
+					this.changeLinePositionToPlay = -1;
+					this.changeColPositionToPlay = -1;
+					this.loopState = 2;
+					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+				}
 
 				this.server.replyReady = false;
 			}

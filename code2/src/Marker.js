@@ -60,7 +60,8 @@ function Marker(scene, markerForm, font) {
 };
 
 Marker.prototype.setShaderValues = function(){
-	if(this.ID.substring(0, 12) == "screen-board" && this.ID.substring(14, 15) == "1"){
+	if(this.ID.substring(0, 12) == "screen-board" && this.ID.substring(14, 15) == "1" ||
+	   this.ID.substring(0, 12) == "screen-timer" && this.ID.substring(14, 15) == "1" ){
 		this.scene.setActiveShaderSimple(this.scene.textShader);
 
 		this.scene.textShader.setUniformsValues({'dims': [16.3, 16.3]});
@@ -70,7 +71,8 @@ Marker.prototype.setShaderValues = function(){
 
 		this.scene.textShader.setUniformsValues({'charCoords': [Math.floor(this.valueToShow / 10) - 0.2, 3]});
   	}
-  	if(this.ID.substring(0, 12) == "screen-board" && this.ID.substring(14, 15) == "2"){
+  	if(this.ID.substring(0, 12) == "screen-board" && this.ID.substring(14, 15) == "2" ||
+  	   this.ID.substring(0, 12) == "screen-timer" && this.ID.substring(14, 15) == "2" ){
 		this.scene.setActiveShaderSimple(this.scene.textShader);
 
 		this.scene.textShader.setUniformsValues({'dims': [16, 16.3]});

@@ -166,6 +166,9 @@ XMLscene.prototype.updateObjects = function(){
         obj.animate(this.timeInterval/1000);
       }
       if(obj.ID.substring(0, 7) == "screen-"){
+      	if(obj.ID.substring(0, 12) == "screen-timer"){
+			obj.valueToShow = 70;
+      	}
       	if(obj.ID.substring(0, 12) == "screen-board" && obj.ID.substring(13, 14) == "1"){
 			if(this.gameStatesStack.length > 0){
 				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];

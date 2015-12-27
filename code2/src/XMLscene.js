@@ -46,9 +46,14 @@ XMLscene.prototype.init = function (application) {
 	  this.startGame = true;
     this.stop = false;
     this.hasInited = false;
+    this.p2FirstTurn = true;
 
     this.loopState = 0;
     this.gameStatesStack = [];
+
+    this.aniTime = 0;
+    this.rotationTime = 1;
+    this.rotateScene = false;
 
 };
 
@@ -145,6 +150,9 @@ XMLscene.prototype.update = function (){
       this.lastDate = this.currentDate;
       this.secondsPassed = (this.lastUpdate - this.startTime) / 1000;
       this.updateObjects();
+      if(this.rotateScene){
+        this.rotateSceneAnimation(this.timeInterval/1000);
+      }
     }
   }
 };
@@ -160,7 +168,21 @@ XMLscene.prototype.updateObjects = function(){
         obj.animate(this.timeInterval/1000);
       }
     }
-}
+  }
+};
+
+XMLscene.prototype.rotateSceneAnimation = function(time){
+  /* reset matrix */
+  mat4.identity(this.m);
+  this.aniTime += time;
+  /* Reset animation time */
+	if(this.aniTime > this.rotationTime){
+    mat4.rotate(this.m, this.m, 180 * Math.PI / 180, [0, 1, 0]);
+    this.rotateScene = false;
+		this.aniTime = 0;
+	}else {
+	  mat4.rotate(this.m, this.m, this.aniTime * 180 * Math.PI / 180, [0, 1, 0]);
+	}
 };
 
 //------------------------------------------------------------------------------------------------------------
@@ -374,6 +396,9 @@ XMLscene.prototype.gameLoop = function () {
 					this.state = new GameState(this.server.answer);
 
 					if(this.state.validState){
+            if(this.p2FirstTurn){
+              this.p2FirstTurn = false;
+            }
 						this.gameStatesStack.push(this.state);
 
 						this.newIndexOfPieceToPlay = -1;
@@ -535,7 +560,7 @@ XMLscene.prototype.reloadEntities = function () {
 		this.root.descendants.push(this.rootCleanup[i]);
 	}
 
-	this.numHandPiecesP1 = 1;
+	  this.numHandPiecesP1 = 1;
   	this.numHandPiecesP2 = 1;
   	this.changeLinePositionToPlay = -1;
     this.changeColPositionToPlay = -1;
@@ -553,13 +578,26 @@ XMLscene.prototype.reloadEntities = function () {
         p.line = 3;
       }
 
-      if(this.loopState == 1 || p.numPiece == 0){
-        p.changeAnimation("bag");
-      }else if(this.loopState == 2){
-        p.hide == false;
-        p.handPosition();
-        p.changeAnimation("iddle");
+      /*
+      Decide animations, position and visibility
+      depending on game state and player turn
+      */
+      switch (this.loopState) {
+        case 1:
+          p.changeAnimation("bag");
+          break;
+        case 2:
+          if(p.numPiece == 0 && nowState.playerTurn == 1){
+            p.changeAnimation("bag");
+          }else if(p.numPiece == 0){
+            p.hide = true;
+          }else{
+            p.handPosition();
+            p.changeAnimation("iddle");
+          }
+          break;
       }
+
       this.numHandPiecesP1++;
   	}
 
@@ -574,12 +612,28 @@ XMLscene.prototype.reloadEntities = function () {
         p.line = 3;
       }
 
-      if(this.loopState == 1){
-        p.changeAnimation("bag");
-      }else if(this.loopState == 2){
-        p.hide == false;
-        p.handPosition();
-        p.changeAnimation("iddle");
+      /*
+      Decide animations, position and visibility
+      depending on game state and player turn
+      */
+      switch (this.loopState) {
+        case 1:
+          p.changeAnimation("bag");
+          break;
+        case 2:
+          if(this.p2FirstTurn){
+            p.handPosition();
+            p.changeAnimation("iddle");
+            this.p2FirstTurn = false;
+          }else if(p.numPiece == 0 && nowState.playerTurn == 2){
+            p.changeAnimation("bag");
+          }else if(p.numPiece == 0){
+              p.hide = true;
+          }else{
+            p.handPosition();
+            p.changeAnimation("iddle");
+          }
+          break;
       }
       this.numHandPiecesP2++;
   	}
@@ -960,6 +1014,12 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 
   if(obj instanceof Piece){
     if(obj.hide){
+      return true;
+    }
+    if(obj.dest == "p1" && this.hidePlayer1Pieces){
+      return true;
+    }
+    if(obj.dest == "p2" && this.hidePlayer2Pieces){
       return true;
     }
   }

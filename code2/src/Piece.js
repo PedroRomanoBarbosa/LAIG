@@ -229,6 +229,8 @@ Piece.prototype.boardAnimation = function(time){
 			this.angle.x = 0;
 			this.changeAnimation("iddle");
 			this.scene.stop = false;
+			this.scene.reloadEntities();
+			this.scene.rotateScene = true;
 		}else {
 			var percentage = (this.aniTime/this.boardTime);
 			var P2 = {x: 0, y:5, z:0};

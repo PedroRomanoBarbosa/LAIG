@@ -24,7 +24,7 @@ function GameState(str) {
 	this.validState = true;
 
 	if(this.parseString(str) == false){
-		if(str == "bad"){
+		if(str == "bad" || str == "Syntax Error"){
 			this.validState = false;
 			console.log("Invalid play try again!");
 		}else

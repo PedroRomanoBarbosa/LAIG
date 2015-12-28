@@ -128,6 +128,13 @@ XMLscene.prototype.onGraphLoaded = function () {
   	}
   }
 
+  this.objectsCleanup = {};
+  for (var key in this.objects) {
+  	if (this.objects.hasOwnProperty(key)) {
+  		this.objectsCleanup[key] = this.objects[key];
+  	}
+  }
+
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
 
@@ -669,6 +676,13 @@ XMLscene.prototype.reloadEntities = function () {
 	for(var i=0; i<this.rootCleanup.length; i++){
 		this.root.descendants.push(this.rootCleanup[i]);
 	}
+
+	this.objects = {};
+	  for (var key in this.objectsCleanup) {
+		if (this.objectsCleanup.hasOwnProperty(key)) {
+			this.objects[key] = this.objectsCleanup[key];
+		}
+	  }
 
 	this.numHandPiecesP1 = 1;
   	this.numHandPiecesP2 = 1;

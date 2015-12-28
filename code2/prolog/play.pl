@@ -219,10 +219,16 @@ playStatePCEasy(BL, PN, NBL, NPN) :-
 						);
 						(
 							randomPosition(LISTPOS, POS),
-							gainStonesPC(POS, BL, PN),
-							tileToSunStone(POS, BL, PN),
-							replacePiece(PIECE, POS, BL, NBL),
-							deletePieceFromHand(PN, X)
+							( isAValidPlay(PIECE, POS, BL), isEmptyTile(POS, BL) ) ->
+							(
+								gainStonesPC(POS, BL, PN),
+								tileToSunStone(POS, BL, PN),
+								replacePiece(PIECE, POS, BL, NBL),
+								deletePieceFromHand(PN, X)
+							);
+							(
+								fail
+							)
 						)
 					)
 				)
@@ -336,11 +342,17 @@ playStatePCHard(BL, PN, NBL, NPN) :-
 									);
 									(
 										randomPosition(LISTPOS, POS),
-										gainStonesPC(POS, BL, PN),
-										tileToSunStone(POS, BL, PN),
-										replacePiece(PIECE, POS, BL, NBL),
-										deletePieceFromHand(PN, X),
-										decMove(PN)
+										( isAValidPlay(PIECE, POS, BL), isEmptyTile(POS, BL) ) ->
+										(
+											gainStonesPC(POS, BL, PN),
+											tileToSunStone(POS, BL, PN),
+											replacePiece(PIECE, POS, BL, NBL),
+											deletePieceFromHand(PN, X),
+											decMove(PN)
+										);
+										(
+											fail
+										)
 									)
 								)
 							)

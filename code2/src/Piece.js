@@ -329,7 +329,7 @@ Piece.prototype.movingAnimation = function(time){
 		}else {
 			var percentage = (this.aniTime/this.movingTime);
 			var P2 = {x: 0, y:2, z:0};
-			var P3 = {x: 0, y:2, z:0};
+			var P3 = {x: 0, y:2, z:1};
 			var P1 = {x: 0, y:0, z:0};
 			var pos = this.getBezier(percentage, P1, P2, P3, P4);
 			var x = pos.z*Math.cos(angle);

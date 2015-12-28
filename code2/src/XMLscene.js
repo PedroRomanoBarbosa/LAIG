@@ -219,7 +219,6 @@ XMLscene.prototype.logPicking = function (){
                 this.objSelected = obj;
                 obj.changeAnimation("chosen");
             }else if (this.loopState == 4 ) {
-                console.log("object selected");
                 this.objSelectedToMove = obj;
                 this.objSelectedToMove.changeAnimation("boardChosen");
             }
@@ -456,7 +455,6 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 5:
-      console.log("state: 5");
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
@@ -465,7 +463,6 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
-          console.log(this.movingDirection);
           switch (this.movingDirection) {
             case "up":
               this.objSelectedToMove.setBoardPosition(this.changeColPositionToPlay - 5, 0, this.changeLinePositionToPlay - 5 - 1);
@@ -664,6 +661,7 @@ XMLscene.prototype.reloadEntities = function () {
       }
       this.numHandPiecesP2++;
   	}
+
 
   	for(var line=0; line<nowState.board.length; line++){
   		for(var col=0; col<nowState.board[line].length; col++){

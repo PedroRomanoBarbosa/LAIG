@@ -55,6 +55,7 @@ XMLscene.prototype.init = function (application) {
     this.rotationTime = 1;
     this.rotationAngle = 180 / this.rotationTime;
     this.rotateScene = false;
+    this.movingDirection = "up";
 
 };
 
@@ -216,8 +217,11 @@ XMLscene.prototype.logPicking = function (){
                 }
             }else if (this.loopState == 2 ) {
                 this.objSelected = obj;
-                obj.setBoardPosition(1,0,1);
                 obj.changeAnimation("chosen");
+            }else if (this.loopState == 4 ) {
+                console.log("object selected");
+                this.objSelectedToMove = obj;
+                this.objSelectedToMove.changeAnimation("boardChosen");
             }
           }
 
@@ -257,6 +261,7 @@ XMLscene.prototype.logPicking = function (){
                   var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
                   this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
                 }else if(customId == "74"){
+                  this.rotateScene = true;
                   this.newIndexOfPieceToPlay = -1;
 
                   if(this.gameStatesStack.length >= 2){
@@ -299,6 +304,8 @@ XMLscene.prototype.logPicking = function (){
                   this.changeLinePositionToPlay = -1;
                   this.changeColPositionToPlay = -1;
                   this.loopState = 2;
+                  this.objSelected.changeAnimation("iddle");
+                  this.objSelectedToMove.changeAnimation("iddle");
                 }else if(lineDir<this.changeLinePositionToPlay){
                   this.server.makeRequest(
                     nowState.getRequestString(
@@ -307,6 +314,7 @@ XMLscene.prototype.logPicking = function (){
                       1
                     )
                   );
+                  this.movingDirection = "up";
                 }else if(lineDir>this.changeLinePositionToPlay){
                   this.server.makeRequest(
                     nowState.getRequestString(
@@ -315,6 +323,7 @@ XMLscene.prototype.logPicking = function (){
                       3
                     )
                   );
+                  this.movingDirection = "down";
                 }else if(colDir<this.changeColPositionToPlay){
                   this.server.makeRequest(
                     nowState.getRequestString(
@@ -323,6 +332,7 @@ XMLscene.prototype.logPicking = function (){
                       4
                     )
                   );
+                  this.movingDirection = "left";
                 }else if(colDir>this.changeColPositionToPlay){
                   this.server.makeRequest(
                     nowState.getRequestString(
@@ -331,6 +341,7 @@ XMLscene.prototype.logPicking = function (){
                       2
                     )
                   );
+                  this.movingDirection = "right";
                 }
               break;
             }
@@ -390,7 +401,6 @@ XMLscene.prototype.gameLoop = function () {
 
     /* player moves */
 		case 2:
-    console.log("state: 2");
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
@@ -420,7 +430,6 @@ XMLscene.prototype.gameLoop = function () {
 
     /* Choose board position */
 		case 3:
-    console.log("3");
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
@@ -431,7 +440,6 @@ XMLscene.prototype.gameLoop = function () {
 					this.loopState = 2;
           this.objSelected.setBoardPosition(this.newColPositionToPlay - 5, 0, this.newLinePositionToPlay - 5);
           this.objSelected.changeAnimation("board");
-          //this.reloadEntities();
 				}else{
           this.objSelected.changeAnimation("iddle");
 					this.newIndexOfPieceToPlay = -1;
@@ -443,13 +451,12 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 4:
-    console.log("4");
 			if(this.changeLinePositionToPlay != -1 && this.changeColPositionToPlay != -1){
 				this.loopState++;
 			}
 		break;
 		case 5:
-    console.log("5");
+      console.log("state: 5");
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
@@ -458,7 +465,22 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
-					this.reloadEntities();
+          console.log(this.movingDirection);
+          switch (this.movingDirection) {
+            case "up":
+              this.objSelectedToMove.setBoardPosition(this.changeColPositionToPlay - 5, 0, this.changeLinePositionToPlay - 5 - 1);
+              break;
+            case "down":
+              this.objSelectedToMove.setBoardPosition(this.changeColPositionToPlay - 5, 0, this.changeLinePositionToPlay - 5 + 1);
+              break;
+            case "left":
+              this.objSelectedToMove.setBoardPosition(this.changeColPositionToPlay - 5 - 1, 0, this.changeLinePositionToPlay - 5);
+              break;
+            case "right":
+              this.objSelectedToMove.setBoardPosition(this.changeColPositionToPlay - 5 + 1, 0, this.changeLinePositionToPlay - 5);
+              break;
+          }
+          this.objSelectedToMove.changeAnimation("moving");
 				}else{
 					this.newIndexOfPieceToPlay = -1;
 					this.changeLinePositionToPlay = -1;

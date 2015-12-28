@@ -35,6 +35,8 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 	this.boardTime = 0.7;
 	this.boardPos = {x:0, y:0, z:0};
 
+	this.movingTime = 0.5;
+
 	mat4.identity(this.matx);
 
 	switch(destination){
@@ -64,7 +66,9 @@ Piece.prototype.animate = function(time) {
 			break;
 		case "chosen":
 			this.chosenAnimation(time);
+			break;
 		case "moving":
+			this.movingAnimation(time);
 			break;
 		case "bag":
 			this.bagAnimation(time);
@@ -72,7 +76,39 @@ Piece.prototype.animate = function(time) {
 		case "board":
 			this.boardAnimation(time);
 			break;
+		case "boardChosen":
+			this.boardChosenAnimation(time);
+			break;
 	}
+}
+
+Piece.prototype.boardChosenAnimation = function(time){
+	this.aniTime += time;
+	var angle = (this.chosenVel*this.aniTime);
+	/* First part */
+	if(angle < 45){
+		this.angleY = -1 * angle;
+	/* Second part */
+	}else if (angle < 135) {
+		this.angleY = -90 + angle;
+	/* Third part */
+	}else if (angle < 180) {
+		this.angleY = 180 - angle;
+	}else{
+			this.angleY = 0;
+	}
+
+	/* reset matrix */
+	mat4.identity(this.matx);
+	mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
+	mat4.rotate(this.matx, this.matx, this.angleY * Math.PI / 180, [0, 1, 0]);
+
+	/* Reset animation time */
+	if(this.aniTime > this.chosenTime){
+		this.aniTime = 0;
+	}
+
+	mat4.multiply(this.matx,this.matx,this.primMatx);
 }
 
 Piece.prototype.chosenAnimation = function(time){
@@ -113,6 +149,9 @@ Piece.prototype.iddleAnimation = function(){
 
 	if(this.dest == "board"){
 		mat4.translate(this.matx, this.matx, [this.col - 5,0,this.line - 5]);
+		this.pos.x = this.col - 5;
+		this.pos.y = 0;
+		this.pos.z = this.line - 5;
 	}else {
 		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
 		mat4.rotate(this.matx, this.matx, this.angle.x*Math.PI/180, [1, 0, 0]);
@@ -257,8 +296,51 @@ Piece.prototype.boardAnimation = function(time){
 		mat4.multiply(this.matx,this.matx,this.primMatx);
 }
 
+Piece.prototype.movingAnimation = function(time){
+	  this.aniTime += time;
+
+		/* Final point */
+		var P4 = {x: this.boardPos.x-this.pos.x, y: this.boardPos.y-this.pos.y, z: this.boardPos.z-this.pos.z};
+		var d = Math.sqrt((P4.x)*(P4.x) + (P4.z)*(P4.z));
+
+		/* Get angle */
+		var angle = Math.atan2(P4.z,P4.x);
+
+		/* reset matrix */
+		mat4.identity(this.matx);
+
+		/* Applies transformations */
+		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
+
+		/* Reset animation time */
+		if(this.aniTime > this.movingTime){
+			this.aniTime = 0;
+			var x = d*Math.cos(angle);
+			var z = d*Math.sin(angle);
+			mat4.translate(this.matx, this.matx, [P4.x,P4.y,P4.z]);
+			this.pos.x = this.boardPos.x;
+			this.pos.y = this.boardPos.y;
+			this.pos.z = this.boardPos.z;
+			this.angle.x = 0;
+			this.changeAnimation("iddle");
+			this.scene.stop = false;
+			this.scene.reloadEntities();
+			this.scene.rotateScene = true;
+		}else {
+			var percentage = (this.aniTime/this.movingTime);
+			var P2 = {x: 0, y:2, z:0};
+			var P3 = {x: 0, y:2, z:0};
+			var P1 = {x: 0, y:0, z:0};
+			var pos = this.getBezier(percentage, P1, P2, P3, P4);
+			var x = pos.z*Math.cos(angle);
+			var z = pos.z*Math.sin(angle);
+			mat4.translate(this.matx, this.matx, [x,pos.y,z]);
+		}
+		mat4.multiply(this.matx,this.matx,this.primMatx);
+}
+
 Piece.prototype.changeAnimation = function(name){
-	if(name != "iddle" && name != "chosen" && name != "moving" && name != "bag" && name != "board"){
+	if(name != "iddle" && name != "chosen" && name != "moving" && name != "bag" && name != "board" && name != "boardChosen"){
 		console.log("The name of the animation given in change animation is not valid");
 		return false;
 	}

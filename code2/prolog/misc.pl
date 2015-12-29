@@ -180,7 +180,7 @@ countSunTilePositionsList([H|T], BL, IN, N) :-
 countSunTilePositions([], [], _).
 countSunTilePositions([H|T], FL, BL) :-
 	(
-		H == wind/piece ->
+		H == wind-piece ->
 		(
 			FL = [0|B],
 			countSunTilePositions(T, B, BL)

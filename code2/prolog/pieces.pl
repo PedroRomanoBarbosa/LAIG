@@ -6,14 +6,14 @@
 form(bird).
 form(turtle).
 form(feather).
-form(dolphin).
+%form(dolphin).
 form(lizard).
 form(flower).
 
 %colours of the pieces
 colour(cyan).
 colour(green).
-colour(purple).
+%colour(purple).
 colour(blue).
 colour(yellow).
 colour(red).

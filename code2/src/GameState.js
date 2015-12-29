@@ -34,6 +34,8 @@ function GameState(str) {
 
 GameState.prototype.parseString = function(str){
 
+	console.log(str);
+
 	var holder = "";
 
 	var i = 0;
@@ -104,7 +106,7 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player1Pieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;
@@ -119,7 +121,7 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player1HandPieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;
@@ -156,7 +158,7 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player2Pieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;
@@ -171,7 +173,7 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player2HandPieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;

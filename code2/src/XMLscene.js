@@ -255,7 +255,10 @@ XMLscene.prototype.logPicking = function (){
 								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
 								this.playerMode = "pchard";
 							}else if(customId == "303"){
-								console.log("pc vs pc");
+								this.startGame = true;
+								this.path = "jogo/jogo.lsx"
+								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pcvpc";
 							}
 						break;
 						case 1:
@@ -374,7 +377,7 @@ XMLscene.prototype.logPicking = function (){
 						case 7:
 						break;
 						case 8:
-						break;
+						break;					
 					}
 				}
 			}
@@ -412,12 +415,17 @@ XMLscene.prototype.gameLoop = function () {
 					this.loopState++;
 					this.reloadEntities();
 					this.clearPickRegistration();
+
+					if(this.playerMode == "pcvpc"){
+						var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+						this.server.makeRequest(nowState.getRequestString(8, 0, 0, 0, 0));
+					}
 				}
 
 				this.server.replyReady = false;
 			}
 		break;
-		case 1:			
+		case 1:
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
 
@@ -429,7 +437,7 @@ XMLscene.prototype.gameLoop = function () {
 					if(this.playerMode == "pvp")
 						this.loopState++;
 					else
-						this.loopState = 6;
+						this.loopState = 2;
 
 					this.reloadEntities();
 					this.turnTimeAcc = this.maxTurnTime;
@@ -449,8 +457,10 @@ XMLscene.prototype.gameLoop = function () {
 				if(nowState.playerTurn == 2){
 					if(this.playerMode == "pceasy")
 						this.loopState = 6;
-					else if(this.playerMode == "pchard")
+					else if(this.playerMode == "pchard" || this.playerMode == "pcvpc")
 						this.loopState = 8;
+				}else if(this.playerMode == "pcvpc"){
+					this.loopState = 8;
 				}
 			}
 

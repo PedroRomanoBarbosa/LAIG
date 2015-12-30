@@ -6,7 +6,7 @@
 form(bird).
 form(turtle).
 form(feather).
-form(dolphin).
+%form(dolphin).
 form(lizard).
 form(flower).
 

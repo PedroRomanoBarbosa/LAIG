@@ -70,6 +70,7 @@ XMLscene.prototype.initLights = function () {
 */
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 3));
+    //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -3));
 };
 
 /**
@@ -185,7 +186,23 @@ XMLscene.prototype.updateObjects = function(){
       	if(obj.ID.substring(0, 12) == "screen-timer"){
 			obj.valueToShow = Math.floor(this.turnTimeAcc);
       	}
-      	if(obj.ID.substring(0, 12) == "screen-infor"){
+      	if(obj.ID.substring(0, 12) == "screen-winds"){
+			if(this.gameStatesStack.length > 1){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				obj.valueToShow = nowState.numberOfWindPiecesDiscarded;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-infor" && obj.ID.substring(13, 14) == "1"){
+      		if(this.gameStatesStack.length > 0){
+      			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+      			obj.valueToShow = nowState.playerTurn;
+      		}else{
+      			obj.valueToShow = 0;
+      		}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-infor" && obj.ID.substring(13, 14) == "2"){
       		if(this.gameStatesStack.length > 0){
       			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
       			obj.valueToShow = nowState.playerTurn;
@@ -205,6 +222,28 @@ XMLscene.prototype.updateObjects = function(){
 			if(this.gameStatesStack.length > 0){
 				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 				obj.valueToShow = nowState.player2Pieces.length + nowState.player2HandPieces.length;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-halfs"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				if(obj.ID.substring(12, 13) == "1")
+					obj.valueToShow = nowState.player1HalfStones;
+				else
+					obj.valueToShow = nowState.player2HalfStones;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-sunss"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				if(obj.ID.substring(12, 13) == "1")
+					obj.valueToShow = nowState.player1SunStones;
+				else
+					obj.valueToShow = nowState.player2SunStones;
 			}else{
 				obj.valueToShow = 0;
 			}
@@ -241,23 +280,19 @@ XMLscene.prototype.logPicking = function (){
 						case 0:
 							if(customId == "300"){
 								this.startGame = true;
-								this.path = "jogo/jogo.lsx"
-								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								new MySceneGraph("jogo/jogo.lsx", this);
 								this.playerMode = "pvp";
 							}else if(customId == "301"){
 								this.startGame = true;
-								this.path = "jogo/jogo.lsx"
-								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								new MySceneGraph("jogo/jogo.lsx", this);
 								this.playerMode = "pceasy";
 							}else if(customId == "302"){
 								this.startGame = true;
-								this.path = "jogo/jogo.lsx"
-								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								new MySceneGraph("jogo/jogo.lsx", this);
 								this.playerMode = "pchard";
 							}else if(customId == "303"){
 								this.startGame = true;
-								this.path = "jogo/jogo.lsx"
-								var newGraph = new MySceneGraph("jogo/jogo.lsx", this);
+								new MySceneGraph("jogo/jogo.lsx", this);
 								this.playerMode = "pcvpc";
 							}
 						break;
@@ -305,6 +340,9 @@ XMLscene.prototype.logPicking = function (){
 
 								this.turnTimeAcc = this.maxTurnTime;
 								this.turnTimerStamp = this.secondsPassed;
+							}else if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
 							}
 						break;
 						case 3:
@@ -371,12 +409,28 @@ XMLscene.prototype.logPicking = function (){
 							}
 						break;
 						case 6:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
 						break;
 						case 7:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
 						break;
 						case 8:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
 						break;
 						case 9:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
 						break;
 					}
 				}
@@ -387,6 +441,8 @@ XMLscene.prototype.logPicking = function (){
 }
 
 XMLscene.prototype.gameLoop = function () {
+
+	console.log(this.loopState);
 
 	this.logPicking();
 
@@ -602,16 +658,20 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 		break;
 		case 1:
 			this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
-			
+
 			if(this.state.playerTurn == 1){
 				if(obj.ID.substring(0, 9) == 'piece-p1-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
 				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else if(this.state.playerTurn == 2){
 				if(obj.ID.substring(0, 9) == 'piece-p2-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
 				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
@@ -633,6 +693,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(70, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-undo'){
 					this.registerForPick(74, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
 				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
@@ -649,6 +711,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(70, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-undo'){
 					this.registerForPick(74, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
 				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
@@ -678,12 +742,32 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			}
 		break;
 		case 6:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
 		break;
 		case 7:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
 		break;
 		case 8:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
 		break;
 		case 9:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
 		break;
 	}
 };
@@ -732,6 +816,13 @@ XMLscene.prototype.menuLoop = function () {
 
 	this.logPicking();
 
+};
+
+XMLscene.prototype.clearAllData = function () {
+	this.gameStatesStack = [];
+	this.loopState = 0;
+	this.startGame = false;
+	this.hasInited = false;
 };
 
 //------------------------------------------------------------------------------------------------------------

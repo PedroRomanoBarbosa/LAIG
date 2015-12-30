@@ -39,7 +39,6 @@ main=function()
 	var myInterface = new MyInterface();
 	var myScene = new XMLscene(app, myInterface);
 	var myGraph = new MySceneGraph("menu/menu.lsx", myScene);
-	myScene.path="menu/menu.lsx";
 	myInterface.setActiveCamera(myScene.camera);
 	app.setScene(myScene);
 

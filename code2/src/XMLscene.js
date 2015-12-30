@@ -178,7 +178,7 @@ XMLscene.prototype.updateObjects = function(){
       if(obj instanceof Piece){
         obj.animate(this.timeInterval/1000);
       }
-      if(this.turnTimeAcc > 0)
+      if(this.turnTimeAcc > 0 && this.loopState != 9)
       	this.turnTimeAcc = this.maxTurnTime - (this.secondsPassed - this.turnTimerStamp);
 
       if(obj.ID.substring(0, 7) == "screen-"){
@@ -268,29 +268,27 @@ XMLscene.prototype.logPicking = function (){
 						break;
 						case 2:
 							this.newIndexOfPieceToPlay = customId;
-
+							
 							if(obj.textureID == "wind-piece"){
 								this.loopState = 4;
 							}
+
+							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 							if(customId == "70"){
 								this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 								this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
 							}else if(customId == "71"){
 								this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 								this.server.makeRequest(nowState.getRequestString(4, 0, 0, 0, 0));
 							}else if(customId == "72"){
 								this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 								this.server.makeRequest(nowState.getRequestString(5, 0, 0, 0, 0));
 							}else if(customId == "73"){
 								this.newIndexOfPieceToPlay = -1;
 
-								var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 								this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
 							}else if(customId == "74"){
 								this.newIndexOfPieceToPlay = -1;
@@ -377,7 +375,9 @@ XMLscene.prototype.logPicking = function (){
 						case 7:
 						break;
 						case 8:
-						break;					
+						break;
+						case 9:
+						break;
 					}
 				}
 			}
@@ -451,8 +451,14 @@ XMLscene.prototype.gameLoop = function () {
 			}
 		break;
 		case 2:
+			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+
+			if(nowState.player1HandPieces.length == 0 || nowState.player2HandPieces.length == 0){
+				this.loopState = 9;
+				break;
+			}
+
 			if(this.playerMode != "pvp"){
-				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
 				if(nowState.playerTurn == 2){
 					if(this.playerMode == "pceasy")
@@ -573,6 +579,8 @@ XMLscene.prototype.gameLoop = function () {
 
 			this.loopState--;
 		break;
+		case 9:
+		break;
 	}
 };
 
@@ -674,6 +682,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 		case 7:
 		break;
 		case 8:
+		break;
+		case 9:
 		break;
 	}
 };

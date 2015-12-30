@@ -34,8 +34,6 @@ function GameState(str) {
 
 GameState.prototype.parseString = function(str){
 
-	console.log(str);
-
 	var holder = "";
 
 	var i = 0;

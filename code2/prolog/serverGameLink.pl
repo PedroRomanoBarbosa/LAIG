@@ -176,6 +176,7 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 					deletePieceFromHand(PlayerTurn, IndexOfPiece),
 					decMove(PlayerTurn),
 					useWindPiece,
+					addMove(PlayerTurn),
 					(
 						hasFinishedTurn(PlayerTurn) ->
 						(

@@ -95,6 +95,7 @@ playState(BL, PN, NBL, NPN) :-
 											movePieceWithWind(L/C, DIR, BL, NBL),
 											deletePieceFromHand(PN, N),
 											decMove(PN),
+											addMove(PN),
 											useWindPiece
 										);
 										(
@@ -228,6 +229,7 @@ playStatePCEasy(BL, PN, NBL, NPN) :-
 												(
 													movePieceWithWind(POS, DIR, BL, NBL),
 													deletePieceFromHand(PN, X),
+													addMove(PN),
 													useWindPiece
 												);
 												(
@@ -350,6 +352,7 @@ playStatePCHard(BL, PN, NBL, NPN) :-
 														movePieceWithWind(POS, DIR, BL, NBL),
 														deletePieceFromHand(PN, X),
 														decMove(PN),
+														addMove(PN),
 														useWindPiece
 													);
 													(

@@ -7,8 +7,6 @@ function Server(port) {
 
 Server.prototype.makeRequest = function(requestStr){
 
-	console.log(requestStr);
-
 	var request = new XMLHttpRequest();
 	request.server = this;
 	request.open('GET', 'http://localhost:'+this.port+'/'+requestStr, true);

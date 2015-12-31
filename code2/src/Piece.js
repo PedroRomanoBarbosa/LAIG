@@ -82,6 +82,9 @@ Piece.prototype.animate = function(time) {
 		case "movieBoard":
 			this.movieBoardAnimation(time);
 			break;
+		case "movieMoving":
+			this.movieMovingAnimation(time);
+			break;
 	}
 }
 
@@ -229,7 +232,11 @@ Piece.prototype.bagAnimation = function(time){
 				this.angle.x = 45;
 			}
 			if(this.scene.movieStarted && this.numPiece == 0 && this.dest == this.scene.moviePlayer){
-				this.scene.movieObj.changeAnimation("movieBoard");
+				if(this.scene.typeOfMove == 1){
+					this.scene.movieObj.changeAnimation("movieBoard");
+				}else if (this.scene.typeOfMove == 2) {
+					this.scene.movieObj.changeAnimation("movieMoving");
+				}
 			}
 			this.changeAnimation("iddle");
 		}else {
@@ -331,7 +338,14 @@ Piece.prototype.movieBoardAnimation = function(time){
 		this.angle.y = 0;
 		this.angle.z = 0;
 		this.changeAnimation("iddle");
-		this.scene.moviePlayer = "p2";
+		if (this.scene.moviePlayer == "p1") {
+			this.scene.moviePlayer = "p2";
+		}else if (this.scene.moviePlayer == "p2") {
+			this.scene.moviePlayer = "p1";
+		}
+		if(this.scene.movieStarted){
+			this.scene.movie = true;
+		}
 		//this.scene.rotateScene = true;
 	}else {
 		var percentage = (this.aniTime/this.boardTime);
@@ -402,8 +416,57 @@ Piece.prototype.movingAnimation = function(time){
 		mat4.multiply(this.matx,this.matx,this.primMatx);
 }
 
+Piece.prototype.movieMovingAnimation = function(time){
+	this.aniTime += time;
+
+	/* Final point */
+	var P4 = {x: this.boardPos.x-this.pos.x, y: this.boardPos.y-this.pos.y, z: this.boardPos.z-this.pos.z};
+	var d = Math.sqrt((P4.x)*(P4.x) + (P4.z)*(P4.z));
+
+	/* Get angle */
+	var angle = Math.atan2(P4.z,P4.x);
+
+	/* reset matrix */
+	mat4.identity(this.matx);
+
+	/* Applies transformations */
+	mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
+
+	/* Reset animation time */
+	if(this.aniTime > this.movingTime){
+		this.aniTime = 0;
+		var x = d*Math.cos(angle);
+		var z = d*Math.sin(angle);
+		mat4.translate(this.matx, this.matx, [P4.x,P4.y,P4.z]);
+		this.pos.x = this.boardPos.x;
+		this.pos.y = this.boardPos.y;
+		this.pos.z = this.boardPos.z;
+		this.angle.x = 0;
+		if (this.scene.moviePlayer == "p1") {
+			this.scene.moviePlayer = "p2";
+		}else if (this.scene.moviePlayer == "p2") {
+			this.scene.moviePlayer = "p1";
+		}
+		if(this.scene.movieStarted){
+			this.scene.movie = true;
+		}
+		this.changeAnimation("iddle");
+		//this.scene.rotateScene = true;
+	}else {
+		var percentage = (this.aniTime/this.movingTime);
+		var P2 = {x: 0, y:2, z:0};
+		var P3 = {x: 0, y:2, z:1};
+		var P1 = {x: 0, y:0, z:0};
+		var pos = this.getBezier(percentage, P1, P2, P3, P4);
+		var x = pos.z*Math.cos(angle);
+		var z = pos.z*Math.sin(angle);
+		mat4.translate(this.matx, this.matx, [x,pos.y,z]);
+	}
+	mat4.multiply(this.matx,this.matx,this.primMatx);
+}
+
 Piece.prototype.changeAnimation = function(name){
-	if(name != "iddle" && name != "chosen" && name != "moving" && name != "bag" && name != "board" && name != "boardChosen" && name != "movieBoard"){
+	if(name != "iddle" && name != "chosen" && name != "moving" && name != "bag" && name != "board" && name != "boardChosen" && name != "movieBoard" && name != "movieMoving"){
 		console.log("The name of the animation given in change animation is not valid");
 		return false;
 	}

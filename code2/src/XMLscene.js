@@ -57,6 +57,16 @@ XMLscene.prototype.init = function (application) {
     this.rotateScene = false;
     this.movingDirection = "up";
 
+    /* Movie variables */
+    this.movie = false;
+    this.movieStarted = false;
+    this.movieIter = 0;
+    this.movieStates = [];
+    this.moviePlayer = "p1";
+
+    /* Wait animation */
+    this.waitAni = false;
+    this.waitTime = 0;
 };
 
 /**
@@ -153,7 +163,10 @@ XMLscene.prototype.update = function (){
       this.secondsPassed = (this.lastUpdate - this.startTime) / 1000;
       this.updateObjects();
       if(this.rotateScene){
-        this.rotateSceneAnimation(this.timeInterval/1000);
+        this.rotateSceneAnimation(this.timeInterval/1000, this.rotateScene);
+      }
+      if(this.waitAni){
+        this.waitAnimation(this.timeInterval/1000);
       }
     }
   }
@@ -184,11 +197,31 @@ XMLscene.prototype.rotateSceneAnimation = function(time){
 	if(this.aniTime > this.rotationTime){
     mat4.rotate(this.m, this.m, 180 * Math.PI / 180, [0, 1, 0]);
     this.rotateScene = false;
+    if(this.movieStarted){
+      this.movie = true;
+    }
 		this.aniTime = 0;
 	}else {
 	  mat4.rotate(this.m, this.m, this.aniTime * this.rotationAngle * Math.PI / 180, [0, 1, 0]);
 	}
 };
+
+XMLscene.prototype.waitAnimation = function(time){
+  this.aniTime += time;
+
+  /* Reset animation time */
+	if(this.aniTime > this.waitTime){
+    this.movie = true;
+    this.waitAni = false;
+  	this.aniTime = 0;
+	}
+};
+
+XMLscene.prototype.wait = function(time){
+  this.movie = false;
+  this.waitAni = true;
+  this.waitTime = time;
+}
 
 //------------------------------------------------------------------------------------------------------------
 
@@ -211,6 +244,9 @@ XMLscene.prototype.logPicking = function (){
           if(obj instanceof Piece){
             if(this.loopState == 1){
                 if(obj.textureID != "wind-piece"){
+                  /* push into movie state array */
+                  var stateVars = {type: 1, pid: obj.ID, x: 0, y: 0, z: 0};
+                  this.movieStates.push(stateVars);
                   obj.setBoardPosition(0,0,0);
                   obj.changeAnimation("board");
                   this.stop = true;
@@ -240,6 +276,11 @@ XMLscene.prototype.logPicking = function (){
                 }
                 if(customId == "70"){
                   this.rotateScene = true;
+
+                  /* push into movie state array */
+                  var stateVars = {type: 0};
+                  this.movieStates.push(stateVars);
+
                   this.newIndexOfPieceToPlay = -1;
 
                   var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -260,6 +301,8 @@ XMLscene.prototype.logPicking = function (){
                   var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
                   this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
                 }else if(customId == "74"){
+                  this.stop = true;
+                  /*
                   this.rotateScene = true;
                   this.newIndexOfPieceToPlay = -1;
 
@@ -271,7 +314,9 @@ XMLscene.prototype.logPicking = function (){
 
                   if(this.gameStatesStack.length == 1){
                     this.loopState = 1;
-                  }
+                  }*/
+                  this.movieStarted = true;
+                  this.movie = true;
                 }
               break;
               case 3:
@@ -315,6 +360,10 @@ XMLscene.prototype.logPicking = function (){
                   );
                   this.movingDirection = "up";
                 }else if(lineDir>this.changeLinePositionToPlay){
+                  /* push into movie state array */
+                  var stateVars = {type: 2, handId: this.newIndexOfPieceToPlay, line: this.newLinePositionToPlay, col: this.newColPositionToPlay};
+                  this.movieStates.push(stateVars);
+
                   this.server.makeRequest(
                     nowState.getRequestString(
                       2, this.newIndexOfPieceToPlay,
@@ -324,6 +373,10 @@ XMLscene.prototype.logPicking = function (){
                   );
                   this.movingDirection = "down";
                 }else if(colDir<this.changeColPositionToPlay){
+                  /* push into movie state array */
+                  var stateVars = {type: 2, handId: this.newIndexOfPieceToPlay, line: this.newLinePositionToPlay, col: this.newColPositionToPlay};
+                  this.movieStates.push(stateVars);
+
                   this.server.makeRequest(
                     nowState.getRequestString(
                       2, this.newIndexOfPieceToPlay,
@@ -333,6 +386,10 @@ XMLscene.prototype.logPicking = function (){
                   );
                   this.movingDirection = "left";
                 }else if(colDir>this.changeColPositionToPlay){
+                  /* push into movie state array */
+                  var stateVars = {type: 2, handId: this.newIndexOfPieceToPlay, line: this.newLinePositionToPlay, col: this.newColPositionToPlay};
+                  this.movieStates.push(stateVars);
+
                   this.server.makeRequest(
                     nowState.getRequestString(
                       2, this.newIndexOfPieceToPlay,
@@ -437,6 +494,11 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
+
+          /* push into movie state array */
+          var stateVars = {type: 1, pid: this.objSelected.ID, x: this.newColPositionToPlay - 5, y: 0, z: this.newLinePositionToPlay - 5};
+          this.movieStates.push(stateVars);
+
           this.objSelected.setBoardPosition(this.newColPositionToPlay - 5, 0, this.newLinePositionToPlay - 5);
           this.objSelected.changeAnimation("board");
 				}else{
@@ -463,6 +525,11 @@ XMLscene.prototype.gameLoop = function () {
 
 					this.newIndexOfPieceToPlay = -1;
 					this.loopState = 2;
+
+          /* push into movie state array */
+          var stateVars = {type: 2, handId: this.newIndexOfPieceToPlay, line: this.newLinePositionToPlay, col: this.newColPositionToPlay};
+          //this.movieStates.push(stateVars);
+
           switch (this.movingDirection) {
             case "up":
               this.objSelectedToMove.setBoardPosition(this.changeColPositionToPlay - 5, 0, this.changeLinePositionToPlay - 5 - 1);
@@ -594,12 +661,12 @@ XMLscene.prototype.reloadEntities = function () {
   	for(var i=0; i<nowState.player1HandPieces.length; i++){
   		var p = new Piece(this, "p1", this.objects['piece'], nowState.player1HandPieces[i]);
       p.numPiece = i;
-      p.line = 1;
+      p.handLine = 1;
       if(i > 6){
-        p.line = 2;
+        p.handLine = 2;
       }
       if(i > 13){
-        p.line = 3;
+        p.handLine = 3;
       }
 
       /*
@@ -628,12 +695,12 @@ XMLscene.prototype.reloadEntities = function () {
   	for(var i=0; i<nowState.player2HandPieces.length; i++){
   		var p = new Piece(this, "p2", this.objects['piece'], nowState.player2HandPieces[i]);
       p.numPiece = i;
-      p.line = 1;
+      p.handLine = 1;
       if(i > 6){
-        p.line = 2;
+        p.handLine = 2;
       }
       if(i > 13){
-        p.line = 3;
+        p.handLine = 3;
       }
 
       /*
@@ -672,6 +739,120 @@ XMLscene.prototype.reloadEntities = function () {
   	}
 };
 
+XMLscene.prototype.reloadEntitiesForMovie = function(state,loop){
+  this.root.descendants = [];
+	for(var i=0; i<this.rootCleanup.length; i++){
+		this.root.descendants.push(this.rootCleanup[i]);
+	}
+
+	  this.numHandPiecesP1 = 1;
+  	this.numHandPiecesP2 = 1;
+  	this.changeLinePositionToPlay = -1;
+    this.changeColPositionToPlay = -1;
+
+  	for(var i=0; i<state.player1HandPieces.length; i++){
+  		var p = new Piece(this, "p1", this.objects['piece'], state.player1HandPieces[i]);
+      p.numPiece = i;
+      p.handLine = 1;
+      if(i > 6){
+        p.handLine = 2;
+      }
+      if(i > 13){
+        p.handLine = 3;
+      }
+
+      /*
+      Decide animations, position and visibility
+      depending on game state and player turn
+      */
+      switch (loop) {
+        case 1:
+          p.changeAnimation("bag");
+          break;
+        case 2:
+          if(p.numPiece == 0 && this.moviePlayer == "p1"){
+            p.changeAnimation("bag");
+          }else if(p.numPiece == 0){
+            p.hide = true;
+          }else{
+            p.handPosition();
+            p.changeAnimation("iddle");
+          }
+          break;
+      }
+
+      this.numHandPiecesP1++;
+  	}
+
+  	for(var i=0; i<state.player2HandPieces.length; i++){
+  		var p = new Piece(this, "p2", this.objects['piece'], state.player2HandPieces[i]);
+      p.numPiece = i;
+      p.handLine = 1;
+      if(i > 6){
+        p.handLine = 2;
+      }
+      if(i > 13){
+        p.handLine = 3;
+      }
+
+      /*
+      Decide animations, position and visibility
+      depending on game state and player turn
+      */
+      switch (loop) {
+        case 1:
+          p.changeAnimation("bag");
+          break;
+        case 2:
+          if(p.numPiece == 0 && this.moviePlayer == "p2"){
+            p.changeAnimation("bag");
+          }else if(p.numPiece == 0){
+              p.hide = true;
+          }else{
+            p.handPosition();
+            p.changeAnimation("iddle");
+          }
+          break;
+      }
+      this.numHandPiecesP2++;
+  	}
+
+
+  	for(var line=0; line<state.board.length; line++){
+  		for(var col=0; col<state.board[line].length; col++){
+  			if(state.board[line][col] != "sunTile" && state.board[line][col] != "free" && state.board[line][col] != "moonTile"){
+  				var p = new Piece(this, "board", this.objects['piece'], state.board[line][col], line + 1, col + 1);
+  			}
+  		}
+  	}
+}
+
+XMLscene.prototype.movieLoop = function(){
+  this.state = this.gameStatesStack[this.movieIter];
+
+  if(this.movieIter < this.gameStatesStack.length){
+    if(this.movieIter == 0){
+      mat4.identity(this.m);
+      this.movie = false;
+      this.reloadEntitiesForMovie(this.state,1);
+      var movieVars = this.movieStates[this.movieIter];
+      this.movieObj = this.objects[movieVars.pid];
+      this.movieObj.setBoardPosition(0,0,0);
+    }else {
+      /*
+      this.movie = false;
+      this.reloadEntitiesForMovie(this.state,2);
+      var movieVars = this.movieStates[this.movieIter];
+      this.movieObj = this.objects[movieVars.pid];
+      this.movieObj.setBoardPosition(movieVars.x,movieVars.y,movieVars.z);
+      */
+    }
+  this.movieIter++;
+  }else {
+    this.movie = false;
+  }
+}
+
 //------------------------------------------------------------------------------------------------------------
 
 /**
@@ -679,12 +860,18 @@ XMLscene.prototype.reloadEntities = function () {
 */
 XMLscene.prototype.display = function () {
 
+  /* Game sequence */
 	if(this.startGame == true && this.hasInited == false){
 		this.hasInited = true;
 		this.server.makeRequest("startGame");
 	}else if(this.startGame == true && this.hasInited == true){
 		this.gameLoop();
 	}
+
+  /* Movie sequence */
+  if(this.movie){
+    this.movieLoop();
+  }
 
 	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

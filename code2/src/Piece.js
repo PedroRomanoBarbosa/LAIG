@@ -42,6 +42,9 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 	switch(destination){
 		case "board":
 			this.ID = piecePrimitive.ID + "-b-" + line + "" + col;
+			this.pos.x = this.col - 5;
+			this.pos.y = 0;
+			this.pos.z = this.line - 5;
 			break;
 		case "p1":
 			this.ID = piecePrimitive.ID + "-p1-" + scene.numHandPiecesP1;
@@ -154,10 +157,7 @@ Piece.prototype.iddleAnimation = function(){
 	mat4.identity(this.matx);
 
 	if(this.dest == "board"){
-		mat4.translate(this.matx, this.matx, [this.col - 5,0,this.line - 5]);
-		this.pos.x = this.col - 5;
-		this.pos.y = 0;
-		this.pos.z = this.line - 5;
+		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
 	}else {
 		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
 		mat4.rotate(this.matx, this.matx, this.angle.x*Math.PI/180, [1, 0, 0]);
@@ -235,6 +235,7 @@ Piece.prototype.bagAnimation = function(time){
 				if(this.scene.typeOfMove == 1){
 					this.scene.movieObj.changeAnimation("movieBoard");
 				}else if (this.scene.typeOfMove == 2) {
+					console.log("movie moving");
 					this.scene.movieObj.changeAnimation("movieMoving");
 				}
 			}
@@ -431,7 +432,7 @@ Piece.prototype.movieMovingAnimation = function(time){
 
 	/* Applies transformations */
 	mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
-
+	console.log("lol");
 	/* Reset animation time */
 	if(this.aniTime > this.movingTime){
 		this.aniTime = 0;

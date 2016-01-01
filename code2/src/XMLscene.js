@@ -828,7 +828,7 @@ XMLscene.prototype.movieDrawPiece = function(){
 
 XMLscene.prototype.movieLoop = function(){
   this.state = this.gameStatesStack[this.movieIter];
-  console.log(this.movieStates);
+  console.log("movie");
   if(this.movieIter < this.gameStatesStack.length-1){
     if(this.movieIter == 0){
       mat4.identity(this.m);

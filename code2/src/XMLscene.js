@@ -399,29 +399,29 @@ XMLscene.prototype.logPicking = function (){
 
 								this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
 							}else if(customId == "74"){
-                this.stop = true;
-                this.movieStarted = true;
-                this.movie = true;
-                this.camera.setPosition(vec3.fromValues(0,25,25));
-                /*
-                this.rotateScene = true;
-                this.newIndexOfPieceToPlay = -1;
+								this.rotateScene = true;
+								this.newIndexOfPieceToPlay = -1;
 
-                if(this.gameStatesStack.length >= 2){
-                  this.gameStatesStack.pop();
+								if(this.gameStatesStack.length >= 2){
+								  this.gameStatesStack.pop();
 
-                  this.reloadEntities();
-                }
+								  this.reloadEntities();
+								}
 
-                if(this.gameStatesStack.length == 1){
-                  this.loopState = 1;
-                }*/
-
-								this.turnTimeAcc = this.maxTurnTime;
-								this.turnTimerStamp = this.secondsPassed;
+								if(this.gameStatesStack.length == 1){
+								  this.loopState = 1;
+								}
 							}else if(customId == "75"){
 								new MySceneGraph("menu/menu.lsx", this);
 								this.clearAllData();
+							}else if(customId == "76"){
+								this.stop = true;
+								this.movieStarted = true;
+								this.movie = true;
+								this.camera.setPosition(vec3.fromValues(0,25,25));
+
+								this.turnTimeAcc = this.maxTurnTime;
+								this.turnTimerStamp = this.secondsPassed;
 							}
 						break;
 						case 3:
@@ -498,11 +498,29 @@ XMLscene.prototype.logPicking = function (){
 								new MySceneGraph("menu/menu.lsx", this);
 								this.clearAllData();
 							}
+							if(customId == "76"){
+								this.stop = true;
+								this.movieStarted = true;
+								this.movie = true;
+								this.camera.setPosition(vec3.fromValues(0,25,25));
+
+								this.turnTimeAcc = this.maxTurnTime;
+								this.turnTimerStamp = this.secondsPassed;
+							}
 						break;
 						case 7:
 							if(customId == "75"){
 								new MySceneGraph("menu/menu.lsx", this);
 								this.clearAllData();
+							}
+							if(customId == "76"){
+								this.stop = true;
+								this.movieStarted = true;
+								this.movie = true;
+								this.camera.setPosition(vec3.fromValues(0,25,25));
+
+								this.turnTimeAcc = this.maxTurnTime;
+								this.turnTimerStamp = this.secondsPassed;
 							}
 						break;
 						case 8:
@@ -510,11 +528,29 @@ XMLscene.prototype.logPicking = function (){
 								new MySceneGraph("menu/menu.lsx", this);
 								this.clearAllData();
 							}
+							if(customId == "76"){
+								this.stop = true;
+								this.movieStarted = true;
+								this.movie = true;
+								this.camera.setPosition(vec3.fromValues(0,25,25));
+
+								this.turnTimeAcc = this.maxTurnTime;
+								this.turnTimerStamp = this.secondsPassed;
+							}
 						break;
 						case 9:
 							if(customId == "75"){
 								new MySceneGraph("menu/menu.lsx", this);
 								this.clearAllData();
+							}
+							if(customId == "76"){
+								this.stop = true;
+								this.movieStarted = true;
+								this.movie = true;
+								this.camera.setPosition(vec3.fromValues(0,25,25));
+
+								this.turnTimeAcc = this.maxTurnTime;
+								this.turnTimerStamp = this.secondsPassed;
 							}
 						break;
 					}
@@ -837,6 +873,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(74, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-main'){
 					this.registerForPick(75, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-repl'){
+					this.registerForPick(76, obj);
 				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
@@ -855,6 +893,8 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(74, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-main'){
 					this.registerForPick(75, obj);
+				}else if(obj.ID.substring(0, 11) == 'option-repl'){
+					this.registerForPick(76, obj);
 				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
@@ -886,28 +926,36 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 		case 6:
 			if(obj.ID.substring(0, 11) == 'option-main'){
 				this.registerForPick(75, obj);
-			}else{
+			}else if(obj.ID.substring(0, 11) == 'option-repl'){
+					this.registerForPick(76, obj);
+				}else{
 				this.clearPickRegistration();
 			}
 		break;
 		case 7:
 			if(obj.ID.substring(0, 11) == 'option-main'){
 				this.registerForPick(75, obj);
-			}else{
+			}else if(obj.ID.substring(0, 11) == 'option-repl'){
+					this.registerForPick(76, obj);
+				}else{
 				this.clearPickRegistration();
 			}
 		break;
 		case 8:
 			if(obj.ID.substring(0, 11) == 'option-main'){
 				this.registerForPick(75, obj);
-			}else{
+			}else if(obj.ID.substring(0, 11) == 'option-repl'){
+					this.registerForPick(76, obj);
+				}else{
 				this.clearPickRegistration();
 			}
 		break;
 		case 9:
 			if(obj.ID.substring(0, 11) == 'option-main'){
 				this.registerForPick(75, obj);
-			}else{
+			}else if(obj.ID.substring(0, 11) == 'option-repl'){
+					this.registerForPick(76, obj);
+				}else{
 				this.clearPickRegistration();
 			}
 		break;

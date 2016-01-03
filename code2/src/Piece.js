@@ -283,8 +283,14 @@ Piece.prototype.boardAnimation = function(time){
 			this.angle.x = 0;
 			this.changeAnimation("iddle");
 			this.scene.stop = false;
-			this.scene.reloadEntities();
-			this.scene.rotateScene = true;
+
+			if(this.scene.playerMode == "pvp" || this.scene.playerMode == "pcvpc"){
+				this.scene.reloadEntities();
+				if(this.scene.firstPlay || this.scene.state.playerTurn != this.scene.stateToCompare.playerTurn){
+					this.scene.firstPlay = false;
+					this.scene.rotateScene = true;
+				}
+			}
 		}else {
 			var percentage = (this.aniTime/this.boardTime);
 			var P2 = {x: 0, y:5, z:0};
@@ -401,8 +407,6 @@ Piece.prototype.movingAnimation = function(time){
 			this.changeAnimation("iddle");
 			this.scene.stop = false;
 			this.scene.reloadEntities();
-			
-			this.scene.rotateScene = true;
 		}else {
 			var percentage = (this.aniTime/this.movingTime);
 			var P2 = {x: 0, y:2, z:0};
@@ -451,7 +455,6 @@ Piece.prototype.movieMovingAnimation = function(time){
 			this.scene.movie = true;
 		}
 		this.changeAnimation("iddle");
-		//this.scene.rotateScene = true;
 	}else {
 		var percentage = (this.aniTime/this.movingTime);
 		var P2 = {x: 0, y:2, z:0};

@@ -37,6 +37,7 @@ XMLscene.prototype.init = function (application) {
 
     this.server = new Server(8081);
     this.isFirstPlay = true;
+    this.firstPlay = true;
     this.newIndexOfPieceToPlay = -1;
     this.newLinePositionToPlay = -1;
     this.newColPositionToPlay = -1;
@@ -302,22 +303,7 @@ XMLscene.prototype.rotateSceneAnimation = function(time){
 
 };
 
-XMLscene.prototype.waitAnimation = function(time){
-  this.aniTime += time;
 
-  /* Reset animation time */
-	if(this.aniTime > this.waitTime){
-    this.movie = true;
-    this.waitAni = false;
-  	this.aniTime = 0;
-	}
-};
-
-XMLscene.prototype.wait = function(time){
-  this.movie = false;
-  this.waitAni = true;
-  this.waitTime = time;
-}
 
 //------------------------------------------------------------------------------------------------------------
 
@@ -416,6 +402,7 @@ XMLscene.prototype.logPicking = function (){
                 this.stop = true;
                 this.movieStarted = true;
                 this.movie = true;
+                this.camera.setPosition(vec3.fromValues(0,25,25));
                 /*
                 this.rotateScene = true;
                 this.newIndexOfPieceToPlay = -1;
@@ -666,6 +653,7 @@ XMLscene.prototype.gameLoop = function () {
 		case 3:
 			if(this.server.replyReady){
 				this.state = new GameState(this.server.answer);
+        this.stateToCompare = this.gameStatesStack[this.gameStatesStack.length - 1];
 
 				if(this.state.validState){
 					this.gameStatesStack.push(this.state);

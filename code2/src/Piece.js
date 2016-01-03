@@ -235,8 +235,9 @@ Piece.prototype.bagAnimation = function(time){
 				if(this.scene.typeOfMove == 1){
 					this.scene.movieObj.changeAnimation("movieBoard");
 				}else if (this.scene.typeOfMove == 2) {
-					console.log("movie moving");
 					this.scene.movieObj.changeAnimation("movieMoving");
+				}else if (this.scene.typeOfMove == 0) {
+					this.scene.rotateScene = true;
 				}
 			}
 			this.changeAnimation("iddle");
@@ -344,10 +345,7 @@ Piece.prototype.movieBoardAnimation = function(time){
 		}else if (this.scene.moviePlayer == "p2") {
 			this.scene.moviePlayer = "p1";
 		}
-		if(this.scene.movieStarted){
-			this.scene.movie = true;
-		}
-		//this.scene.rotateScene = true;
+		this.scene.rotateScene = true;
 	}else {
 		var percentage = (this.aniTime/this.boardTime);
 		var P2 = {x: 0, y:5, z:0};
@@ -432,7 +430,7 @@ Piece.prototype.movieMovingAnimation = function(time){
 
 	/* Applies transformations */
 	mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
-	console.log("lol");
+
 	/* Reset animation time */
 	if(this.aniTime > this.movingTime){
 		this.aniTime = 0;
@@ -468,7 +466,7 @@ Piece.prototype.movieMovingAnimation = function(time){
 
 Piece.prototype.changeAnimation = function(name){
 	if(name != "iddle" && name != "chosen" && name != "moving" && name != "bag" && name != "board" && name != "boardChosen" && name != "movieBoard" && name != "movieMoving"){
-		console.log("The name of the animation given in change animation is not valid");
+		console.error("The name of the animation given in change animation is not valid");
 		return false;
 	}
 	this.currentAnim = name;

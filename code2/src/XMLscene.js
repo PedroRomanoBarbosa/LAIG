@@ -82,7 +82,7 @@ XMLscene.prototype.initLights = function () {
 * @function Initializes scene's cameras
 */
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, 25), vec3.fromValues(0, 0, 3));
+    this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0,25,25), vec3.fromValues(0, -3, 0));
     //this.camera = new CGFcamera(0.4, 10, 500, vec3.fromValues(0, 25, -25), vec3.fromValues(0, 0, -3));
 };
 
@@ -187,26 +187,28 @@ XMLscene.prototype.updateObjects = function(){
 };
 
 XMLscene.prototype.rotateSceneAnimation = function(time){
-  /* reset matrix */
-  mat4.identity(this.m);
   this.aniTime += time;
-  if(this.state.playerTurn == 1){
-    mat4.rotate(this.m, this.m, 180 * Math.PI / 180, [0, 1, 0]);
+  var m = 1;
+  if(this.movieStarted){
+    m = -1;
   }
-  /* Reset animation time */
+  var angle = time/this.rotationTime*180;
+
 	if(this.aniTime > this.rotationTime){
-    mat4.rotate(this.m, this.m, 180 * Math.PI / 180, [0, 1, 0]);
-    this.rotateScene = false;
-    if(this.movieStarted){
-      this.movie = true;
+    if(this.state.playerTurn == 1){
+      this.camera.setPosition(vec3.fromValues(0,25,m*25));
+    }else if(this.state.playerTurn == 2){
+        this.camera.setPosition(vec3.fromValues(0,25,m*-25));
     }
+    this.rotateScene = false;
 		this.aniTime = 0;
     if(this.movieStarted){
       this.movie = true;
     }
 	}else {
-	  mat4.rotate(this.m, this.m, this.aniTime * this.rotationAngle * Math.PI / 180, [0, 1, 0]);
+    this.camera.orbit(CGFcameraAxis.Y, angle*Math.PI/180);
 	}
+
 };
 
 XMLscene.prototype.waitAnimation = function(time){
@@ -828,7 +830,6 @@ XMLscene.prototype.movieDrawPiece = function(){
 
 XMLscene.prototype.movieLoop = function(){
   this.state = this.gameStatesStack[this.movieIter];
-  console.log("movie");
   if(this.movieIter < this.gameStatesStack.length-1){
     if(this.movieIter == 0){
       mat4.identity(this.m);
@@ -845,15 +846,19 @@ XMLscene.prototype.movieLoop = function(){
       var movieVars = this.movieStates[this.movieIter];
 
       switch (movieVars.type) {
+        /* Pass */
         case 0:
-
+        this.typeOfMove = movieVars.type;
+        this.movieDrawPiece();
           break;
+        /* Hand to board */
         case 1:
           this.movieObj = this.objects[movieVars.pid];
           this.movieObj.setBoardPosition(movieVars.x,movieVars.y,movieVars.z);
           this.typeOfMove = movieVars.type;
           this.movieDrawPiece();
           break;
+        /* move piece */
         case 2:
           this.movieObj = this.objects[movieVars.pid];
           this.movieObj.setBoardPosition(movieVars.x,movieVars.y,movieVars.z);
@@ -864,7 +869,6 @@ XMLscene.prototype.movieLoop = function(){
     }
     this.movieIter++;
   }else {
-    console.log("acabou");
     this.movie = false;
   }
 }

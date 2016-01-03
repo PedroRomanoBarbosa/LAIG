@@ -399,6 +399,10 @@ XMLscene.prototype.logPicking = function (){
 								if(this.gameStatesStack.length >= 2){
 								  this.gameStatesStack.pop();
 
+								  if(this.gameStatesStack.length == 1){
+										this.firstPlay = true;
+									}
+
 								  this.reloadEntities();
 								}
 
@@ -557,8 +561,6 @@ XMLscene.prototype.logPicking = function (){
 
 XMLscene.prototype.gameLoop = function () {
 
-	console.log(this.playerTurnToPlay);
-
   if(this.stop){
     return true;
   }
@@ -574,10 +576,12 @@ XMLscene.prototype.gameLoop = function () {
 		this.newLinePositionToPlay = -1;
 		this.newColPositionToPlay = -1;
 		this.changeLinePositionToPlay = -1;
-    this.changeColPositionToPlay = -1;
+    	this.changeColPositionToPlay = -1;
 
 		var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 		this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
+
+		this.rotateScene = true;
 	}
 
 	switch(this.loopState){
@@ -1198,10 +1202,16 @@ XMLscene.prototype.menuLoop = function () {
 };
 
 XMLscene.prototype.clearAllData = function () {
+	var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+	if(nowState.playerTurn == 2){
+		this.camera.setPosition(vec3.fromValues(0,25,25));
+	}
+	this.firstPlay = true;
 	this.gameStatesStack = [];
 	this.loopState = 0;
 	this.startGame = false;
 	this.hasInited = false;
+	this.playerTurnToPlay = 0;
 };
 
 //------------------------------------------------------------------------------------------------------------

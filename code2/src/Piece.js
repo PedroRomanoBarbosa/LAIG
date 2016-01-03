@@ -7,6 +7,7 @@ function Piece(scene, destination, piecePrimitive, pieceFormat, line, col) {
 
 	this.scene = scene;
 	this.dest = destination;
+	this.primitive = piecePrimitive;
 	this.primMatx = piecePrimitive.matx;
 	this.descendants = piecePrimitive.descendants;
 	this.lastTransformation = piecePrimitive.lastTransformation;
@@ -159,7 +160,13 @@ Piece.prototype.iddleAnimation = function(){
 	if(this.dest == "board"){
 		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
 	}else {
-		mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
+		if(this.ID.substring(this.primitive.ID.length) == "-p1-1" && this.scene.playerTurnToPlay == 2){
+			mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y-1.5,this.pos.z]);
+		}else if(this.ID.substring(this.primitive.ID.length) == "-p2-1" && this.scene.playerTurnToPlay == 1){
+			mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y-1.5,this.pos.z]);
+		}else{
+			mat4.translate(this.matx, this.matx, [this.pos.x,this.pos.y,this.pos.z]);
+		}
 		mat4.rotate(this.matx, this.matx, this.angle.x*Math.PI/180, [1, 0, 0]);
 		if(this.dest == "p2"){
 			mat4.rotate(this.matx, this.matx, 180*Math.PI/180, [0, 1, 0]);

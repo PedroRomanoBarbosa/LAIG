@@ -1182,6 +1182,8 @@
 					<DESCENDANT id="bag2" />
 					<DESCENDANT id="rack1" />
 					<DESCENDANT id="rack2" />
+					<DESCENDANT id="rack1b" />
+					<DESCENDANT id="rack2b" />
 					<DESCENDANT id="line1" />
 					<DESCENDANT id="line2" />
 					<DESCENDANT id="line3" />
@@ -1357,6 +1359,21 @@
 			</DESCENDANTS>
 		</NODE>
 
+		<NODE id="rack1b">
+			<MATERIAL id="m" />
+			<TEXTURE id="clear" />
+
+			<TRANSLATION x="0" y="0" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<TRANSLATION x="0" y="0" z="1.5" />
+			<ROTATION axis="x" angle="180" />
+			<SCALE sx="1" sy="1" sz="3" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="rack" />
+			</DESCENDANTS>
+		</NODE>
+
 		<NODE id="rack2">
 			<MATERIAL id="m" />
 			<TEXTURE id="clear" />
@@ -1364,6 +1381,21 @@
 			<TRANSLATION x="0" y="0" z="-5.5" />
 			<ROTATION axis="x" angle="-45" />
 			<TRANSLATION x="0" y="0" z="-1.5" />
+
+			<DESCENDANTS>
+					<DESCENDANT id="rack" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="rack2b">
+			<MATERIAL id="m" />
+			<TEXTURE id="clear" />
+
+			<TRANSLATION x="0" y="0" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<TRANSLATION x="0" y="0" z="-1.5" />
+			<ROTATION axis="x" angle="180" />
+			<SCALE sx="1" sy="1" sz="3" />
 
 			<DESCENDANTS>
 					<DESCENDANT id="rack" />

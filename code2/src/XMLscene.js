@@ -72,6 +72,8 @@ XMLscene.prototype.init = function (application) {
 	this.showAxis = false;
 	this.maxTurnTime = 30;
 
+	this.playerTurnToPlay = 0;
+
 	this.app.setInterface(this.myInterface);
 };
 
@@ -219,15 +221,7 @@ XMLscene.prototype.updateObjects = function(){
 				obj.valueToShow = 0;
 			}
       	}
-      	if(obj.ID.substring(0, 12) == "screen-infor" && obj.ID.substring(13, 14) == "1"){
-      		if(this.gameStatesStack.length > 0){
-      			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-      			obj.valueToShow = nowState.playerTurn;
-      		}else{
-      			obj.valueToShow = 0;
-      		}
-      	}
-      	if(obj.ID.substring(0, 12) == "screen-infor" && obj.ID.substring(13, 14) == "2"){
+      	if(obj.ID.substring(0, 12) == "screen-infor"){
       		if(this.gameStatesStack.length > 0){
       			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
       			obj.valueToShow = nowState.playerTurn;
@@ -562,6 +556,8 @@ XMLscene.prototype.logPicking = function (){
 }
 
 XMLscene.prototype.gameLoop = function () {
+
+	console.log(this.playerTurnToPlay);
 
   if(this.stop){
     return true;
@@ -984,6 +980,7 @@ XMLscene.prototype.reloadEntities = function () {
     this.changeColPositionToPlay = -1;
 
   	var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+  	this.playerTurnToPlay = nowState.playerTurn;
 
   	for(var i=0; i<nowState.player1HandPieces.length; i++){
   		var p = new Piece(this, "p1", this.objects['piece'], nowState.player1HandPieces[i]);

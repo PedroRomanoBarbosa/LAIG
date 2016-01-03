@@ -180,7 +180,7 @@ countSunTilePositionsList([H|T], BL, IN, N) :-
 countSunTilePositions([], [], _).
 countSunTilePositions([H|T], FL, BL) :-
 	(
-		H == wind/piece ->
+		H == wind-piece ->
 		(
 			FL = [0|B],
 			countSunTilePositions(T, B, BL)
@@ -244,7 +244,7 @@ reloadData :-
 	assert(player2Pieces([])),
 	assert(player1HandPieces([])),
 	assert(player2HandPieces([])),
-	assert(player1HalfStones(5)),
+	assert(player1HalfStones(0)),
 	assert(player2HalfStones(0)),
 	assert(player1SunStones(0)),
 	assert(player2SunStones(0)),

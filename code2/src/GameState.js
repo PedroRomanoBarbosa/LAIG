@@ -24,7 +24,7 @@ function GameState(str) {
 	this.validState = true;
 
 	if(this.parseString(str) == false){
-		if(str == "bad"){
+		if(str == "bad" || str == "Syntax Error"){
 			this.validState = false;
 			console.log("Invalid play try again!");
 		}else
@@ -104,12 +104,14 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player1Pieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;
 	}
-	this.player1Pieces.push(holder);
+	if(holder != " " && holder != "")
+		this.player1Pieces.push(holder);
+
 	i++;
 
 	// parse player 1 hand pieces
@@ -119,12 +121,13 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player1HandPieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;
 	}
-	this.player1HandPieces.push(holder);
+	if(holder != " " && holder != "")
+		this.player1HandPieces.push(holder);
 	i++;
 
 	// parse player 1 halfstones
@@ -156,12 +159,13 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player2Pieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;
 	}
-	this.player2Pieces.push(holder);
+	if(holder != " " && holder != "")
+		this.player2Pieces.push(holder);
 	i++;
 
 	// parse player 2 hand pieces
@@ -171,12 +175,13 @@ GameState.prototype.parseString = function(str){
 		if(str[i] == ","){
 			this.player2HandPieces.push(holder);
 			holder = "";
-		}else
+		}else if(str[i] != " ")
 			holder += str[i];
 
 		i++;
 	}
-	this.player2HandPieces.push(holder);
+	if(holder != " " && holder != "")
+		this.player2HandPieces.push(holder);
 	i++;
 
 	// parse player 2 halfstones

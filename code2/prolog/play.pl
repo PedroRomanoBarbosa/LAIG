@@ -95,6 +95,7 @@ playState(BL, PN, NBL, NPN) :-
 											movePieceWithWind(L/C, DIR, BL, NBL),
 											deletePieceFromHand(PN, N),
 											decMove(PN),
+											addMove(PN),
 											useWindPiece
 										);
 										(
@@ -173,66 +174,95 @@ playStatePCEasy(BL, PN, NBL, NPN) :-
 				length(L, M)
 			)
 		),
-		getValidPositionLists(L, BL, LIST),
 		(
-			hasValidOptionOnList(LIST) ->
+			isFirstPositionEmpty(BL) ->
 			(
-				MMAX is M + 1,
 				repeat,
-				random(1, MMAX, X),
-				nth1(X, L, PIECE),
-				nth1(X, LIST, LISTPOS),
+				random(1, 6, W),
+				nth1(W, L, PIECE),
 				(
-					LISTPOS == [] ->
+					isWindPiece(PIECE) ->
 					(
 						fail
 					);
 					(
-						isWindPiece(PIECE) ->
-						(
-							getAllPositionsPlayed(BL, PLAYEDPOS),
-							repeat,
-							randomPosition(PLAYEDPOS, POS),
-							numberOfAdjacentPieces(POS, BL, N),
-							(
-								N =:= 4 ->
-								(
-									fail
-								);
-								(
-									DIRS = [1, 2, 3, 4],
-									repeat,
-									randomPosition(DIRS, DIR),
-									(
-										validDir(POS, DIR, BL) ->
-										(
-											movePieceWithWind(POS, DIR, BL, NBL),
-											deletePieceFromHand(PN, X),
-											useWindPiece
-										);
-										(
-											fail
-										)
-									)
-								)
-							)
-						);
-						(
-							randomPosition(LISTPOS, POS),
-							gainStonesPC(POS, BL, PN),
-							tileToSunStone(POS, BL, PN),
-							replacePiece(PIECE, POS, BL, NBL),
-							deletePieceFromHand(PN, X)
-						)
+						replacePiece(PIECE, 5/5, BL, NBL),
+						deletePieceFromHand(PN, W),
+						addPieceToHand(PN),
+						changePlayer(PN, NPN)
 					)
 				)
 			);
 			(
-				dontReplace(BL, NBL)
+				getValidPositionLists(L, BL, LIST),
+				(
+					hasValidOptionOnList(LIST, BL) ->
+					(
+						MMAX is M + 1,
+						repeat,
+						random(1, MMAX, X),
+						nth1(X, L, PIECE),
+						nth1(X, LIST, LISTPOS),
+						(
+							LISTPOS == [] ->
+							(
+								fail
+							);
+							(
+								isWindPiece(PIECE) ->
+								(
+									getAllPositionsPlayed(BL, PLAYEDPOS),
+									repeat,
+									randomPosition(PLAYEDPOS, POS),
+									numberOfAdjacentPieces(POS, BL, N),
+									(
+										N =:= 4 ->
+										(
+											fail
+										);
+										(
+											DIRS = [1, 2, 3, 4],
+											repeat,
+											randomPosition(DIRS, DIR),
+											(
+												validDir(POS, DIR, BL) ->
+												(
+													movePieceWithWind(POS, DIR, BL, NBL),
+													deletePieceFromHand(PN, X),
+													addMove(PN),
+													useWindPiece
+												);
+												(
+													fail
+												)
+											)
+										)
+									)
+								);
+								(
+									randomPosition(LISTPOS, POS),
+									( isAValidPlay(PIECE, POS, BL), isEmptyTile(POS, BL) ) ->
+									(
+										gainStonesPC(POS, BL, PN),
+										tileToSunStone(POS, BL, PN),
+										replacePiece(PIECE, POS, BL, NBL),
+										deletePieceFromHand(PN, X)
+									);
+									(
+										fail
+									)
+								)
+							)
+						)
+					);
+					(
+						dontReplace(BL, NBL)
+					)
+				),
+				changePlayer(PN, NPN),
+				addPieceToHand(PN)
 			)
-		),
-		changePlayer(PN, NPN),
-		addPieceToHand(PN)
+		)
 	),
 	!.
 	
@@ -262,7 +292,7 @@ playStatePCHard(BL, PN, NBL, NPN) :-
 				);
 				(
 					replacePiece(PIECE, 5/5, BL, NBL),
-					deletePieceFromHand(PN, INDEX),
+					deletePieceFromHand(PN, W),
 					addPieceToHand(PN),
 					changePlayer(PN, NPN)
 				)
@@ -291,7 +321,7 @@ playStatePCHard(BL, PN, NBL, NPN) :-
 				INDEX =:= 0 ->
 				(
 					(
-						hasValidOptionOnList(LIST) ->
+						hasValidOptionOnList(LIST, BL) ->
 						(
 							MMAX is M + 1,
 							repeat,
@@ -322,6 +352,7 @@ playStatePCHard(BL, PN, NBL, NPN) :-
 														movePieceWithWind(POS, DIR, BL, NBL),
 														deletePieceFromHand(PN, X),
 														decMove(PN),
+														addMove(PN),
 														useWindPiece
 													);
 													(
@@ -336,11 +367,17 @@ playStatePCHard(BL, PN, NBL, NPN) :-
 									);
 									(
 										randomPosition(LISTPOS, POS),
-										gainStonesPC(POS, BL, PN),
-										tileToSunStone(POS, BL, PN),
-										replacePiece(PIECE, POS, BL, NBL),
-										deletePieceFromHand(PN, X),
-										decMove(PN)
+										isEmptyTile(POS, BL) ->
+										(
+											gainStonesPC(POS, BL, PN),
+											tileToSunStone(POS, BL, PN),
+											replacePiece(PIECE, POS, BL, NBL),
+											deletePieceFromHand(PN, X),
+											decMove(PN)
+										);
+										(
+											fail
+										)
 									)
 								)
 							)

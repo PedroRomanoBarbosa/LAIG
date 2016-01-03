@@ -176,6 +176,7 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 					deletePieceFromHand(PlayerTurn, IndexOfPiece),
 					decMove(PlayerTurn),
 					useWindPiece,
+					addMove(PlayerTurn),
 					(
 						hasFinishedTurn(PlayerTurn) ->
 						(
@@ -267,6 +268,38 @@ playMode(Mode, IndexOfPiece, Position, Direction, Result) :-
 			halfToSunStones(PlayerTurn) ->
 			(
 				notChangePlayer(PlayerTurn, NewPlayerTurn),
+				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+				Result = 'good'
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		)
+	);
+	
+	Mode =:= 7 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		(
+			playStatePCEasy(Board, PlayerTurn, NewBoard, NewPlayerTurn) ->
+			(
+				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
+				Result = 'good'
+			);
+			(
+				assert(stateOfTheGame(Board, PlayerTurn)),
+				Result = 'bad'
+			)
+		)
+	);
+	
+	Mode =:= 8 ->
+	(
+		retract(stateOfTheGame(Board, PlayerTurn)),
+		(
+			playStatePCHard(Board, PlayerTurn, NewBoard, NewPlayerTurn) ->
+			(
 				assert(stateOfTheGame(NewBoard, NewPlayerTurn)),
 				Result = 'good'
 			);

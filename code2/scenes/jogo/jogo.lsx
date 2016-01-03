@@ -57,14 +57,6 @@
 
 
 	<TEXTURES>
-		<TEXTURE id="bagSide">
-				<file path="images/bagSide.png" />
-				<amplif_factor s="1" t="1" />
-		</TEXTURE>
-		<TEXTURE id="bagFront">
-				<file path="images/bagFront.png" />
-				<amplif_factor s="1" t="1" />
-		</TEXTURE>
 		<TEXTURE id="free">
         	<file path="images/free.jpg" />
         	<amplif_factor s="1" t="1" />
@@ -253,8 +245,61 @@
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
 
+    	<TEXTURE id="bagSide">
+				<file path="images/bagSide.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+		<TEXTURE id="bagFront">
+				<file path="images/bagFront.jpg" />
+				<amplif_factor s="1" t="1" />
+		</TEXTURE>
+
     	<TEXTURE id="undo">
         	<file path="images/undo.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="font">
+        	<file path="images/font.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="timer">
+        	<file path="images/timer.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="player1marker">
+        	<file path="images/player1marker.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="player2marker">
+        	<file path="images/player2marker.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="half1">
+        	<file path="images/half1.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="half2">
+        	<file path="images/half2.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+
+    	<TEXTURE id="windplayed">
+        	<file path="images/windplayed.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="halfstones">
+        	<file path="images/halfstones.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="sunstones">
+        	<file path="images/sunstones.jpg" />
+        	<amplif_factor s="1" t="1" />
+    	</TEXTURE>
+    	<TEXTURE id="exit">
+        	<file path="images/exit.jpg" />
         	<amplif_factor s="1" t="1" />
     	</TEXTURE>
 	</TEXTURES>
@@ -334,17 +379,473 @@
 
 
 
+		<!-- SCREEN -->
+
+		<NODE id="screen-timer110">
+			<TRANSLATION x="-10.5" y="6" z="2" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="timer" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-timer111">
+			<TRANSLATION x="-11.1" y="5.1" z="2.9" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-timer112">
+			<TRANSLATION x="-9.9" y="5.1" z="2.9" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-winds110">
+			<TRANSLATION x="-7.5" y="6" z="2" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="windplayed" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-winds111">
+			<TRANSLATION x="-8.1" y="5.1" z="2.9" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-winds112">
+			<TRANSLATION x="-6.9" y="5.1" z="2.9" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board110">
+			<TRANSLATION x="-10.5" y="3.5" z="4.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="player1marker" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board111">
+			<TRANSLATION x="-11.05" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board112">
+			<TRANSLATION x="-9.85" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board120">
+			<TRANSLATION x="-7.5" y="3.5" z="4.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="player2marker" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board121">
+			<TRANSLATION x="-8.05" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board122">
+			<TRANSLATION x="-6.85" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-infor111">
+			<TRANSLATION x="-10.5" y="1.5" z="6.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="free" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-halfs110">
+			<TRANSLATION x="10.5" y="3.5" z="4.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="halfstones" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-halfs111">
+			<TRANSLATION x="9.85" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-halfs112">
+			<TRANSLATION x="11.05" y="2.7" z="5.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-sunss110">
+			<TRANSLATION x="10.5" y="1.5" z="6.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="sunstones" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-sunss111">
+			<TRANSLATION x="9.85" y="0.7" z="7.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-sunss112">
+			<TRANSLATION x="11.05" y="0.7" z="7.5" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+
+
+		<NODE id="screen-timer210">
+			<TRANSLATION x="10.5" y="6" z="-2" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="timer" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-timer211">
+			<TRANSLATION x="11.1" y="5.1" z="-2.9" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-timer212">
+			<TRANSLATION x="9.9" y="5.1" z="-2.9" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-winds210">
+			<TRANSLATION x="7.5" y="6" z="-2" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="windplayed" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-winds211">
+			<TRANSLATION x="8.1" y="5.1" z="-2.9" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-winds212">
+			<TRANSLATION x="6.9" y="5.1" z="-2.9" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board210">
+			<TRANSLATION x="10.5" y="3.5" z="-4.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="player2marker" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board211">
+			<TRANSLATION x="11.05" y="2.7" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board212">
+			<TRANSLATION x="9.85" y="2.7" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board220">
+			<TRANSLATION x="7.5" y="3.5" z="-4.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="player1marker" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board221">
+			<TRANSLATION x="8.05" y="2.7" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-board222">
+			<TRANSLATION x="6.85" y="2.7" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-infor211">
+			<TRANSLATION x="10.5" y="1.5" z="-6.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="free" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-halfs210">
+			<TRANSLATION x="-10.5" y="3.5" z="-4.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="halfstones" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-halfs211">
+			<TRANSLATION x="-9.85" y="2.7" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-halfs212">
+			<TRANSLATION x="-11.05" y="2.7" z="-5.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-sunss210">
+			<TRANSLATION x="-10.5" y="1.5" z="-6.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.8" sy="1" sz="0.8" />
+			<MATERIAL id="m" />
+			<TEXTURE id="sunstones" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-sunss211">
+			<TRANSLATION x="-9.85" y="0.7" z="-7.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half1" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="screen-sunss212">
+			<TRANSLATION x="-11.05" y="0.7" z="-7.5" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.4" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="half2" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
+			</DESCENDANTS>
+		</NODE>
+
+
+
+
 		<!-- OPTIONS -->
 
 		<NODE id="option-1">
 			<MATERIAL id="m" />
 			<TEXTURE id="clear" />
 			<DESCENDANTS>
+				<DESCENDANT id="option-main1" />
 				<DESCENDANT id="option-undo1" />
 				<DESCENDANT id="option-hts1" />
 				<DESCENDANT id="option-ste1" />
 				<DESCENDANT id="option-stw1" />
 				<DESCENDANT id="option-pass1" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-main1">
+			<TRANSLATION x="-10.5" y="0" z="8" />
+			<ROTATION axis="x" angle="45" />
+			<SCALE sx="0.7" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="exit" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 
@@ -403,11 +904,24 @@
 			<MATERIAL id="m" />
 			<TEXTURE id="clear" />
 			<DESCENDANTS>
+				<DESCENDANT id="option-main2" />
 				<DESCENDANT id="option-undo2" />
 				<DESCENDANT id="option-hts2" />
 				<DESCENDANT id="option-ste2" />
 				<DESCENDANT id="option-stw2" />
 				<DESCENDANT id="option-pass2" />
+			</DESCENDANTS>
+		</NODE>
+
+		<NODE id="option-main2">
+			<TRANSLATION x="10.5" y="0" z="-8" />
+			<ROTATION axis="x" angle="-45" />
+			<ROTATION axis="y" angle="180" />
+			<SCALE sx="0.7" sy="1" sz="0.7" />
+			<MATERIAL id="m" />
+			<TEXTURE id="exit" />
+			<DESCENDANTS>
+				<DESCENDANT id="option-p" />
 			</DESCENDANTS>
 		</NODE>
 

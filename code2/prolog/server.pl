@@ -116,4 +116,5 @@ parse_input(List, Reply) :-
 		
 		Result == 'good' -> getGameState(Reply)
 	).
+parse_input(_, bad).
 	

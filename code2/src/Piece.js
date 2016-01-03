@@ -401,6 +401,7 @@ Piece.prototype.movingAnimation = function(time){
 			this.changeAnimation("iddle");
 			this.scene.stop = false;
 			this.scene.reloadEntities();
+			
 			this.scene.rotateScene = true;
 		}else {
 			var percentage = (this.aniTime/this.movingTime);

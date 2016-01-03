@@ -26,6 +26,8 @@ MyInterface.prototype.init = function(application) {
 	checksGroup.add(this.scene, 'lightsVisible').name("Visible Lights");
 	checksGroup.add(this.scene, 'showAxis').name("Visible Axis");
 
+	checksGroup.add(this.scene, 'maxTurnTime', 15, 45).name("Turn Time");
+
 	checksGroup.close();
 
     return true;

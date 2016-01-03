@@ -43,8 +43,8 @@ XMLscene.prototype.init = function (application) {
     this.changeLinePositionToPlay = -1;
     this.changeColPositionToPlay = -1;
 
-	  this.startGame = true;
     this.stop = false;
+	this.startGame = false;
     this.hasInited = false;
     this.p2FirstTurn = true;
 
@@ -67,6 +67,11 @@ XMLscene.prototype.init = function (application) {
     /* Wait animation */
     this.waitAni = false;
     this.waitTime = 0;
+    this.lightsVisible = false;
+	this.showAxis = false;
+	this.maxTurnTime = 30;
+
+	this.app.setInterface(this.myInterface);
 };
 
 /**
@@ -133,17 +138,33 @@ XMLscene.prototype.onGraphLoaded = function () {
   	}
   }
 
+  this.textShader=new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
+  this.textTexture = this.textures['font'];
+
+  for(var i=0; i<this.graph.nodes.length; i++){
+  	if(this.graph.nodes[i].tagId.substring(0, 7) == "screen-"){
+  		new Marker(this, this.graph.nodes[i], this.textTexture);
+  	}
+  }
+
+  this.objectsCleanup = {};
+  for (var key in this.objects) {
+  	if (this.objects.hasOwnProperty(key)) {
+  		this.objectsCleanup[key] = this.objects[key];
+  	}
+  }
+
   this.numHandPiecesP1 = 1;
   this.numHandPiecesP2 = 1;
+
+  this.turnTimerStamp = 0;
+  this.turnTimeAcc = 0;
+
+  this.timeOutBool = false;
 
   console.log(this);
   /* Update scene */
   this.setUpdatePeriod(1000/60);
-
-	this.lightsVisible = false;
-	this.showAxis = false;
-	this.app.setInterface(this.myInterface);
-
 };
 
 /**
@@ -181,6 +202,76 @@ XMLscene.prototype.updateObjects = function(){
       var obj = this.objects[key];
       if(obj instanceof Piece){
         obj.animate(this.timeInterval/1000);
+      }
+      if(this.turnTimeAcc > 0 && this.loopState != 9)
+      	this.turnTimeAcc = this.maxTurnTime - (this.secondsPassed - this.turnTimerStamp);
+
+      if(obj.ID.substring(0, 7) == "screen-"){
+      	if(obj.ID.substring(0, 12) == "screen-timer"){
+			obj.valueToShow = Math.floor(this.turnTimeAcc);
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-winds"){
+			if(this.gameStatesStack.length > 1){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				obj.valueToShow = nowState.numberOfWindPiecesDiscarded;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-infor" && obj.ID.substring(13, 14) == "1"){
+      		if(this.gameStatesStack.length > 0){
+      			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+      			obj.valueToShow = nowState.playerTurn;
+      		}else{
+      			obj.valueToShow = 0;
+      		}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-infor" && obj.ID.substring(13, 14) == "2"){
+      		if(this.gameStatesStack.length > 0){
+      			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+      			obj.valueToShow = nowState.playerTurn;
+      		}else{
+      			obj.valueToShow = 0;
+      		}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-board" && obj.ID.substring(13, 14) == "1"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				obj.valueToShow = nowState.player1Pieces.length + nowState.player1HandPieces.length;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-board" && obj.ID.substring(13, 14) == "2"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				obj.valueToShow = nowState.player2Pieces.length + nowState.player2HandPieces.length;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-halfs"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				if(obj.ID.substring(12, 13) == "1")
+					obj.valueToShow = nowState.player1HalfStones;
+				else
+					obj.valueToShow = nowState.player2HalfStones;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
+      	if(obj.ID.substring(0, 12) == "screen-sunss"){
+			if(this.gameStatesStack.length > 0){
+				var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+				if(obj.ID.substring(12, 13) == "1")
+					obj.valueToShow = nowState.player1SunStones;
+				else
+					obj.valueToShow = nowState.player2SunStones;
+			}else{
+				obj.valueToShow = 0;
+			}
+      	}
       }
     }
   }
@@ -246,6 +337,7 @@ XMLscene.prototype.logPicking = function (){
 				if (obj)
 				{
 					var customId = this.pickResults[i][1];
+
           if(obj instanceof Piece){
             if(this.loopState == 1){
                 if(obj.textureID != "wind-piece"){
@@ -265,135 +357,180 @@ XMLscene.prototype.logPicking = function (){
             }
           }
 
-            switch(this.loopState){
-              case 0:
-              break;
-              case 1:
-                this.newIndexOfPieceToPlay = customId;
-                var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-                this.server.makeRequest(nowState.getRequestString(0, this.newIndexOfPieceToPlay, 0, 0, 0));
-              break;
-              case 2:
-                this.newIndexOfPieceToPlay = customId;
+					switch(this.loopState){
+						case 0:
+							if(customId == "300"){
+								this.startGame = true;
+								new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pvp";
+							}else if(customId == "301"){
+								this.startGame = true;
+								new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pceasy";
+							}else if(customId == "302"){
+								this.startGame = true;
+								new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pchard";
+							}else if(customId == "303"){
+								this.startGame = true;
+								new MySceneGraph("jogo/jogo.lsx", this);
+								this.playerMode = "pcvpc";
+							}
+						break;
+						case 1:
+							this.newIndexOfPieceToPlay = customId;
+							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+							this.server.makeRequest(nowState.getRequestString(0, this.newIndexOfPieceToPlay, 0, 0, 0));
+						break;
+						case 2:
+							this.newIndexOfPieceToPlay = customId;
 
-                if(obj.textureID == "wind-piece"){
-                  this.loopState = 4;
+							if(obj.textureID == "wind-piece"){
+								this.loopState = 4;
+							}
+
+							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+							if(customId == "70"){
+                this.rotateScene = true;
+
+                /* push into movie state array */
+                var stateVars = {type: 0};
+                this.movieStates.push(stateVars);
+
+								this.newIndexOfPieceToPlay = -1;
+
+								this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
+							}else if(customId == "71"){
+								this.newIndexOfPieceToPlay = -1;
+
+								this.server.makeRequest(nowState.getRequestString(4, 0, 0, 0, 0));
+							}else if(customId == "72"){
+								this.newIndexOfPieceToPlay = -1;
+
+								this.server.makeRequest(nowState.getRequestString(5, 0, 0, 0, 0));
+							}else if(customId == "73"){
+								this.newIndexOfPieceToPlay = -1;
+
+								this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
+							}else if(customId == "74"){
+                this.stop = true;
+                this.movieStarted = true;
+                this.movie = true;
+                /*
+                this.rotateScene = true;
+                this.newIndexOfPieceToPlay = -1;
+
+                if(this.gameStatesStack.length >= 2){
+                  this.gameStatesStack.pop();
+
+                  this.reloadEntities();
                 }
-                if(customId == "70"){
-                  this.rotateScene = true;
 
-                  /* push into movie state array */
-                  var stateVars = {type: 0};
-                  this.movieStates.push(stateVars);
+                if(this.gameStatesStack.length == 1){
+                  this.loopState = 1;
+                }*/
 
-                  this.newIndexOfPieceToPlay = -1;
+								this.turnTimeAcc = this.maxTurnTime;
+								this.turnTimerStamp = this.secondsPassed;
+							}else if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
+						break;
+						case 3:
+							this.newLinePositionToPlay = Math.floor(customId / 10);
+    						this.newColPositionToPlay = customId % 10;
 
-                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-                  this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
-                }else if(customId == "71"){
-                  this.newIndexOfPieceToPlay = -1;
+    						var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
-                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-                  this.server.makeRequest(nowState.getRequestString(4, 0, 0, 0, 0));
-                }else if(customId == "72"){
-                  this.newIndexOfPieceToPlay = -1;
+							this.server.makeRequest(
+								nowState.getRequestString(
+									1, this.newIndexOfPieceToPlay,
+									this.newLinePositionToPlay, this.newColPositionToPlay,
+									0
+								)
+							);
+						break;
+						case 4:
+							this.changeLinePositionToPlay = Math.floor(customId / 10);
+    						this.changeColPositionToPlay = customId % 10;
+						break;
+						case 5:
+							var lineDir = Math.floor(customId / 10);
+							var colDir = customId % 10;
 
-                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-                  this.server.makeRequest(nowState.getRequestString(5, 0, 0, 0, 0));
-                }else if(customId == "73"){
-                  this.newIndexOfPieceToPlay = -1;
+							var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
 
-                  var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-                  this.server.makeRequest(nowState.getRequestString(6, 0, 0, 0, 0));
-                }else if(customId == "74"){
-                  this.stop = true;
-                  /*
-                  this.rotateScene = true;
-                  this.newIndexOfPieceToPlay = -1;
-
-                  if(this.gameStatesStack.length >= 2){
-                    this.gameStatesStack.pop();
-
-                    this.reloadEntities();
-                  }
-
-                  if(this.gameStatesStack.length == 1){
-                    this.loopState = 1;
-                  }*/
-                  this.movieStarted = true;
-                  this.movie = true;
-                }
-              break;
-              case 3:
-                this.newLinePositionToPlay = Math.floor(customId / 10);
-                this.newColPositionToPlay = customId % 10;
-
-                var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-
-                this.server.makeRequest(
-                  nowState.getRequestString(
-                    1, this.newIndexOfPieceToPlay,
-                    this.newLinePositionToPlay, this.newColPositionToPlay,
-                    0
-                  )
-                );
-              break;
-              case 4:
-                this.changeLinePositionToPlay = Math.floor(customId / 10);
-                  this.changeColPositionToPlay = customId % 10;
-              break;
-              case 5:
-                var lineDir = Math.floor(customId / 10);
-                var colDir = customId % 10;
-
-                var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
-
-                if(lineDir != this.changeLinePositionToPlay && colDir != this.changeColPositionToPlay){
-                  this.newIndexOfPieceToPlay = -1;
-                  this.changeLinePositionToPlay = -1;
-                  this.changeColPositionToPlay = -1;
-                  this.loopState = 2;
-                  this.objSelected.changeAnimation("iddle");
-                  this.objSelectedToMove.changeAnimation("iddle");
-                }else if(lineDir<this.changeLinePositionToPlay){
-                  this.server.makeRequest(
-                    nowState.getRequestString(
-                      2, this.newIndexOfPieceToPlay,
-                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
-                      1
-                    )
-                  );
-                  this.movingDirection = "up";
-                }else if(lineDir>this.changeLinePositionToPlay){
-                  this.server.makeRequest(
-                    nowState.getRequestString(
-                      2, this.newIndexOfPieceToPlay,
-                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
-                      3
-                    )
-                  );
-                  this.movingDirection = "down";
-                }else if(colDir<this.changeColPositionToPlay){
-                  this.server.makeRequest(
-                    nowState.getRequestString(
-                      2, this.newIndexOfPieceToPlay,
-                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
-                      4
-                    )
-                  );
-                  this.movingDirection = "left";
-                }else if(colDir>this.changeColPositionToPlay){
-                  this.server.makeRequest(
-                    nowState.getRequestString(
-                      2, this.newIndexOfPieceToPlay,
-                      this.changeLinePositionToPlay, this.changeColPositionToPlay,
-                      2
-                    )
-                  );
-                  this.movingDirection = "right";
-                }
-              break;
-            }
+							if(lineDir != this.changeLinePositionToPlay && colDir != this.changeColPositionToPlay){
+								this.newIndexOfPieceToPlay = -1;
+								this.changeLinePositionToPlay = -1;
+								this.changeColPositionToPlay = -1;
+								this.loopState = 2;
+                this.objSelected.changeAnimation("iddle");
+                this.objSelectedToMove.changeAnimation("iddle");
+							}else if(lineDir<this.changeLinePositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay,
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										1
+									)
+								);
+                this.movingDirection = "up";
+							}else if(lineDir>this.changeLinePositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay,
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										3
+									)
+								);
+                this.movingDirection = "down";
+							}else if(colDir<this.changeColPositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay,
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										4
+									)
+								);
+                this.movingDirection = "left";
+							}else if(colDir>this.changeColPositionToPlay){
+								this.server.makeRequest(
+									nowState.getRequestString(
+										2, this.newIndexOfPieceToPlay,
+										this.changeLinePositionToPlay, this.changeColPositionToPlay,
+										2
+									)
+								);
+                this.movingDirection = "right";
+							}
+						break;
+						case 6:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
+						break;
+						case 7:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
+						break;
+						case 8:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
+						break;
+						case 9:
+							if(customId == "75"){
+								new MySceneGraph("menu/menu.lsx", this);
+								this.clearAllData();
+							}
+						break;
+					}
 				}
 			}
 			this.pickResults.splice(0,this.pickResults.length);
@@ -407,7 +544,22 @@ XMLscene.prototype.gameLoop = function () {
     return true;
   }
 
+
 	this.logPicking();
+
+	if(this.loopState != 0 && this.loopState != 1 && Math.floor(this.turnTimeAcc) == 0 && this.timeOutBool == false){
+		this.timeOutBool = true;
+		this.loopState = 2;
+
+		this.newIndexOfPieceToPlay = -1;
+		this.newLinePositionToPlay = -1;
+		this.newColPositionToPlay = -1;
+		this.changeLinePositionToPlay = -1;
+    this.changeColPositionToPlay = -1;
+
+		var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+		this.server.makeRequest(nowState.getRequestString(3, 0, 0, 0, 0));
+	}
 
 	switch(this.loopState){
 
@@ -422,6 +574,11 @@ XMLscene.prototype.gameLoop = function () {
 					this.loopState++;
 					this.reloadEntities();
 					this.clearPickRegistration();
+
+					if(this.playerMode == "pcvpc"){
+						var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+						this.server.makeRequest(nowState.getRequestString(8, 0, 0, 0, 0));
+					}
 				}
 
 				this.server.replyReady = false;
@@ -437,8 +594,15 @@ XMLscene.prototype.gameLoop = function () {
 					this.gameStatesStack.push(this.state);
 
 					this.newIndexOfPieceToPlay = -1;
-					this.loopState++;
+
+					if(this.playerMode == "pvp")
+						this.loopState++;
+					else
+						this.loopState = 2;
+
 					this.reloadEntities();
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
 					this.clearPickRegistration();
 				}else{
 					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -450,6 +614,25 @@ XMLscene.prototype.gameLoop = function () {
 
     /* player moves */
 		case 2:
+			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+
+			if(nowState.player1HandPieces.length == 0 || nowState.player2HandPieces.length == 0){
+				this.loopState = 9;
+				break;
+			}
+
+			if(this.playerMode != "pvp"){
+
+				if(nowState.playerTurn == 2){
+					if(this.playerMode == "pceasy")
+						this.loopState = 6;
+					else if(this.playerMode == "pchard" || this.playerMode == "pcvpc")
+						this.loopState = 8;
+				}else if(this.playerMode == "pcvpc"){
+					this.loopState = 8;
+				}
+			}
+
 			if(this.newIndexOfPieceToPlay != -1){
 				this.loopState++;
 				this.clearPickRegistration();
@@ -467,6 +650,8 @@ XMLscene.prototype.gameLoop = function () {
 
 						this.newIndexOfPieceToPlay = -1;
 						this.reloadEntities();
+						this.turnTimeAcc = this.maxTurnTime;
+						this.turnTimerStamp = this.secondsPassed;
 					}else{
 						this.newIndexOfPieceToPlay = -1;
 						this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -494,6 +679,10 @@ XMLscene.prototype.gameLoop = function () {
 
           this.objSelected.setBoardPosition(this.newColPositionToPlay - 5, 0, this.newLinePositionToPlay - 5);
           this.objSelected.changeAnimation("board");
+
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
+
 				}else{
           this.objSelected.changeAnimation("iddle");
 					this.newIndexOfPieceToPlay = -1;
@@ -551,6 +740,9 @@ XMLscene.prototype.gameLoop = function () {
 
           this.movieStates.push(stateVars);
           this.objSelectedToMove.changeAnimation("moving");
+
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
 				}else{
 					this.newIndexOfPieceToPlay = -1;
 					this.changeLinePositionToPlay = -1;
@@ -562,6 +754,43 @@ XMLscene.prototype.gameLoop = function () {
 				this.server.replyReady = false;
 			}
 		break;
+		case 6:
+			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+			this.server.makeRequest(nowState.getRequestString(7, 0, 0, 0, 0));
+
+			this.loopState++;
+		break;
+		case 7:
+			if(this.server.replyReady){
+				this.state = new GameState(this.server.answer);
+
+				if(this.state.validState){
+					this.gameStatesStack.push(this.state);
+
+					this.newIndexOfPieceToPlay = -1;
+					this.loopState = 2;
+					this.turnTimeAcc = this.maxTurnTime;
+					this.turnTimerStamp = this.secondsPassed;
+					this.reloadEntities();
+				}else{
+					this.newIndexOfPieceToPlay = -1;
+					this.changeLinePositionToPlay = -1;
+					this.changeColPositionToPlay = -1;
+					this.loopState = 2;
+					this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
+				}
+
+				this.server.replyReady = false;
+			}
+		break;
+		case 8:
+			var nowState = this.gameStatesStack[this.gameStatesStack.length - 1];
+			this.server.makeRequest(nowState.getRequestString(8, 0, 0, 0, 0));
+
+			this.loopState--;
+		break;
+		case 9:
+		break;
 	}
 };
 
@@ -569,6 +798,17 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 
 	switch(this.loopState){
 		case 0:
+			if(obj.ID == 'option-pvpPlane'){
+				this.registerForPick(300, obj);
+			}else if(obj.ID == 'option-pvpceasyPlane'){
+				this.registerForPick(301, obj);
+			}else if(obj.ID == 'option-pvpchardPlane'){
+				this.registerForPick(302, obj);
+			}else if(obj.ID == 'option-pcvpcPlane'){
+				this.registerForPick(303, obj);
+			}else if(obj.ID.substring(0, 7) != 'option-'){
+				this.clearPickRegistration();
+			}
 		break;
 		case 1:
 			this.state = this.gameStatesStack[this.gameStatesStack.length - 1];
@@ -576,13 +816,17 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 			if(this.state.playerTurn == 1){
 				if(obj.ID.substring(0, 9) == 'piece-p1-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
-				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p2-'){
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
+				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else if(this.state.playerTurn == 2){
 				if(obj.ID.substring(0, 9) == 'piece-p2-'){
 					this.registerForPick(parseInt(obj.ID.substring(9)), obj);
-				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p1-'){
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
+				}else if(obj.ID.substring(0, 7) == 'option-' || obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else{
@@ -603,7 +847,9 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(70, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-undo'){
 					this.registerForPick(74, obj);
-				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
+				}else if(obj.ID.substring(0, 9) == 'piece-p2-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else if(this.state.playerTurn == 2){
@@ -619,7 +865,9 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 					this.registerForPick(70, obj);
 				}else if(obj.ID.substring(0, 11) == 'option-undo'){
 					this.registerForPick(74, obj);
-				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2"){
+				}else if(obj.ID.substring(0, 11) == 'option-main'){
+					this.registerForPick(75, obj);
+				}else if(obj.ID.substring(0, 9) == 'piece-p1-' || obj.ID.substring(0, 8) == 'piece-b-' || obj.ID == "board" || obj.ID == "options-1" || obj.ID == "options-2" || obj.ID.substring(0, 7) == 'screen-'){
 					this.clearPickRegistration();
 				}
 			}else{
@@ -636,7 +884,7 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 		case 4:
 			if(obj.ID.substring(0, 8) == 'piece-b-'){
 				this.registerForPick(parseInt(obj.ID.substring(8)), obj);
-			}else if(obj.ID.substring(0, 7) == 'piece-p' || obj.ID.substring(0, 7) == 'option-' || obj.ID == "board"){
+			}else if(obj.ID.substring(0, 7) == 'piece-p' || obj.ID.substring(0, 7) == 'option-' || obj.ID == "board" || obj.ID.substring(0, 7) == 'screen-'){
 				this.clearPickRegistration();
 			}
 		break;
@@ -647,15 +895,52 @@ XMLscene.prototype.objectsToRegister = function (obj) {
 				this.clearPickRegistration();
 			}
 		break;
+		case 6:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
+		break;
+		case 7:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
+		break;
+		case 8:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
+		break;
+		case 9:
+			if(obj.ID.substring(0, 11) == 'option-main'){
+				this.registerForPick(75, obj);
+			}else{
+				this.clearPickRegistration();
+			}
+		break;
 	}
 };
 
 XMLscene.prototype.reloadEntities = function () {
 
+	this.timeOutBool = false;
+
 	this.root.descendants = [];
 	for(var i=0; i<this.rootCleanup.length; i++){
 		this.root.descendants.push(this.rootCleanup[i]);
 	}
+
+	this.objects = {};
+	  for (var key in this.objectsCleanup) {
+		if (this.objectsCleanup.hasOwnProperty(key)) {
+			this.objects[key] = this.objectsCleanup[key];
+		}
+	  }
 
 	  this.numHandPiecesP1 = 1;
   	this.numHandPiecesP2 = 1;
@@ -744,6 +1029,7 @@ XMLscene.prototype.reloadEntities = function () {
   		}
   	}
 };
+
 
 XMLscene.prototype.reloadEntitiesForMovie = function(state,loop){
   this.root.descendants = [];
@@ -873,6 +1159,18 @@ XMLscene.prototype.movieLoop = function(){
   }
 }
 
+
+XMLscene.prototype.menuLoop = function () {
+	this.logPicking();
+};
+
+XMLscene.prototype.clearAllData = function () {
+	this.gameStatesStack = [];
+	this.loopState = 0;
+	this.startGame = false;
+	this.hasInited = false;
+};
+
 //------------------------------------------------------------------------------------------------------------
 
 /**
@@ -886,6 +1184,8 @@ XMLscene.prototype.display = function () {
 		this.server.makeRequest("startGame");
 	}else if(this.startGame == true && this.hasInited == true){
 		this.gameLoop();
+	}else{
+		this.menuLoop();
 	}
 
   /* Movie sequence */
@@ -1259,6 +1559,11 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
   //Multiply transformations matrix
 	this.multMatrix(obj.matx);
 
+  if(obj instanceof Marker){
+  	obj.setShaderValues();
+  	this.textTexture.bind(1);
+  }
+
 	for(var u=0; u < obj.descendants.length; u++){
 		if(obj.descendants[u] in this.primitives ){
 		  this.processPrimitiveDisplay(this.primitives[ obj.descendants[u] ], mat, tex);
@@ -1266,6 +1571,10 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 		else{
 		  this.processNodeDisplay(this.objects[ obj.descendants[u] ] );
 		}
+	}
+
+	if(obj instanceof Marker){
+		this.setActiveShaderSimple(this.defaultShader);
 	}
 
 	this.parentMaterial = matAnt;
@@ -1280,12 +1589,12 @@ XMLscene.prototype.processNodeDisplay = function (obj) {
 * @param m The material of the primitive to process
 * @param t The texture of the primitive to process
 */
-XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t) {
+XMLscene.prototype.processPrimitiveDisplay = function (obj, m, t, b) {
 
 	m.apply();
 	if(t!=null){
 		if(obj.updatableTexCoords) obj.updateTexCoords(t.amplif_factor.s, t.amplif_factor.t);
-		t.bind();
+		t.bind(0);
 	}
 
 	obj.display();

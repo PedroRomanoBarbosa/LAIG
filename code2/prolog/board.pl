@@ -230,7 +230,6 @@ validPlayPosition(PIECE, L/C, BL) :-
 	isEmptyTile(L/C, BL);
 	(
 		checkPosition(L/C, BL, N),
-		nl,nl,write('---'),write(PIECE),nl,write(N),nl,nl,
 		validPieces(PIECE, N)
 	).
 	
@@ -507,19 +506,33 @@ getValidPositionsBoard(PIECE, L/C, BL, LIST) :-
 getValidPositionLists([], _, []).
 getValidPositionLists([H|T], BL, LIST) :-
 	(
-		H == wind/piece -> 
-			LIST = [wind/piece|FT];
+		H == wind-piece -> 
+			LIST = [wind-piece|FT];
 			LIST = [FH|FT]
 	),
 	getValidPositionsBoard(H, 1/1, BL, FH),
 	getValidPositionLists(T, BL, FT).
 	
 %verifies if there is at least a valid position that can be played with a piece
-hasValidOptionOnList([]) :- fail.
-hasValidOptionOnList([H|T]) :-
-	H == [] ->
-		hasValidOptionOnList(T);
-		true.
+hasValidOptionOnList([], _) :- fail.
+hasValidOptionOnList([H|T], BL) :-
+	hasValidOptionOnListAux(H, BL) ->
+	(
+		true
+	);
+	(
+		hasValidOptionOnList(T, BL)
+	).
+		
+hasValidOptionOnListAux([], _) :- fail.
+hasValidOptionOnListAux([H|T], BL) :-
+	isEmptyTile(H, BL) ->
+	(
+		true
+	);
+	(
+		hasValidOptionOnListAux(T, BL)
+	).
 			
 %----------------------------
 %randomly picks a position from a list of positions
